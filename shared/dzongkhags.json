@@ -1,0 +1,25 @@
+{
+  "note": "The 20 dzongkhags of Bhutan. ids are ISO 3166-2:BT. grid = schematic position (col,row; north is row 0) used only by the tile-map fallback; it is NOT geography.",
+  "dzongkhags": [
+    {"id":"BT-GA","name":"Gasa","aliases":["Gasa"],"grid":[3,0]},
+    {"id":"BT-33","name":"Bumthang","aliases":["Bumthang","Bumthang Dzongkhag"],"grid":[6,0]},
+    {"id":"BT-44","name":"Lhuntse","aliases":["Lhuntse","Lhuentse","Lhuntshi","Lhuntsi"],"grid":[7,0]},
+    {"id":"BT-TY","name":"Trashiyangtse","aliases":["Trashiyangtse","Trashi Yangtse","Tashiyangtse","Tashi Yangtse","Trashiyangste","Yangtse"],"grid":[9,0]},
+    {"id":"BT-13","name":"Haa","aliases":["Haa"],"grid":[0,1]},
+    {"id":"BT-11","name":"Paro","aliases":["Paro"],"grid":[1,1]},
+    {"id":"BT-15","name":"Thimphu","aliases":["Thimphu","Thimphu Thromde"],"grid":[2,1]},
+    {"id":"BT-23","name":"Punakha","aliases":["Punakha"],"grid":[3,1]},
+    {"id":"BT-24","name":"Wangdue Phodrang","aliases":["Wangdue Phodrang","Wangdue","Wangduephodrang","Wangdi Phodrang","Wangdi"],"grid":[4,1]},
+    {"id":"BT-32","name":"Trongsa","aliases":["Trongsa","Tongsa"],"grid":[5,1]},
+    {"id":"BT-42","name":"Mongar","aliases":["Mongar","Monggar"],"grid":[7,1]},
+    {"id":"BT-41","name":"Trashigang","aliases":["Trashigang","Tashigang","Trashigang Dzongkhag"],"grid":[8,1]},
+    {"id":"BT-12","name":"Chukha","aliases":["Chukha","Chhukha","Chukkha","Phuentsholing","Phuntsholing"],"grid":[1,2]},
+    {"id":"BT-22","name":"Dagana","aliases":["Dagana","Dagapela"],"grid":[2,2]},
+    {"id":"BT-21","name":"Tsirang","aliases":["Tsirang","Chirang","Damphu"],"grid":[3,2]},
+    {"id":"BT-34","name":"Zhemgang","aliases":["Zhemgang","Shemgang","Zhemgang Dzongkhag"],"grid":[5,2]},
+    {"id":"BT-43","name":"Pemagatshel","aliases":["Pemagatshel","Pema Gatshel","Pemagatsel","Pemagatshal"],"grid":[8,2]},
+    {"id":"BT-14","name":"Samtse","aliases":["Samtse","Samchi"],"grid":[0,3]},
+    {"id":"BT-31","name":"Sarpang","aliases":["Sarpang","Sarbhang","Gelephu","Gelephu Thromde"],"grid":[4,3]},
+    {"id":"BT-45","name":"Samdrup Jongkhar","aliases":["Samdrup Jongkhar","Samdrupjongkhar","Samdrup Jongkha","Samdrup Jongkhar Dzongkhag","S/Jongkhar","S. Jongkhar"],"grid":[9,3]}
+  ]
+}
