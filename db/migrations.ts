@@ -148,4 +148,13 @@ CREATE TABLE update_log (
 );
 `,
   },
+  {
+    name: '0002_drop_runtime_boundaries.sql',
+    // Map boundaries are now bundled with the app (src/geo, public/geo); the download job and its table are gone.
+    sql: `
+DELETE FROM update_log WHERE job = 'boundaries';
+DELETE FROM sources WHERE id = 'boundaries';
+DROP TABLE IF EXISTS boundaries;
+`,
+  },
 ];

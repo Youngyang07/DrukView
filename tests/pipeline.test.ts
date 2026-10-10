@@ -7,7 +7,6 @@ import { makeGeoMatcher, parseAmount, resolveLocations } from '../pipeline/lib.m
 import { normalizeWorldBank } from '../pipeline/worldbank.mjs';
 import { parseIati } from '../pipeline/iati.mjs';
 import { parseCsv, buildBudget, buildAllocations } from '../pipeline/ingest-manual.mjs';
-import { tagFeatures } from '../pipeline/boundaries.mjs';
 import { validateProjects } from '../pipeline/validate.mjs';
 import { parseOpenMeteo, openMeteoUrl } from '../pipeline/weather.mjs';
 import { buildTenders, buildOffices } from '../pipeline/ingest-manual.mjs';
@@ -95,15 +94,6 @@ test('manual CSV: parsing quotes + strict citation rules', () => {
   assert.match(al.errs.join('|'), /unknown dzongkhag/);
 });
 
-test('boundary tagging maps shapeName variants and reports unmatched', () => {
-  const fc = { features: [
-    { properties: { shapeName: 'Monggar' }, geometry: { type: 'Polygon', coordinates: [] } },
-    { properties: { shapeName: 'Narnia' }, geometry: { type: 'Polygon', coordinates: [] } },
-  ] };
-  const { fc: out, unmatched } = tagFeatures(fc, matcher);
-  assert.equal(out.features[0].properties.dzongkhag_id, 'BT-42'); assert.deepEqual(unmatched, ['Narnia']);
-});
-
 test('dzongkhag reference data: slugs unique, coordinates inside Bhutan bounds', () => {
   assert.equal(new Set(dz.map((d: any) => d.slug)).size, 20);
   for (const d of dz) { assert.ok(d.lat > 26.6 && d.lat < 28.4, d.name); assert.ok(d.lon > 88.7 && d.lon < 92.2, d.name); }
@@ -182,12 +172,22 @@ test('ADB real sample: loans/grants of one project merge; "Finalisation" is comp
   assert.equal(adbProjectKey('XM-DAC-46004-39221-022-GRNT0088'), '39221-022'); assert.equal(adbProjectKey('SOMETHING-ELSE'), null);
 });
 
-test('geoBoundaries real shape names: all 20 match (incl. the capital, spelled "Thimpu")', () => {
-  const names: string[] = JSON.parse(real('geoboundaries-shapenames.json'));
-  assert.equal(names.length, 20);
-  const ids = names.map(n => matcher.byName(n));
-  assert.ok(!ids.includes(null), `unmatched: ${names.filter((n, i) => !ids[i])}`);
-  assert.equal(new Set(ids).size, 20); assert.equal(matcher.byName('Thimpu'), 'BT-15');
+test('bundled map: 20 dzongkhags with the right ids, 205 gewogs matching the official count per dzongkhag', () => {
+  const dzGeo = JSON.parse(readFileSync('src/geo/bhutan-dzongkhags.json', 'utf8'));
+  const gwGeo = JSON.parse(readFileSync('public/geo/bhutan-gewogs.json', 'utf8'));
+  const ids = new Set(dz.map((d: any) => d.id));
+  assert.deepEqual(new Set(dzGeo.features.map((f: any) => f.properties.id)), ids);
+  for (const f of [...dzGeo.features, ...gwGeo.features]) {
+    const [lon, lat] = f.properties.label;
+    assert.ok(lon > 88.7 && lon < 92.2 && lat > 26.6 && lat < 28.4, `label outside Bhutan: ${f.properties.name}`);
+    assert.ok(f.geometry.coordinates[0].length >= 4);
+  }
+  // official number of gewogs per dzongkhag (sums to 205)
+  const official: Record<string, number> = { Bumthang: 4, Chukha: 11, Dagana: 14, Gasa: 4, Haa: 6, Lhuntse: 8, Mongar: 17, Paro: 10, Pemagatshel: 11, Punakha: 11,
+    'Samdrup Jongkhar': 11, Samtse: 15, Sarpang: 12, Thimphu: 8, Trashigang: 15, Trashiyangtse: 8, Trongsa: 5, Tsirang: 12, 'Wangdue Phodrang': 15, Zhemgang: 8 };
+  assert.equal(gwGeo.features.length, 205);
+  for (const d of dz) assert.equal(gwGeo.features.filter((g: any) => g.properties.dz === d.id).length, official[d.name], d.name);
+  assert.ok(String(dzGeo.attribution).includes('CC BY 3.0 IGO'));
 });
 
 test('network errors say what failed (cause + URL), not just "fetch failed"', async () => {

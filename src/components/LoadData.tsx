@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const JOBS = [
   ['manual', 'Curated budget CSVs'], ['worldbank', 'World Bank projects'], ['adb', 'ADB projects'],
-  ['boundaries', 'Dzongkhag map'], ['weather', 'Weather'],
+  ['weather', 'Weather'],
 ] as const;
 type Line = { job: string; label: string; state: 'waiting' | 'running' | 'ok' | 'skipped' | 'error'; text: string };
 

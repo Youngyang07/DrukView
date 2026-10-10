@@ -8,7 +8,6 @@ import sectors from '../../shared/iati-sectors.json';
 import { makeGeoMatcher } from '../../pipeline/lib.mjs';
 import { fetchWorldBank, SOURCE as WB } from '../../pipeline/worldbank.mjs';
 import { fetchAdb, SOURCE as ADB } from '../../pipeline/adb.mjs';
-import { fetchBoundaries, SOURCE as BND } from '../../pipeline/boundaries.mjs';
 import { fetchWeather, SOURCE as WX } from '../../pipeline/weather.mjs';
 import { validateProjects } from '../../pipeline/validate.mjs';
 import { parseCsv, buildBudget, buildAllocations, buildTenders, buildOffices } from '../../pipeline/ingest-manual.mjs';
@@ -19,7 +18,7 @@ export const MANUAL: SourceDef = {
   url: 'https://www.mof.gov.bt/publications/', kind: 'manual',
   notes: 'National budget reports, tender notices and office directories are published as PDFs/web pages without an API. Rows are transcribed into data/manual/*.csv and every row must cite its public document.',
 };
-export const JOBS = ['worldbank', 'adb', 'boundaries', 'weather', 'manual'] as const;
+export const JOBS = ['worldbank', 'adb', 'weather', 'manual'] as const;
 export type JobName = (typeof JOBS)[number];
 
 type Dz = { id: string; name: string; aliases: string[]; lat: number; lon: number };
@@ -61,14 +60,6 @@ export async function saveWeather(rows: any[]) {
   return rows.length;
 }
 
-export async function saveBoundaries(fc: any, license: string | null) {
-  await withTx(async c => {
-    for (const f of fc.features) await c.query(`insert into boundaries(dzongkhag_id,geometry,license,retrieved_at) values ($1,$2,$3,now())
-      on conflict (dzongkhag_id) do update set geometry=$2,license=$3,retrieved_at=now()`, [f.properties.dzongkhag_id, JSON.stringify(f.geometry), license]);
-  });
-  return fc.features.length;
-}
-
 export type ManualFiles = { budget: string; allocations: string; tenders: string; offices: string };
 export async function readManualFiles(dir = resolve(process.cwd(), 'data/manual')): Promise<ManualFiles> {
   const r = (f: string) => readFile(resolve(dir, f), 'utf8').catch(() => '');
@@ -102,7 +93,7 @@ export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; reco
  * secret) — but at most once per interval, so they cannot be used to hammer the sources or the database.
  * A valid CRON_SECRET bypasses the interval. After a failed run a retry is allowed after 5 minutes.
  */
-export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, boundaries: 720, weather: 120, manual: 10 };
+export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, manual: 10 };
 const RETRY_AFTER_ERROR_MIN = 5;
 
 /** Atomically claim the right to run a job now. Returns null when claimed, or the seconds to wait. */
@@ -129,7 +120,7 @@ function withDeadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
 }
 
 export async function runJob(job: JobName, { force = false }: { force?: boolean } = {}): Promise<JobResult> {
-  const def = { worldbank: WB, adb: ADB, boundaries: BND, weather: WX, manual: MANUAL }[job] as SourceDef;
+  const def = { worldbank: WB, adb: ADB, weather: WX, manual: MANUAL }[job] as SourceDef;
   const wait = await claimRun(job, def, force);
   if (wait !== null) return { job, status: 'skipped', records: 0, message: `Refreshed recently; next refresh allowed in about ${Math.ceil(wait / 60)} min.`, retry_after_s: wait };
   try {
@@ -149,7 +140,6 @@ export async function runJob(job: JobName, { force = false }: { force?: boolean 
 async function fetchAndSave(job: JobName): Promise<number> {
   if (job === 'worldbank') return replaceProjects('worldbank', await fetchWorldBank(await matcherOf()));
   if (job === 'adb') return replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
-  if (job === 'boundaries') { const r = await fetchBoundaries(await matcherOf()); return saveBoundaries(r.fc, r.license); }
   if (job === 'weather') return saveWeather(await fetchWeather(await loadDz()));
   return saveManual(await readManualFiles(), await matcherOf());
 }

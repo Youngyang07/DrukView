@@ -20,7 +20,7 @@ function ClickBars({ rows, active, onPick, fmt }: { rows: [string, number][]; ac
     </button>))}</>;
 }
 
-export default function Explorer({ dz, geo, hasAlloc, locale }: { dz: ExplorerDz[]; geo: any; hasAlloc: boolean; locale: string }) {
+export default function Explorer({ dz, hasAlloc, locale }: { dz: ExplorerDz[]; hasAlloc: boolean; locale: string }) {
   const [metric, setMetric] = useState<Metric>('usd');
   const [sel, setSel] = useState<string | null>(null);
   const [fy, setFy] = useState('');
@@ -34,7 +34,12 @@ export default function Explorer({ dz, geo, hasAlloc, locale }: { dz: ExplorerDz
   const years = d ? [...new Set(d.allocations.map(a => a.fiscal_year))].sort().reverse() : [];
   const year = fy && years.includes(fy) ? fy : years[0] ?? '';
   const alFy = d ? d.allocations.filter(a => a.fiscal_year === year && a.currency === 'BTN') : [];
-  const alView = alFy.filter(a => (!sector || (a.sector ?? 'General') === sector) && (!src || a.funding_source === src) && (!gewog || a.gewog === gewog));
+  const alView = alFy.filter(a => (!sector || (a.sector ?? 'General') === sector) && (!src || a.funding_source === src) && (!gewog || a.gewog?.toLowerCase() === gewog.toLowerCase()));
+  const gewogValues = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const a of alFy) if (a.gewog) m[a.gewog.toLowerCase()] = (m[a.gewog.toLowerCase()] ?? 0) + a.amount;
+    return m;
+  }, [alFy]);
   const projView = d ? d.projects.filter(p => (!sector || (p.sector ?? 'Unclassified') === sector) && (!src || p.funder === src)) : [];
   const filtered = [sector && `sector: ${sector}`, src && `source: ${src}`, gewog && `gewog: ${gewog}`].filter(Boolean) as string[];
 
@@ -43,10 +48,12 @@ export default function Explorer({ dz, geo, hasAlloc, locale }: { dz: ExplorerDz
       <div className="card mapcard">
         <div className="card-h"><h2>Click a dzongkhag to open its budget</h2>
           <label className="inline">Colour by <select value={metric} onChange={e => setMetric(e.target.value as Metric)}>
-            <option value="usd">Committed US$ (single-dzongkhag projects)</option><option value="count">Number of projects</option>
-            {hasAlloc ? <option value="btn">Budget allocation (Nu., curated)</option> : null}</select></label>
+            <option value="usd">Committed US$</option><option value="count">Number of projects</option>
+            {hasAlloc ? <option value="btn">Budget (Nu.)</option> : null}</select></label>
         </div>
-        <MapView geo={geo} dz={dz.map(x => ({ id: x.id, name: x.name, col: x.col, row: x.row }))} values={values} format={fmtMap} selected={sel} onSelect={pick} />
+        <MapView values={values} format={fmtMap} selected={sel} onSelect={pick}
+          gewogValues={gewogValues} selectedGewog={gewog} onGewog={g => setGewog(cur => (cur.toLowerCase() === g.toLowerCase() ? '' : g))}
+          formatGewog={(name, v) => `${name} Gewog: ${v ? money(v, 'BTN') + ' in published budget lines' : 'no budget lines added yet'}`} />
       </div>
 
       <aside className="card" aria-live="polite">

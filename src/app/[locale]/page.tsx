@@ -27,7 +27,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <Stat label="Last project refresh" value={<Fresh at={fr?.projects} />} sub="automated daily" />
       </div> : null}
       {st && st.total === 0 ? <div className="banner info"><b>No project data has been loaded yet</b>Open <Link href={`/${locale}/data-sources`}>Data sources</Link> and press <b>Load / refresh data now</b> (about a minute). It also refreshes automatically every day. Until then DrukView shows nothing rather than estimates.</div> : null}
-      {ex ? <Explorer dz={ex.dz} geo={ex.geo} hasAlloc={ex.hasAlloc} locale={locale} /> : null}
+      {ex ? <Explorer dz={ex.dz} hasAlloc={ex.hasAlloc} locale={locale} /> : null}
     </div>
   </>);
 }
