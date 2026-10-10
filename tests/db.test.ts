@@ -84,16 +84,23 @@ d('database layer', () => {
     await db.query('drop schema public cascade; create schema public;');
     const { ensureSchema } = await import('../src/server/setup');
     const rs = await Promise.all([ensureSchema(), ensureSchema(), ensureSchema()]);
-    expect(rs.flatMap(r => r.applied)).toEqual(['0001_init.sql']); // applied exactly once
+    expect(rs.flatMap(r => r.applied).sort()).toEqual(['0001_init.sql', '0002_drop_runtime_boundaries.sql']); // each applied exactly once
     expect(await q.getDzongkhags()).toHaveLength(20);
     // restore the fixtures the remaining tests rely on
     await db.query(`insert into sources(id,name,kind) values ('worldbank','WB','api'),('adb','ADB','iati'),('weather','WX','api')`);
   });
 
+  test('an existing database picks up migrations added later (no manual step on upgrade)', async () => {
+    await db.query("delete from schema_migrations where name = '0002_drop_runtime_boundaries.sql'");
+    await db.query('create table boundaries (dzongkhag_id text primary key)');
+    const fresh = await import('../src/server/setup');
+    expect((await fresh.ensureSchema()).applied).toEqual(['0002_drop_runtime_boundaries.sql']);
+    expect((await db.query("select to_regclass('public.boundaries') is null as gone"))[0].gone).toBe(true);
+  });
+
   test('freshness reflects sources; update_log writes', async () => {
     await db.query(`update sources set last_success=now(), status='ok' where id='worldbank'`);
     const fr = await q.freshness(); expect(fr.projects).toBeTruthy(); expect(fr.manual).toBeNull();
-    expect(await q.getBoundaries()).toBeNull();
   });
 
   test('jobs: rate-limited without the secret, secret bypasses, one winner under concurrency, quick retry after failure', async () => {

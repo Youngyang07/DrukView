@@ -23,12 +23,14 @@ export async function dbStatus(): Promise<DbStatus> {
   } catch { return 'unreachable'; }
 }
 
-/** True when the database is reachable AND initialised. A connected-but-empty database is set up automatically here. */
+let synced = false; // pending migrations + reference data applied once per server process
+
 export async function dbReady(): Promise<boolean> {
   let st = await dbStatus();
-  if (st === 'no-schema') {
-    try { const { ensureSchema } = await import('./setup'); await ensureSchema(); st = await dbStatus(); }
-    catch (e) { console.error('[drukview] automatic database setup failed:', (e as Error).message); }
+  // Empty database → create everything. Existing database → apply any migrations added since it was created (once per process).
+  if (st === 'no-schema' || (st === 'ok' && !synced)) {
+    try { const { ensureSchema } = await import('./setup'); await ensureSchema(); synced = true; st = await dbStatus(); }
+    catch (e) { console.error('[drukview] database setup/migration failed:', (e as Error).message); }
   }
   return st === 'ok';
 }

@@ -19,7 +19,7 @@ export async function freshness(): Promise<Record<string, string | null>> {
   const rows = await query<{ id: string; last_success: string | null }>('select id, last_success::text from sources');
   const m = Object.fromEntries(rows.map(r => [r.id, r.last_success]));
   const newest = (...ids: string[]) => ids.map(i => m[i]).filter(Boolean).sort().pop() ?? null;
-  return { projects: newest('worldbank', 'adb'), weather: m.weather ?? null, boundaries: m.boundaries ?? null, manual: m['rgob-manual'] ?? null };
+  return { projects: newest('worldbank', 'adb'), weather: m.weather ?? null, manual: m['rgob-manual'] ?? null };
 }
 
 const WHERE = (f: Filters, scope: string | null, params: unknown[]) => {
@@ -106,9 +106,3 @@ export const getTenders = (scope: string | null) => query<Tender>(`select t.id,d
 export type Office = { kind: string; dzongkhag: string | null; name: string; role: string | null; contact: string | null; source_name: string; source_url: string; retrieved_on: string | null };
 export const getOffices = (scope: string | null) => query<Office>(`select o.kind,d.name dzongkhag,o.name,o.role,o.contact,o.source_name,o.source_url,o.retrieved_on::text
   from offices o left join dzongkhags d on d.id=o.dzongkhag_id ${scope ? 'where o.dzongkhag_id=$1 or o.dzongkhag_id is null' : ''} order by o.kind desc, o.name`, scope ? [scope] : []);
-
-export async function getBoundaries() {
-  const rows = await query<{ dzongkhag_id: string; geometry: unknown }>('select dzongkhag_id, geometry from boundaries');
-  if (!rows.length) return null;
-  return { type: 'FeatureCollection' as const, features: rows.map(r => ({ type: 'Feature' as const, properties: { dzongkhag_id: r.dzongkhag_id }, geometry: r.geometry as any })) };
-}
