@@ -1,20 +1,24 @@
+// @ts-nocheck
 // Fixtures below are SHAPE fixtures for parser tests only. They are not real Bhutan data and never ship in /data.
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
-import { makeGeoMatcher, loadDzongkhags, parseAmount, resolveLocations } from '../pipeline/lib.mjs';
+import { readFileSync } from 'node:fs';
+import { makeGeoMatcher, parseAmount, resolveLocations } from '../pipeline/lib.mjs';
 import { normalizeWorldBank } from '../pipeline/worldbank.mjs';
 import { parseIati } from '../pipeline/iati.mjs';
 import { parseCsv, buildBudget, buildAllocations } from '../pipeline/ingest-manual.mjs';
 import { tagFeatures } from '../pipeline/boundaries.mjs';
 import { validateProjects } from '../pipeline/validate.mjs';
+import { parseOpenMeteo, openMeteoUrl } from '../pipeline/weather.mjs';
+import { buildTenders, buildOffices } from '../pipeline/ingest-manual.mjs';
 
-const dz = await loadDzongkhags();
+const dz = JSON.parse(readFileSync('shared/dzongkhags.json', 'utf8')).dzongkhags;
 const matcher = makeGeoMatcher(dz);
 
 test('20 dzongkhags with unique ids and grid cells', () => {
   assert.equal(dz.length, 20);
-  assert.equal(new Set(dz.map(d => d.id)).size, 20);
-  assert.equal(new Set(dz.map(d => d.grid.join(','))).size, 20);
+  assert.equal(new Set(dz.map((d: any) => d.id)).size, 20);
+  assert.equal(new Set(dz.map((d: any) => d.grid_col + ',' + d.grid_row)).size, 20);
 });
 
 test('geo matcher: aliases, word boundaries, multiple hits', () => {
@@ -49,7 +53,7 @@ test('World Bank normalisation', () => {
   assert.equal(a.start_date, '2021-03-04'); assert.deepEqual(a.locations.map(l => l.dzongkhag).sort(), ['BT-32', 'BT-34']);
   assert.equal(a.geo_confidence, 'text-match'); assert.match(a.url, /^https:\/\/projects\.worldbank\.org\//);
   assert.equal(b.status, 'completed'); assert.equal(b.locations.length, 0); assert.equal(b.geo_confidence, 'none');
-  assert.deepEqual(validateProjects([a, b], new Set(dz.map(d => d.id))), []);
+  assert.deepEqual(validateProjects([a, b], new Set(dz.map((d: any) => d.id))), []);
 });
 
 const IATI = `<?xml version="1.0"?><iati-activities version="2.03">
@@ -98,4 +102,37 @@ test('boundary tagging maps shapeName variants and reports unmatched', () => {
   ] };
   const { fc: out, unmatched } = tagFeatures(fc, matcher);
   assert.equal(out.features[0].properties.dzongkhag_id, 'BT-42'); assert.deepEqual(unmatched, ['Narnia']);
+});
+
+test('dzongkhag reference data: slugs unique, coordinates inside Bhutan bounds', () => {
+  assert.equal(new Set(dz.map((d: any) => d.slug)).size, 20);
+  for (const d of dz) { assert.ok(d.lat > 26.6 && d.lat < 28.4, d.name); assert.ok(d.lon > 88.7 && d.lon < 92.2, d.name); }
+});
+
+test('Open-Meteo parsing: forecast flag, null handling, location count guard', () => {
+  const two = [{ id: 'A', lat: 1, lon: 2 }, { id: 'B', lat: 3, lon: 4 }];
+  const mk = () => ({ daily: { time: ['2026-10-09', '2026-10-11'], temperature_2m_max: [20, 22], temperature_2m_min: [10, null], precipitation_sum: [0, 5.5] } });
+  const rows = parseOpenMeteo([mk(), mk()], two, '2026-10-10', 'x');
+  assert.equal(rows.length, 4);
+  assert.equal(rows[0].is_forecast, false); assert.equal(rows[1].is_forecast, true); assert.equal(rows[1].tmin_c, null); assert.equal(rows[2].dzongkhag, 'B');
+  assert.throws(() => parseOpenMeteo([mk()], two, '2026-10-10', 'x'), /expected 2/);
+  assert.equal(parseOpenMeteo(mk(), [two[0]], '2026-10-10', 'x').length, 2); // single-location responses are a bare object
+  assert.match(openMeteoUrl(two), /latitude=1,3&longitude=2,4/);
+});
+
+test('tenders / offices CSV validation', () => {
+  const t = buildTenders([{ id: 'T1', dzongkhag: 'Paro', title: 'Bridge', url: 'https://example.org/t', source_name: 'e-GP', value: '1000', currency: 'BTN', published_on: '2026-01-05' }], matcher);
+  assert.deepEqual(t.errs, []); assert.equal(t.out[0].dzongkhag, 'BT-11');
+  const bad = buildTenders([{ id: 'T2', dzongkhag: 'Nowhere', title: 'X', url: 'http://x', source_name: '', value: '5', currency: '', published_on: '05/01/2026' }], matcher).errs.join('|');
+  assert.match(bad, /unknown dzongkhag/); assert.match(bad, /https/); assert.match(bad, /currency/); assert.match(bad, /YYYY-MM-DD/); assert.match(bad, /source_name/);
+  const o = buildOffices([{ kind: 'boss', name: 'N', source_name: 'S', source_url: 'https://example.org' }], matcher).errs.join('|');
+  assert.match(o, /leader or office/);
+});
+
+test('project validation rejects bad batches', () => {
+  const ok = { id: 'x:1', source: 'x', title: 'T', status: 'active', amount_committed: 5, currency: 'USD', url: 'https://e.org', locations: [] };
+  const ids = new Set(dz.map((d: any) => d.id));
+  assert.deepEqual(validateProjects([ok], ids), []);
+  const e = validateProjects([ok, { ...ok, status: 'weird', amount_committed: -1, url: 'http://e', locations: [{ dzongkhag: 'ZZ' }] }], ids).join('|');
+  assert.match(e, /duplicate id/); assert.match(e, /bad status/); assert.match(e, /bad amount/); assert.match(e, /https/); assert.match(e, /unknown dzongkhag/);
 });

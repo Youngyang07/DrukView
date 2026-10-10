@@ -1,4 +1,4 @@
-import { fetchJson, makeGeoMatcher, loadDzongkhags } from './lib.mjs';
+import { fetchJson } from './lib.mjs';
 
 export const SOURCE = {
   id: 'boundaries',
@@ -20,8 +20,7 @@ export function tagFeatures(fc, matcher) {
   return { fc: { type: 'FeatureCollection', features }, unmatched };
 }
 
-export async function fetchBoundaries() {
-  const matcher = makeGeoMatcher(await loadDzongkhags());
+export async function fetchBoundaries(matcher) {
   const meta = await fetchJson('https://www.geoboundaries.org/api/current/gbOpen/BTN/ADM1/');
   const url = meta.simplifiedGeometryGeoJSON || meta.gjDownloadURL;
   if (!url) throw new Error('geoBoundaries metadata has no GeoJSON URL');
