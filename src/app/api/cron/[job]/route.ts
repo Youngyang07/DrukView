@@ -1,7 +1,7 @@
 import { timingSafeEqual } from 'node:crypto';
 import { JOBS, runJob, type JobName } from '@/server/ingest';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 function authorised(req: Request): boolean {
   const secret = process.env.CRON_SECRET;
