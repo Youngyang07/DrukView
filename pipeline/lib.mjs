@@ -1,20 +1,4 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const DATA = resolve(ROOT, 'data');
 export const UA = 'DrukView-data-bot/0.1 (+https://github.com/youngyang07/drukview)';
-
-export async function readJson(path, fallback) {
-  try { return JSON.parse(await readFile(path, 'utf8')); }
-  catch (e) { if (fallback !== undefined) return fallback; throw e; }
-}
-
-export async function writeJson(path, obj) {
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, JSON.stringify(obj, null, 2) + '\n');
-}
 
 export async function fetchWithRetry(url, { retries = 3, timeoutMs = 60000, accept } = {}) {
   let last;
@@ -77,10 +61,6 @@ export function makeGeoMatcher(dzongkhags) {
       return null;
     },
   };
-}
-
-export async function loadDzongkhags() {
-  return (await readJson(resolve(ROOT, 'shared/dzongkhags.json'))).dzongkhags;
 }
 
 /** Compute project locations. Explicit location fields beat text matching. */

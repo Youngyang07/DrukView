@@ -1,9 +1,8 @@
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { DATA, readJson, loadDzongkhags, httpsUrl } from './lib.mjs';
+import { httpsUrl } from './lib.mjs';
 
 const STATUSES = new Set(['active', 'completed', 'pipeline', 'cancelled', 'suspended', 'unknown']);
 
+/** Returns a list of problems; empty = valid. Collectors refuse to load a batch that has any. */
 export function validateProjects(records, dzIds) {
   const errs = [], seen = new Set();
   records.forEach((r, i) => {
@@ -19,15 +18,4 @@ export function validateProjects(records, dzIds) {
     for (const l of r.locations ?? []) if (!dzIds.has(l.dzongkhag)) errs.push(`${w}: unknown dzongkhag ${l.dzongkhag}`);
   });
   return errs;
-}
-
-export async function validateAll() {
-  const dz = new Set((await loadDzongkhags()).map(d => d.id));
-  const errs = validateProjects((await readJson(resolve(DATA, 'projects.json'))).records, dz);
-  for (const r of (await readJson(resolve(DATA, 'allocations.json'))).records) if (!dz.has(r.dzongkhag)) errs.push(`allocation: unknown dzongkhag ${r.dzongkhag}`);
-  return errs;
-}
-
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  validateAll().then(e => { if (e.length) { console.error(e.join('\n')); process.exit(1); } console.log('data valid'); });
 }

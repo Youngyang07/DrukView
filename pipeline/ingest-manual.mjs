@@ -1,10 +1,8 @@
+// Pure CSV parsing/validation (DB writes live in src/server/ingest.ts).
 // Ministry of Finance, Home & Cultural Affairs, Agriculture & Livestock and other RGoB budget documents are
 // published as PDFs/Excel without an API. They enter DrukView through citation-checked CSVs in data/manual/.
 // Every row MUST carry a source_url (https) and document name so each Ngultrum can be traced to a public document.
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { DATA, readJson, writeJson, parseAmount, httpsUrl, makeGeoMatcher, loadDzongkhags } from './lib.mjs';
+import { parseAmount, httpsUrl } from './lib.mjs';
 
 export function parseCsv(text) {
   const rows = []; let row = [], cell = '', q = false;
@@ -56,19 +54,32 @@ export function buildAllocations(rows, matcher) {
   return { errs, out };
 }
 
-export async function ingestManual() {
-  const matcher = makeGeoMatcher(await loadDzongkhags());
-  const read = async f => parseCsv(await readFile(resolve(DATA, 'manual', f), 'utf8').catch(() => ''));
-  const b = buildBudget(await read('budget_by_agency.csv'));
-  const a = buildAllocations(await read('allocations_by_location.csv'), matcher);
-  const errs = [...b.errs.map(e => `budget_by_agency.csv ${e}`), ...a.errs.map(e => `allocations_by_location.csv ${e}`)];
-  if (errs.length) throw new Error('Manual data rejected:\n  ' + errs.join('\n  '));
-  const at = new Date().toISOString();
-  await writeJson(resolve(DATA, 'budget.json'), { generated_at: at, records: b.out });
-  await writeJson(resolve(DATA, 'allocations.json'), { generated_at: at, records: a.out });
-  return { budget: b.out.length, allocations: a.out.length };
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const optDate = (v, k, n, errs) => { if (v && !DATE.test(v)) errs.push(`row ${n}: ${k} must be YYYY-MM-DD`); return v || null; };
+
+export function buildTenders(rows, matcher) {
+  const errs = [], out = [];
+  rows.forEach((r, i) => {
+    const n = i + 2; need(r, ['id', 'title', 'url', 'source_name'], errs, n);
+    if (r.url && !httpsUrl(r.url)) errs.push(`row ${n}: url must be https`);
+    let dz = null; if (r.dzongkhag) { dz = matcher.byName(r.dzongkhag); if (!dz) errs.push(`row ${n}: unknown dzongkhag "${r.dzongkhag}"`); }
+    if (r.value && parseAmount(r.value) === null) errs.push(`row ${n}: value is not a number`);
+    if (r.value && !/^[A-Z]{3}$/.test(r.currency)) errs.push(`row ${n}: value needs ISO currency`);
+    out.push({ id: r.id, dzongkhag: dz, title: r.title, agency: r.agency || null, category: r.category || null, value: parseAmount(r.value), currency: r.currency || null,
+      published_on: optDate(r.published_on, 'published_on', n, errs), closing_on: optDate(r.closing_on, 'closing_on', n, errs), status: r.status || null,
+      url: httpsUrl(r.url), source_name: r.source_name, retrieved_on: optDate(r.retrieved_on, 'retrieved_on', n, errs) });
+  });
+  return { errs, out };
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  ingestManual().then(r => console.log('manual ingest ok', r), e => { console.error(e.message); process.exit(1); });
+export function buildOffices(rows, matcher) {
+  const errs = [], out = [];
+  rows.forEach((r, i) => {
+    const n = i + 2; need(r, ['kind', 'name', 'source_name', 'source_url'], errs, n);
+    if (r.kind && !['leader', 'office'].includes(r.kind)) errs.push(`row ${n}: kind must be leader or office`);
+    if (r.source_url && !httpsUrl(r.source_url)) errs.push(`row ${n}: source_url must be https`);
+    let dz = null; if (r.dzongkhag) { dz = matcher.byName(r.dzongkhag); if (!dz) errs.push(`row ${n}: unknown dzongkhag "${r.dzongkhag}"`); }
+    out.push({ dzongkhag: dz, kind: r.kind, name: r.name, role: r.role || null, contact: r.contact || null, source_name: r.source_name, source_url: httpsUrl(r.source_url), retrieved_on: optDate(r.retrieved_on, 'retrieved_on', n, errs) });
+  });
+  return { errs, out };
 }

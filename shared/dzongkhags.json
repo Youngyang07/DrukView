@@ -1,25 +1,284 @@
 {
-  "note": "The 20 dzongkhags of Bhutan. ids are ISO 3166-2:BT. grid = schematic position (col,row; north is row 0) used only by the tile-map fallback; it is NOT geography.",
-  "dzongkhags": [
-    {"id":"BT-GA","name":"Gasa","aliases":["Gasa"],"grid":[3,0]},
-    {"id":"BT-33","name":"Bumthang","aliases":["Bumthang","Bumthang Dzongkhag"],"grid":[6,0]},
-    {"id":"BT-44","name":"Lhuntse","aliases":["Lhuntse","Lhuentse","Lhuntshi","Lhuntsi"],"grid":[7,0]},
-    {"id":"BT-TY","name":"Trashiyangtse","aliases":["Trashiyangtse","Trashi Yangtse","Tashiyangtse","Tashi Yangtse","Trashiyangste","Yangtse"],"grid":[9,0]},
-    {"id":"BT-13","name":"Haa","aliases":["Haa"],"grid":[0,1]},
-    {"id":"BT-11","name":"Paro","aliases":["Paro"],"grid":[1,1]},
-    {"id":"BT-15","name":"Thimphu","aliases":["Thimphu","Thimphu Thromde"],"grid":[2,1]},
-    {"id":"BT-23","name":"Punakha","aliases":["Punakha"],"grid":[3,1]},
-    {"id":"BT-24","name":"Wangdue Phodrang","aliases":["Wangdue Phodrang","Wangdue","Wangduephodrang","Wangdi Phodrang","Wangdi"],"grid":[4,1]},
-    {"id":"BT-32","name":"Trongsa","aliases":["Trongsa","Tongsa"],"grid":[5,1]},
-    {"id":"BT-42","name":"Mongar","aliases":["Mongar","Monggar"],"grid":[7,1]},
-    {"id":"BT-41","name":"Trashigang","aliases":["Trashigang","Tashigang","Trashigang Dzongkhag"],"grid":[8,1]},
-    {"id":"BT-12","name":"Chukha","aliases":["Chukha","Chhukha","Chukkha","Phuentsholing","Phuntsholing"],"grid":[1,2]},
-    {"id":"BT-22","name":"Dagana","aliases":["Dagana","Dagapela"],"grid":[2,2]},
-    {"id":"BT-21","name":"Tsirang","aliases":["Tsirang","Chirang","Damphu"],"grid":[3,2]},
-    {"id":"BT-34","name":"Zhemgang","aliases":["Zhemgang","Shemgang","Zhemgang Dzongkhag"],"grid":[5,2]},
-    {"id":"BT-43","name":"Pemagatshel","aliases":["Pemagatshel","Pema Gatshel","Pemagatsel","Pemagatshal"],"grid":[8,2]},
-    {"id":"BT-14","name":"Samtse","aliases":["Samtse","Samchi"],"grid":[0,3]},
-    {"id":"BT-31","name":"Sarpang","aliases":["Sarpang","Sarbhang","Gelephu","Gelephu Thromde"],"grid":[4,3]},
-    {"id":"BT-45","name":"Samdrup Jongkhar","aliases":["Samdrup Jongkhar","Samdrupjongkhar","Samdrup Jongkha","Samdrup Jongkhar Dzongkhag","S/Jongkhar","S. Jongkhar"],"grid":[9,3]}
-  ]
+ "note": "The 20 dzongkhags of Bhutan. id = ISO 3166-2:BT. lat/lon = approximate headquarters-town coordinates, used ONLY to request weather. grid = schematic tile-map position, NOT geography.",
+ "dzongkhags": [
+  {
+   "id": "BT-GA",
+   "slug": "gasa",
+   "name": "Gasa",
+   "aliases": [
+    "Gasa"
+   ],
+   "lat": 27.91,
+   "lon": 89.73,
+   "grid_col": 3,
+   "grid_row": 0
+  },
+  {
+   "id": "BT-33",
+   "slug": "bumthang",
+   "name": "Bumthang",
+   "aliases": [
+    "Bumthang",
+    "Bumthang Dzongkhag"
+   ],
+   "lat": 27.55,
+   "lon": 90.75,
+   "grid_col": 6,
+   "grid_row": 0
+  },
+  {
+   "id": "BT-44",
+   "slug": "lhuntse",
+   "name": "Lhuntse",
+   "aliases": [
+    "Lhuntse",
+    "Lhuentse",
+    "Lhuntshi",
+    "Lhuntsi"
+   ],
+   "lat": 27.65,
+   "lon": 91.18,
+   "grid_col": 7,
+   "grid_row": 0
+  },
+  {
+   "id": "BT-TY",
+   "slug": "trashiyangtse",
+   "name": "Trashiyangtse",
+   "aliases": [
+    "Trashiyangtse",
+    "Trashi Yangtse",
+    "Tashiyangtse",
+    "Tashi Yangtse",
+    "Trashiyangste",
+    "Yangtse"
+   ],
+   "lat": 27.6,
+   "lon": 91.5,
+   "grid_col": 9,
+   "grid_row": 0
+  },
+  {
+   "id": "BT-13",
+   "slug": "haa",
+   "name": "Haa",
+   "aliases": [
+    "Haa"
+   ],
+   "lat": 27.39,
+   "lon": 89.28,
+   "grid_col": 0,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-11",
+   "slug": "paro",
+   "name": "Paro",
+   "aliases": [
+    "Paro"
+   ],
+   "lat": 27.43,
+   "lon": 89.41,
+   "grid_col": 1,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-15",
+   "slug": "thimphu",
+   "name": "Thimphu",
+   "aliases": [
+    "Thimphu",
+    "Thimphu Thromde"
+   ],
+   "lat": 27.47,
+   "lon": 89.64,
+   "grid_col": 2,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-23",
+   "slug": "punakha",
+   "name": "Punakha",
+   "aliases": [
+    "Punakha"
+   ],
+   "lat": 27.59,
+   "lon": 89.86,
+   "grid_col": 3,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-24",
+   "slug": "wangdue-phodrang",
+   "name": "Wangdue Phodrang",
+   "aliases": [
+    "Wangdue Phodrang",
+    "Wangdue",
+    "Wangduephodrang",
+    "Wangdi Phodrang",
+    "Wangdi"
+   ],
+   "lat": 27.49,
+   "lon": 89.9,
+   "grid_col": 4,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-32",
+   "slug": "trongsa",
+   "name": "Trongsa",
+   "aliases": [
+    "Trongsa",
+    "Tongsa"
+   ],
+   "lat": 27.5,
+   "lon": 90.5,
+   "grid_col": 5,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-42",
+   "slug": "mongar",
+   "name": "Mongar",
+   "aliases": [
+    "Mongar",
+    "Monggar"
+   ],
+   "lat": 27.27,
+   "lon": 91.24,
+   "grid_col": 7,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-41",
+   "slug": "trashigang",
+   "name": "Trashigang",
+   "aliases": [
+    "Trashigang",
+    "Tashigang",
+    "Trashigang Dzongkhag"
+   ],
+   "lat": 27.33,
+   "lon": 91.55,
+   "grid_col": 8,
+   "grid_row": 1
+  },
+  {
+   "id": "BT-12",
+   "slug": "chukha",
+   "name": "Chukha",
+   "aliases": [
+    "Chukha",
+    "Chhukha",
+    "Chukkha",
+    "Phuentsholing",
+    "Phuntsholing"
+   ],
+   "lat": 26.85,
+   "lon": 89.39,
+   "grid_col": 1,
+   "grid_row": 2
+  },
+  {
+   "id": "BT-22",
+   "slug": "dagana",
+   "name": "Dagana",
+   "aliases": [
+    "Dagana",
+    "Dagapela"
+   ],
+   "lat": 27.03,
+   "lon": 89.88,
+   "grid_col": 2,
+   "grid_row": 2
+  },
+  {
+   "id": "BT-21",
+   "slug": "tsirang",
+   "name": "Tsirang",
+   "aliases": [
+    "Tsirang",
+    "Chirang",
+    "Damphu"
+   ],
+   "lat": 27.02,
+   "lon": 90.12,
+   "grid_col": 3,
+   "grid_row": 2
+  },
+  {
+   "id": "BT-34",
+   "slug": "zhemgang",
+   "name": "Zhemgang",
+   "aliases": [
+    "Zhemgang",
+    "Shemgang",
+    "Zhemgang Dzongkhag"
+   ],
+   "lat": 27.22,
+   "lon": 90.66,
+   "grid_col": 5,
+   "grid_row": 2
+  },
+  {
+   "id": "BT-43",
+   "slug": "pemagatshel",
+   "name": "Pemagatshel",
+   "aliases": [
+    "Pemagatshel",
+    "Pema Gatshel",
+    "Pemagatsel",
+    "Pemagatshal"
+   ],
+   "lat": 27.03,
+   "lon": 91.34,
+   "grid_col": 8,
+   "grid_row": 2
+  },
+  {
+   "id": "BT-14",
+   "slug": "samtse",
+   "name": "Samtse",
+   "aliases": [
+    "Samtse",
+    "Samchi"
+   ],
+   "lat": 26.89,
+   "lon": 89.09,
+   "grid_col": 0,
+   "grid_row": 3
+  },
+  {
+   "id": "BT-31",
+   "slug": "sarpang",
+   "name": "Sarpang",
+   "aliases": [
+    "Sarpang",
+    "Sarbhang",
+    "Gelephu",
+    "Gelephu Thromde"
+   ],
+   "lat": 26.87,
+   "lon": 90.49,
+   "grid_col": 4,
+   "grid_row": 3
+  },
+  {
+   "id": "BT-45",
+   "slug": "samdrup-jongkhar",
+   "name": "Samdrup Jongkhar",
+   "aliases": [
+    "Samdrup Jongkhar",
+    "Samdrupjongkhar",
+    "Samdrup Jongkha",
+    "Samdrup Jongkhar Dzongkhag",
+    "S/Jongkhar",
+    "S. Jongkhar"
+   ],
+   "lat": 26.8,
+   "lon": 91.5,
+   "grid_col": 9,
+   "grid_row": 3
+  }
+ ]
 }
