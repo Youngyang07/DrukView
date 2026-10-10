@@ -112,7 +112,7 @@ export function parseIati(xml, { sourceId, funder, matcher, fetchedAt, countryFi
 }
 
 export async function fetchIati(url, opts) {
-  const xml = await fetchText(url, { timeoutMs: 120000 });
+  const xml = await fetchText(url, { timeoutMs: 30000, retries: 1 }); // ~3 MB for Bhutan
   const rows = parseIati(xml, opts);
   if (!rows.length) throw new Error(`IATI file at ${url} yielded zero Bhutan activities`);
   return rows;

@@ -95,19 +95,45 @@ export async function saveManual(files: ManualFiles, matcher: any) {
   return b.out.length + a.out.length + t.out.length + o.out.length;
 }
 
-export type JobResult = { job: JobName; status: 'ok' | 'error'; records: number; message: string | null };
+export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; records: number; message: string | null; retry_after_s?: number };
 
-export async function runJob(job: JobName): Promise<JobResult> {
-  const def = { worldbank: WB, adb: ADB, boundaries: BND, weather: WX, manual: MANUAL }[job] as SourceDef;
+/**
+ * Jobs only read PUBLIC data and upsert it, so anyone may trigger them (the "Load data" button, Vercel Cron without a
+ * secret) — but at most once per interval, so they cannot be used to hammer the sources or the database.
+ * A valid CRON_SECRET bypasses the interval. After a failed run a retry is allowed after 5 minutes.
+ */
+export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, boundaries: 720, weather: 120, manual: 10 };
+const RETRY_AFTER_ERROR_MIN = 5;
+
+/** Atomically claim the right to run a job now. Returns null when claimed, or the seconds to wait. */
+export async function claimRun(job: JobName, def: SourceDef, force: boolean): Promise<number | null> {
   await upsertSource(def);
-  await query('update sources set last_attempt=now() where id=$1', [def.id]);
+  const won = await query<{ id: string }>(
+    `update sources set last_attempt = now()
+       where id = $1 and ($2::boolean or last_attempt is null
+         or last_attempt < now() - make_interval(mins => $3::int)
+         or (status in ('error','stale') and last_attempt < now() - make_interval(mins => $4::int)))
+     returning id`, [def.id, force, MIN_INTERVAL_MIN[job], RETRY_AFTER_ERROR_MIN]);
+  if (won.length) return null;
+  const [r] = await query<{ wait: number }>(
+    `select greatest(1, ceil(extract(epoch from (last_attempt + make_interval(mins => case when status in ('error','stale') then $2::int else $3::int end) - now()))))::int as wait
+       from sources where id = $1`, [def.id, RETRY_AFTER_ERROR_MIN, MIN_INTERVAL_MIN[job]]);
+  return r?.wait ?? 60;
+}
+
+/** Hosting platforms kill a function at 60 s; finish (and record the failure) before that happens. */
+export const JOB_DEADLINE_MS = 50_000;
+function withDeadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
+  let t: ReturnType<typeof setTimeout>;
+  return Promise.race([p, new Promise<T>((_, rej) => { t = setTimeout(() => rej(new Error(`${what} did not finish within ${ms / 1000} s (source slow or unreachable)`)), ms); })]).finally(() => clearTimeout(t));
+}
+
+export async function runJob(job: JobName, { force = false }: { force?: boolean } = {}): Promise<JobResult> {
+  const def = { worldbank: WB, adb: ADB, boundaries: BND, weather: WX, manual: MANUAL }[job] as SourceDef;
+  const wait = await claimRun(job, def, force);
+  if (wait !== null) return { job, status: 'skipped', records: 0, message: `Refreshed recently; next refresh allowed in about ${Math.ceil(wait / 60)} min.`, retry_after_s: wait };
   try {
-    let n = 0;
-    if (job === 'worldbank') n = await replaceProjects('worldbank', await fetchWorldBank(await matcherOf()));
-    if (job === 'adb') n = await replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
-    if (job === 'boundaries') { const r = await fetchBoundaries(await matcherOf()); n = await saveBoundaries(r.fc, r.license); }
-    if (job === 'weather') n = await saveWeather(await fetchWeather(await loadDz()));
-    if (job === 'manual') n = await saveManual(await readManualFiles(), await matcherOf());
+    const n = await withDeadline(fetchAndSave(job), JOB_DEADLINE_MS, job);
     await query(`update sources set status='ok', last_success=now(), records=$2, error=null where id=$1`, [def.id, n]);
     await query('insert into update_log(job,status,records) values ($1,$2,$3)', [job, 'ok', n]);
     return { job, status: 'ok', records: n, message: null };
@@ -118,4 +144,12 @@ export async function runJob(job: JobName): Promise<JobResult> {
     await query('insert into update_log(job,status,records,message) values ($1,$2,0,$3)', [job, 'error', msg]);
     return { job, status: 'error', records: 0, message: msg };
   }
+}
+
+async function fetchAndSave(job: JobName): Promise<number> {
+  if (job === 'worldbank') return replaceProjects('worldbank', await fetchWorldBank(await matcherOf()));
+  if (job === 'adb') return replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
+  if (job === 'boundaries') { const r = await fetchBoundaries(await matcherOf()); return saveBoundaries(r.fc, r.license); }
+  if (job === 'weather') return saveWeather(await fetchWeather(await loadDz()));
+  return saveManual(await readManualFiles(), await matcherOf());
 }

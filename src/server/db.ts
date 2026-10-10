@@ -23,5 +23,12 @@ export async function dbStatus(): Promise<DbStatus> {
   } catch { return 'unreachable'; }
 }
 
-/** True only when the database is reachable AND initialised; pages otherwise show an honest setup message. */
-export async function dbReady(): Promise<boolean> { return (await dbStatus()) === 'ok'; }
+/** True when the database is reachable AND initialised. A connected-but-empty database is set up automatically here. */
+export async function dbReady(): Promise<boolean> {
+  let st = await dbStatus();
+  if (st === 'no-schema') {
+    try { const { ensureSchema } = await import('./setup'); await ensureSchema(); st = await dbStatus(); }
+    catch (e) { console.error('[drukview] automatic database setup failed:', (e as Error).message); }
+  }
+  return st === 'ok';
+}

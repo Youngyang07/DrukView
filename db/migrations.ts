@@ -1,3 +1,9 @@
+// Database migrations, bundled as code so the deployed app can create its own tables without reading files at runtime.
+// Append new migrations to the end; never edit one that has shipped.
+export const MIGRATIONS: { name: string; sql: string }[] = [
+  {
+    name: '0001_init.sql',
+    sql: `
 CREATE TABLE dzongkhags (
   id         text PRIMARY KEY,            -- ISO 3166-2:BT, e.g. BT-15
   slug       text NOT NULL UNIQUE,        -- url slug, e.g. thimphu
@@ -140,3 +146,6 @@ CREATE TABLE update_log (
   records int NOT NULL DEFAULT 0,
   message text
 );
+`,
+  },
+];

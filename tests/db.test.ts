@@ -13,11 +13,12 @@ d('database layer', () => {
   beforeAll(async () => {
     process.env.DATABASE_URL = url;
     db = await import('../src/server/db'); ing = await import('../src/server/ingest'); q = await import('../src/server/queries');
-    const { migrate } = await import('../scripts/migrate'); const { seed } = await import('../scripts/seed');
     await db.query('drop schema public cascade; create schema public;');
     expect(await db.dbStatus()).toBe('no-schema'); // connected, but tables missing → must not crash pages
-    await migrate(); await seed();
+    expect(await db.dbReady()).toBe(true);           // ...and is set up automatically on first use
     expect(await db.dbStatus()).toBe('ok');
+    const { ensureSchema } = await import('../src/server/setup');
+    expect((await ensureSchema()).applied).toEqual([]); // idempotent
     await db.query(`insert into sources(id,name,kind) values ('worldbank','WB','api'),('adb','ADB','iati'),('weather','WX','api')`);
   });
   afterAll(async () => { await db.pool().end(); });
@@ -79,9 +80,31 @@ d('database layer', () => {
     expect((await q.bySector(null)).find(s => s.k === 'Roads')!.n).toBe(1);
   });
 
+  test('schema setup is safe when several requests race on an empty database', async () => {
+    await db.query('drop schema public cascade; create schema public;');
+    const { ensureSchema } = await import('../src/server/setup');
+    const rs = await Promise.all([ensureSchema(), ensureSchema(), ensureSchema()]);
+    expect(rs.flatMap(r => r.applied)).toEqual(['0001_init.sql']); // applied exactly once
+    expect(await q.getDzongkhags()).toHaveLength(20);
+    // restore the fixtures the remaining tests rely on
+    await db.query(`insert into sources(id,name,kind) values ('worldbank','WB','api'),('adb','ADB','iati'),('weather','WX','api')`);
+  });
+
   test('freshness reflects sources; update_log writes', async () => {
     await db.query(`update sources set last_success=now(), status='ok' where id='worldbank'`);
     const fr = await q.freshness(); expect(fr.projects).toBeTruthy(); expect(fr.manual).toBeNull();
     expect(await q.getBoundaries()).toBeNull();
+  });
+
+  test('jobs: rate-limited without the secret, secret bypasses, one winner under concurrency, quick retry after failure', async () => {
+    expect((await ing.runJob('manual')).status).toBe('ok');
+    const again = await ing.runJob('manual');
+    expect(again.status).toBe('skipped'); expect(again.retry_after_s).toBeGreaterThan(0);
+    expect((await ing.runJob('manual', { force: true })).status).toBe('ok');
+    await db.query(`update sources set last_attempt = now() - interval '1 day' where id = 'rgob-manual'`);
+    const claims = await Promise.all([1, 2, 3, 4].map(() => ing.claimRun('manual', ing.MANUAL, false)));
+    expect(claims.filter(c => c === null)).toHaveLength(1); // exactly one request gets to run
+    await db.query(`update sources set status = 'error', last_attempt = now() - interval '6 minutes' where id = 'rgob-manual'`);
+    expect(await ing.claimRun('manual', ing.MANUAL, false)).toBeNull(); // failed runs may retry after 5 min
   });
 });

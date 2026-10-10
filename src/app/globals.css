@@ -73,3 +73,5 @@ details summary{cursor:pointer;list-style:none}details summary::before{content:"
 .chk{border:1px solid var(--line);border-radius:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:4px 12px;margin-bottom:12px}.chk label{font-size:.9rem}
 .foot{border-top:1px solid var(--line);padding:18px 0;color:var(--muted);font-size:.82rem}.prose{max-width:75ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.loaddata button[disabled]{opacity:.6;cursor:wait}
+.plist li,td,.note,.banner{overflow-wrap:anywhere}
