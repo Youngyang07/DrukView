@@ -210,7 +210,7 @@ export default function MapView({ values, format, selected, onSelect, gewogValue
             : dzLabels.map(s => <text key={s.id} x={s.lx} y={s.ly} fontSize={12 * u} strokeWidth={3 * u} textAnchor="middle" dominantBaseline="middle">{s.name}</text>)}
         </g>
       </svg>
-      <div className="legend">Less {[0, 1, 2, 3, 4, 5].map(i => <i key={i} style={{ background: `var(--q${i})` }} />)} More · grey = no figures</div>
+      <div className="legend">Less {[0, 1, 2, 3, 4, 5].map(i => <i key={i} style={{ background: `var(--m${i})` }} />)} More · grey = no figures</div>
       <p className="note">
         {sel ? (gewogError ? 'Gewog boundaries could not be loaded; showing the dzongkhag only. ' : `${gw.length || '…'} gewogs of ${sel.name}. Click a gewog to filter its budget lines. `) : 'Click a dzongkhag to open its budget and gewogs. Zoom with + / −, Ctrl + scroll or pinch; drag to move when zoomed. '}
         Boundaries: OCHA/HDX via geoBoundaries (CC BY 3.0 IGO); no legal or political meaning. Projects shared by several dzongkhags are counted in each; their money is not split.
