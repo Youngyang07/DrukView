@@ -30,7 +30,7 @@ const PALETTE = ['#8a1c2b', '#ffb400', '#2f6f8f', '#5c8a3c', '#9b5fc0', '#c2552b
 
 // ---------- state ----------
 const S = { dz: [], dzById: {}, projects: [], budget: [], alloc: [], sources: [], geo: null, generated: null,
-  f: { funder: '', status: '', sector: '', year: '', q: '' }, metric: 'usd', sel: null, tab: 'map', sort: { key: 'amount_committed', dir: -1 } };
+  f: { funder: '', status: '', sector: '', year: '', q: '' }, metric: 'usd', sel: null, pf: { fy: '', sector: '', src: '', gewog: '' }, tab: 'map', sort: { key: 'amount_committed', dir: -1 } };
 
 async function load() {
   const j = async (p, fb) => { try { const r = await fetch(p, { cache: 'no-cache' }); if (!r.ok) throw 0; return await r.json(); } catch { return fb; } };
@@ -183,32 +183,65 @@ function projectItem(p) {
     h('div', { class: 'm' }, h('span', { class: `badge b-${p.status}` }, STATUS[p.status] ?? p.status), ` ${p.funder} · ${moneyFull(p.amount_committed, p.currency)}`,
       p.sector ? ` · ${p.sector}` : '', p.start_date ? ` · from ${p.start_date.slice(0, 4)}` : ''));
 }
+// Interactive per-dzongkhag budget explorer. Panel-level filters (fy/sector/src/gewog) live in S.pf and reset on selection change.
+const rerenderPanel = () => { const l = filtered(); renderPanel(l, aggregate(l)); };
+function clickBars(pairs, fmt, key, activeVal) {
+  const max = Math.max(...pairs.map(p => p[1]), 1);
+  return pairs.map(([k, v]) => h('button', { type: 'button', class: `row crow${activeVal === k ? ' on' : ''}`, 'aria-pressed': String(activeVal === k),
+    title: activeVal === k ? 'Click to clear this filter' : 'Click to filter',
+    onclick: () => { S.pf[key] = activeVal === k ? '' : k; rerenderPanel(); } },
+    h('span', {}, k), h('span', { class: 'track' }, h('i', { style: `width:${(v / max * 100).toFixed(1)}%;display:block` })), h('span', { class: 'v' }, fmt(v))));
+}
+function tile(label, value, sub) { return h('div', { class: 'kpi' }, h('small', {}, label), h('b', {}, value), h('span', {}, sub)); }
 function renderPanel(list, agg) {
   const el = clear($('#panel'));
   if (!S.sel) {
-    el.append(h('h2', {}, 'Bhutan overview'), h('p', { class: 'note' }, 'Select a dzongkhag on the map to see its projects, funders and allocations.'));
+    el.append(h('h2', {}, 'Bhutan overview'), h('p', { class: 'note' }, 'Click any dzongkhag on the map to open its budget: allocations, funding sources, sectors, gewogs and projects.'));
     const by = sumBy(list.filter(p => p.currency === 'USD'), p => p.funder, p => p.amount_committed);
-    if (by.length) { el.append(h('h3', {}, 'Committed by funder (US$)'), stackedBar(by, v => money(v, 'USD'))); }
+    if (by.length) el.append(h('h3', {}, 'Committed by funder (US$)'), stackedBar(by, v => money(v, 'USD')));
     el.append(h('p', { class: 'note' }, `${full.format(agg.national)} projects have no identifiable dzongkhag (national or multi-region) and appear only in the table and totals.`));
     return;
   }
-  const d = S.dzById[S.sel], a = agg.by[S.sel], al = allocBy(S.sel);
+  const pf = S.pf, d = S.dzById[S.sel], a = agg.by[S.sel];
+  const allAl = allocBy(S.sel), years = [...new Set(allAl.map(x => x.fiscal_year))].sort().reverse();
+  if (!pf.fy || !years.includes(pf.fy)) pf.fy = years[0] ?? '';
+  const alFy = allAl.filter(x => x.fiscal_year === pf.fy && x.currency === 'BTN');
+  const alView = alFy.filter(x => (!pf.sector || (x.sector ?? 'General') === pf.sector) && (!pf.src || x.funding_source === pf.src) && (!pf.gewog || x.gewog === pf.gewog));
+  const projView = a.items.filter(p => (!pf.sector || (p.sector ?? 'Unclassified') === pf.sector) && (!pf.src || p.funder === pf.src));
+
   el.append(h('div', { class: 'card-h' }, h('h2', {}, d.name + ' Dzongkhag'), h('button', { type: 'button', onclick: () => { S.sel = null; location.hash = 'map'; } }, 'Clear')));
-  el.append(h('p', {}, `${a.n} project${a.n === 1 ? '' : 's'} · ${a.usd ? money(a.usd, 'USD') + ' committed to single-dzongkhag projects' : 'no committed amounts attributed'}`));
-  const byF = sumBy(a.items.filter(p => p.currency === 'USD' && p.amount_committed), p => p.funder, p => p.amount_committed);
-  if (byF.length) el.append(h('h3', {}, 'Who is funding (US$)'), stackedBar(byF, v => money(v, 'USD')));
-  if (al.length) {
-    el.append(h('h3', {}, 'Budget allocations (curated from published documents)'));
-    const bySrc = sumBy(al.filter(x => x.currency === 'BTN'), x => x.funding_source, x => x.amount);
-    if (bySrc.length) el.append(stackedBar(bySrc, v => money(v, 'BTN')));
-    const gw = sumBy(al.filter(x => x.gewog), x => x.gewog, x => x.amount);
-    if (gw.length) el.append(h('h3', {}, 'By gewog'), h('ul', { class: 'plist' }, gw.map(([g, v]) => h('li', {}, `${g} – ${money(v, 'BTN')}`))));
-    el.append(h('ul', { class: 'plist' }, al.map(x => h('li', {}, h('div', { class: 't' }, `${x.sector ?? 'General'} – ${moneyFull(x.amount, x.currency)} (${x.fiscal_year})`),
-      h('div', { class: 'm' }, `${x.funding_source}${x.gewog ? ' · ' + x.gewog : ''}${x.village ? ' · ' + x.village : ''} · `, ext(x.source_url, `${x.source_name}: ${x.document}${x.page ? ', p.' + x.page : ''}`))))));
+  const totBtn = alFy.reduce((t, x) => t + (x.amount ?? 0), 0), totUsd = a.items.filter(p => p.currency === 'USD').reduce((t, p) => t + (p.amount_committed ?? 0), 0);
+  el.append(h('div', { class: 'kpis small' },
+    tile(`Govt/other budget ${pf.fy || ''}`, alFy.length ? money(totBtn, 'BTN') : 'n/a', alFy.length ? `${alFy.length} allocation line${alFy.length === 1 ? '' : 's'}` : 'none published in DrukView yet'),
+    tile('Partner commitments', a.items.length ? money(totUsd, 'USD') : 'n/a', 'US$, all projects touching this dzongkhag'),
+    tile('Projects', String(a.n), `${a.items.filter(p => p.status === 'active').length} active · ${a.items.filter(p => p.status === 'completed').length} completed`)));
+  if (years.length > 1) el.append(h('label', { class: 'inline' }, 'Fiscal year ', h('select', { onchange: e => { pf.fy = e.target.value; rerenderPanel(); } }, years.map(y => h('option', { value: y, selected: y === pf.fy }, y)))));
+
+  const active = [pf.sector && `sector: ${pf.sector}`, pf.src && `source: ${pf.src}`, pf.gewog && `gewog: ${pf.gewog}`].filter(Boolean);
+  if (active.length) el.append(h('p', { class: 'note' }, 'Filtered by ', active.join(' · '), ' ', h('button', { type: 'button', class: 'link', onclick: () => { S.pf = { fy: pf.fy, sector: '', src: '', gewog: '' }; rerenderPanel(); } }, 'clear filters')));
+
+  if (!alFy.length) el.append(h('div', { class: 'empty' }, `No government or sector budget lines for ${d.name} have been added yet. Allocation rows (with their source document) go in data/manual/allocations_by_location.csv.`));
+  else {
+    const src = sumBy(alFy, x => x.funding_source, x => x.amount);
+    el.append(h('h3', {}, 'Where the money comes from'), ...clickBars(src, v => money(v, 'BTN'), 'src', pf.src));
+    const sec = sumBy(alFy.filter(x => !pf.src || x.funding_source === pf.src), x => x.sector ?? 'General', x => x.amount);
+    el.append(h('h3', {}, 'What it is spent on'), ...clickBars(sec, v => money(v, 'BTN'), 'sector', pf.sector));
+    const gw = sumBy(alFy.filter(x => x.gewog), x => x.gewog, x => x.amount);
+    if (gw.length) el.append(h('h3', {}, 'By gewog'), ...clickBars(gw, v => money(v, 'BTN'), 'gewog', pf.gewog));
+    el.append(h('h3', {}, `Budget lines${alView.length !== alFy.length ? ` (${alView.length} of ${alFy.length})` : ''}`),
+      h('ul', { class: 'plist' }, alView.map(x => h('li', {}, h('div', { class: 't' }, `${x.sector ?? 'General'} – ${moneyFull(x.amount, x.currency)}`),
+        h('div', { class: 'm' }, `${x.funding_source}${x.gewog ? ' · ' + x.gewog : ''}${x.village ? ' · ' + x.village : ''} · FY ${x.fiscal_year} · `, ext(x.source_url, `${x.source_name}: ${x.document}${x.page ? ', p.' + x.page : ''}`))))));
   }
-  el.append(h('h3', {}, 'Projects'));
-  const items = [...a.items].sort((x, y) => (y.amount_committed ?? -1) - (x.amount_committed ?? -1));
-  el.append(items.length ? h('ul', { class: 'plist' }, items.slice(0, 40).map(projectItem)) : h('div', { class: 'empty' }, 'No projects match the current filters for this dzongkhag.'));
+  const byF = sumBy(a.items.filter(p => p.currency === 'USD' && p.amount_committed), p => p.funder, p => p.amount_committed);
+  if (byF.length) el.append(h('h3', {}, 'Development-partner projects by funder (US$)'), ...clickBars(byF, v => money(v, 'USD'), 'src', pf.src));
+  el.append(h('h3', {}, `Projects (${projView.length})`));
+  const items = [...projView].sort((x, y) => (y.amount_committed ?? -1) - (x.amount_committed ?? -1));
+  el.append(items.length ? h('ul', { class: 'plist' }, items.slice(0, 40).map(p => h('li', {}, h('details', {},
+    h('summary', {}, h('span', { class: 't' }, p.title), h('div', { class: 'm' }, h('span', { class: `badge b-${p.status}` }, STATUS[p.status] ?? p.status), ` ${p.funder} · ${moneyFull(p.amount_committed, p.currency)}`)),
+    h('dl', { class: 'dl' }, ...[['Sector', p.sector], ['Implementing agency', p.implementing_agency], ['Committed', moneyFull(p.amount_committed, p.currency)], ['Disbursed', p.amount_disbursed == null ? 'not reported by source' : moneyFull(p.amount_disbursed, p.currency)],
+      ['Period', `${p.start_date ?? '?'} → ${p.end_date ?? '?'}`], ['Location basis', p.geo_confidence === 'text-match' ? 'inferred from place names in text' : p.geo_confidence === 'location-field' ? 'source location field' : 'unspecified']]
+      .filter(r => r[1]).flatMap(([k, v]) => [h('dt', {}, k), h('dd', {}, v)])),
+    p.description ? h('p', { class: 'note' }, p.description) : null, p.url ? h('p', {}, ext(p.url, 'Open original record ↗')) : null)))) : h('div', { class: 'empty' }, 'No projects match these filters for this dzongkhag.'));
   if (items.length > 40) el.append(h('p', { class: 'note' }, `Showing 40 of ${items.length}. See the Projects tab for all.`));
 }
 
@@ -308,7 +341,7 @@ function render() {
 function route() {
   const [tab, dz] = (location.hash.slice(1) || 'map').split('/');
   S.tab = ['map', 'projects', 'budget', 'funding', 'data'].includes(tab) ? tab : 'map';
-  S.sel = S.dzById[dz] ? dz : null;
+  const nsel = S.dzById[dz] ? dz : null; if (nsel !== S.sel) S.pf = { fy: '', sector: '', src: '', gewog: '' }; S.sel = nsel;
   for (const t of document.querySelectorAll('.tab')) t.hidden = t.id !== `tab-${S.tab}`;
   for (const a of document.querySelectorAll('#tabs a')) a.toggleAttribute('aria-current', a.dataset.tab === S.tab), a.dataset.tab === S.tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current');
   render();

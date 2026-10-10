@@ -73,3 +73,11 @@ td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
 .empty{color:var(--muted);padding:18px;border:1px dashed var(--line);border-radius:12px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.kpis.small{grid-template-columns:repeat(3,1fr);gap:8px}.kpis.small .kpi{padding:8px 10px}.kpis.small .kpi b{font-size:1.05rem}
+button.row{width:100%;background:none;border:0;border-radius:8px;text-align:left;font-weight:400;padding:5px 6px}
+button.row:hover{background:var(--bg)} button.row.on{background:var(--q1);outline:2px solid var(--saffron)}
+button.link{border:0;background:none;color:var(--link);text-decoration:underline;padding:0;font-weight:400}
+details summary{cursor:pointer;list-style:none} details summary::before{content:"▸ ";color:var(--muted)} details[open] summary::before{content:"▾ "}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:.84rem;margin:8px 0}.dl dt{color:var(--muted)}.dl dd{margin:0}
+@media(max-width:520px){.kpis.small{grid-template-columns:1fr}}
