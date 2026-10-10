@@ -17,7 +17,7 @@ Next.js 15 (App Router, TypeScript) · PostgreSQL (`pg`, plain SQL migrations) �
 |---|---|---|
 | World Bank Projects & Operations API | automated (`pipeline/worldbank.mjs`) | daily |
 | Asian Development Bank IATI file | automated (`pipeline/adb.mjs`; override with `ADB_IATI_URL`) | daily |
-| Open-Meteo weather | automated (`pipeline/weather.mjs`) | every 6 h |
+| Open-Meteo weather | automated (`pipeline/weather.mjs`) | daily (Vercel Hobby allows at most one run/day per cron; on a Pro plan change `vercel.json` to e.g. `37 */6 * * *`) |
 | geoBoundaries (map shapes) | automated (`pipeline/boundaries.mjs`) | weekly |
 | MoF / MoHCA / MoAL & other ministries' budgets, allocations, tenders, offices | **curated CSV** in `data/manual/` — these are PDFs/web pages with no API. Every row must cite its public document | on commit |
 
