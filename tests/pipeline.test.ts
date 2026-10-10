@@ -136,3 +136,60 @@ test('project validation rejects bad batches', () => {
   const e = validateProjects([ok, { ...ok, status: 'weird', amount_committed: -1, url: 'http://e', locations: [{ dzongkhag: 'ZZ' }] }], ids).join('|');
   assert.match(e, /duplicate id/); assert.match(e, /bad status/); assert.match(e, /bad amount/); assert.match(e, /https/); assert.match(e, /unknown dzongkhag/);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Regression tests built from REAL responses captured on 2026-10-10 (trimmed copies in tests/fixtures).
+// Each one pins a bug that synthetic fixtures had hidden.
+// ---------------------------------------------------------------------------------------------
+import { isoDate, fetchWithRetry } from '../pipeline/lib.mjs';
+import { adbProjectKey, adbProjectUrl } from '../pipeline/adb.mjs';
+
+const real = (f: string) => readFileSync(`tests/fixtures/${f}`, 'utf8');
+const sectorNames = JSON.parse(readFileSync('shared/iati-sectors.json', 'utf8')).sectors;
+
+test('isoDate: ISO and World Bank US-style dates, timezone independent, rejects junk', () => {
+  assert.equal(isoDate('2024-12-11T00:00:00Z'), '2024-12-11');
+  assert.equal(isoDate('12/31/2027 12:00:00 AM'), '2027-12-31');
+  assert.equal(isoDate('6/30/2024 12:00:00 AM'), '2024-06-30');
+  assert.equal(isoDate('2/30/2024 12:00:00 AM'), null); // impossible date
+  assert.equal(isoDate('garbage'), null); assert.equal(isoDate(null), null);
+});
+
+test('World Bank real sample: abstract key "cdata!", "0" commitment = not reported, US dates, statuses', () => {
+  const rows = normalizeWorldBank(JSON.parse(real('worldbank-real-sample.json')), matcher, 'x');
+  assert.equal(rows.length, 5);
+  const dpf = rows.find((r: any) => r.id === 'worldbank:P500536');
+  assert.equal(dpf.amount_committed, null, 'a "0" commitment must read as unreported, never US$0');
+  assert.ok(dpf.description.startsWith('The operation will provide'), 'abstract must come from project_abstract["cdata!"]');
+  assert.equal(dpf.status, 'active'); assert.equal(dpf.end_date, '2027-12-31'); assert.equal(dpf.start_date, '2024-12-11');
+  const closed = rows.find((r: any) => r.id === 'worldbank:P178635');
+  assert.equal(closed.amount_committed, 50_000_000); assert.equal(closed.status, 'completed'); assert.equal(closed.end_date, '2024-06-30'); assert.equal(closed.implementing_agency, 'Ministry of Finance');
+  assert.deepEqual(validateProjects(rows, new Set(dz.map((d: any) => d.id))), []);
+});
+
+test('ADB real sample: loans/grants of one project merge; "Finalisation" is completed; sector names; adb.org URL', () => {
+  const rows = parseIati(real('adb-real-sample.xml'), { sourceId: 'adb', funder: 'Asian Development Bank', matcher, fetchedAt: 'x', projectKey: adbProjectKey, projectUrl: adbProjectUrl, sectorNames });
+  assert.equal(rows.length, 2, '3 activities = 2 projects (grants 0088 and 0089 share project 39221-022)');
+  const p = rows.find((r: any) => r.id === 'adb:39221-022');
+  assert.equal(Math.round(p.amount_committed), 14_296_646); // US$6.00M + US$8.30M, as printed on adb.org/projects/39221-022/main
+  assert.equal(p.status, 'completed', 'IATI status 3 (Finalisation) is Closed on adb.org');
+  assert.equal(p.url, 'https://www.adb.org/projects/39221-022/main');
+  assert.equal(p.sector, 'Small and medium-sized enterprises (SME) development'); assert.equal(p.start_date, '2008-02-19'); assert.equal(p.end_date, '2014-09-29');
+  assert.equal(p.implementing_agency, 'Ministry of Finance');
+  const located = rows.find((r: any) => r.locations.length);
+  assert.ok(located, 'a project with " Dzongkhag" location names must resolve to dzongkhags'); assert.equal(located.geo_confidence, 'location-field');
+  assert.deepEqual(validateProjects(rows, new Set(dz.map((d: any) => d.id))), []);
+  assert.equal(adbProjectKey('XM-DAC-46004-39221-022-GRNT0088'), '39221-022'); assert.equal(adbProjectKey('SOMETHING-ELSE'), null);
+});
+
+test('geoBoundaries real shape names: all 20 match (incl. the capital, spelled "Thimpu")', () => {
+  const names: string[] = JSON.parse(real('geoboundaries-shapenames.json'));
+  assert.equal(names.length, 20);
+  const ids = names.map(n => matcher.byName(n));
+  assert.ok(!ids.includes(null), `unmatched: ${names.filter((n, i) => !ids[i])}`);
+  assert.equal(new Set(ids).size, 20); assert.equal(matcher.byName('Thimpu'), 'BT-15');
+});
+
+test('network errors say what failed (cause + URL), not just "fetch failed"', async () => {
+  await assert.rejects(() => fetchWithRetry('http://127.0.0.1:59999/x', { retries: 0, timeoutMs: 2000 }), /ECONNREFUSED.*127\.0\.0\.1:59999/);
+});

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iati-activities generated-datetime="2026-09-29T09:32:33+08:00" version="2.03">
+<iati-activity default-currency="USD" hierarchy="1" last-updated-datetime="2026-09-29T09:32:33+08:00" xml:lang="en"><iati-identifier>XM-DAC-46004-39221-022-GRNT0088</iati-identifier><reporting-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></reporting-org><title><narrative>Micro, Small, and Medium-Sized Enterprise Sector Development Program (former Small and Medium Enterprise/Micro Enterprise Development Program)</narrative></title><description><narrative>The overall objective of the proposed MSME SDP is to promote the expansion and growth of a vibrant MSME sector and encourage private sector development for broad-based, sustainable economic growth and employment. To achieve this goal, the MSME SDP will consist of a program grant to address policy reforms and strengthening of the enabling environment; and a project grant, to provide the required funding otherwise not available from the domestic market due to market failure. The Program objectives include (i) establishing an integrated policy, strategy, and institutional framework for MSME development; (ii) enhancing business laws and regulations to facilitate MSME operations; (iii) increasing access to market-based finance; and (iv) strengthening business support infrastructure.</narrative></description><participating-org activity-id="XM-DAC-46004-39221-022-GRNT0088" ref="XM-DAC-46004" role="2" type="40"><narrative>Asian Development Bank</narrative></participating-org><participating-org activity-id="XM-DAC-46004-39221-022-GRNT0088" ref="BT-COA-202.01" role="4" type="10"><narrative>Ministry of Finance</narrative></participating-org><other-identifier ref="46004" type="B1"><owner-org><narrative>Asian Development Bank</narrative></owner-org></other-identifier><activity-status code="3"/><activity-date iso-date="2008-02-19" type="1"/><activity-date iso-date="2008-02-19" type="2"/><activity-date iso-date="2010-12-31" type="3"/><activity-date iso-date="2012-12-21" type="4"/><contact-info><organisation><narrative>Asian Development Bank</narrative></organisation><person-name><narrative>Anqian Huang</narrative></person-name><website>https://www.adb.org/forms/request-information-form?topic=projects&amp;source=PDS&amp;subject=39221-022 (Closed)&amp;officer= ahuang@adb.org&amp;division= Public Management, Financial Sector and Trade Division, SARD&amp;projectcountry= Bhutan</website></contact-info><activity-scope code="4"/><recipient-country code="BT"/><location><location-reach code="1"/><location-id vocabulary="G1" code="1252634"/><name><narrative>Bhutan</narrative></name><point srsName="http://www.opengis.net/def/crs/EPSG/0/4326"><pos>27.5 90.5</pos></point><exactness code="2"/></location><sector code="32130" vocabulary="1"/><policy-marker code="Private sector development" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Private sector development</narrative></policy-marker><policy-marker code="Inclusive economic growth" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Inclusive economic growth</narrative></policy-marker><policy-marker code="Some gender elements (SGE)" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Some gender elements (SGE)</narrative></policy-marker><collaboration-type code="2"/><default-flow-type code="10"/><default-finance-type code="110"/><default-aid-type code="A01" vocabulary="1"/><default-tied-status code="5"/><capital-spend percentage="0"/><transaction><transaction-type code="2"/><transaction-date iso-date="2008-02-19"/><value value-date="2008-02-19">6000000</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2013-12-31"/><value value-date="2013-12-31">6000000.00</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-bhu-grj.pdf; https://www.adb.org/sites/default/files/project-documents//39221-bhu-grg.pdf"><title><narrative>Grant Agreement</narrative></title><category code="A09"/><category code="A04"/><language code="en"/><document-date iso-date="2008-02-19"/></document-link><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-bhu-rrp.pdf"><title><narrative>Project/Program Completion Reports</narrative></title><category code="A01"/><category code="A02"/><category code="A03"/><category code="A05"/><category code="A08"/><language code="en"/><document-date iso-date="2013-09-30"/></document-link><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-022-bhu-pcr.pdf"><title><narrative>Project/Program Completion Reports</narrative></title><category code="A07"/><category code="A08"/><language code="en"/><document-date iso-date="2013-09-30"/></document-link><document-link format="application/pdf" url="https://www.adb.org/projects/39221-022/main#project-tenders"><title><narrative>ADB financing is released against agreed conditions (if applicable) and completed policy actions and not implemented through contracts.</narrative></title><category code="A11"/><language code="en"/><document-date iso-date="2026-08-31"/></document-link><document-link format="application/pdf" url="https://www.adb.org/projects/39221-022/main#project-tenders"><title><narrative>ADB financing is released against agreed conditions (if applicable) and completed policy actions and not implemented through contracts.</narrative></title><category code="A10"/><language code="en"/><document-date iso-date="2026-08-31"/></document-link><conditions attached="1"><condition type="1"><narrative>Policy</narrative></condition><condition type="2"><narrative>Performance</narrative></condition><condition type="3"><narrative>Fiduciary</narrative></condition></conditions><result aggregation-status="false" type="1"><title><narrative>Project Output/s</narrative></title><description><narrative>Output/s as listed by the project staff.</narrative></description><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-022-bhu-pcr.pdf"><title><narrative>Project/Program Completion Reports</narrative></title><category code="A08"/><language code="en"/><document-date iso-date="2013-09-30"/></document-link><indicator measure="5"><title><narrative>Output 1  Indicator 1</narrative></title><description><narrative>Output: 1. Establishment of a coordinated policy, strategy, and institutional framework for MSME development 
+Indicator: Establishment of an MSME division to facilitate coordination between different ministries and other stakeholders, including the private sector 
+Progress/Status: The MSME Division has been established at the Department of Cottage and Small Industry of the Ministry of Economic Affairs. 
+Data Source: Official copies of government&amp;apos;s
+confirmation on the actions
+undertaken
+
+Official copies and publication
+of government strategies</narrative></description></indicator><indicator measure="5"><title><narrative>Output 1  Indicator 2</narrative></title><description><narrative>Output: 1. Establishment of a coordinated policy, strategy, and institutional framework for MSME development 
+Indicator: Prepared and adopted longterm policy and strategy (i.e., white paper) for MSME
+development 
+Progress/Status: The draft white paper has been prepared by the consultants and is now available for government review. The draft white paper was based on significant analyses and surveys conducted in the field, including informal sector survey, enterprise survey, value-chain analyses, and in consultation with a diverse range of stakeholders, including the private sector. The draft is being prepared for submission for adoption by the legislative bodies. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 1</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Established OSS units at the RTIOs with approved and adopted action plans and
+performance benchmarks 
+Progress/Status: The introduction of government&amp;apos;s G2C (Government-to-Citizen) Initiatives in 2010 replaced the OSS&amp;apos; work, including that of the OSS working group. G2C covers the work that was originally designed for OSS on (i) simplified business formalization process and OSS, and (ii) minimizing relevant bureaucratic procedures. G2C signed a Compact with MOEA on simplification and automation of small and cottage business licensing requirement. The extensive performance benchmarks on the time taken for each business formalization step are included in the Compact signed between G2C and MOEA. 
+Data Source: Official copies of government&amp;apos;s
+confirmation on the undertaken actions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 2</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Reduced time involved in business formalization process from 62 days to 30
+or even closer to international best practice 
+Progress/Status: Based on the definition used by the World Bank, the government&amp;apos;s calculation summed the total number of days for business formalization in Bhutan to 29. 
+Data Source: Official publication of government strategies</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 3</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Piloted RIA on two selected draft business laws (e.g., Bhutan Enterprises
+Registration Act and/or Industries and Investment Act, or any other legislation
+relevant to MSME development ) 
+Progress/Status: The pilot RIA exercise did not cover suggested (i) Bhutan Enterprises Registration Act  and (ii) Industries and Investment Act.  Alternatively, the RIA working group conducted and completed two equivalent pilot RIA exercises on draft legislations of (i) Business Start-Up in Bhutan and (ii) Improving Entrepreneurial Skills Development and Access to Finance for Cottage and Small Industries in Bhutan. Both replacement legislations are equally relevant to MSME development in Bhutan. 
+Data Source: Official copies of laws and
+regulations</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 4</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Developed RIA methodology, policy, and
+guidelines 
+Progress/Status: The RIA working group has completed the preparation of the RIA policy of “Rules and Regulations for Regulatory Impact Assessment System in Bhutan, 2011” and “Regulatory RIA in Bhutan Guideline.” RIA methodology and procedures have also been developed. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 1</narrative></title><description><narrative>Output: 3. Increased access to market-based finance 
+Indicator: Establish a central registry for secured transactions at RMA 
+Progress/Status: Ongoing, 
+Data Source: Official copies of
+Government/RMA reports</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 2</narrative></title><description><narrative>Output: 3. Increased access to market-based finance 
+Indicator: Improved MSME lending practice at BDFC by increasing the share of total loan portfolio allocated in the MSME- riented sector, and reducing its NPL ratio (e.g., from 15% in 2006; increasing from 15% of total loan portfolio distributed in the manufacturing sector in
+2006) 
+Progress/Status: To be determined. 
+Data Source: Official copies of BDFC&amp;apos;s board
+decision
+
+BDFC&amp;apos;s financial statement</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 3</narrative></title><description><narrative>Output: 3. Increased access to market-based finance 
+Indicator: Approved and adopted BDFC 5-year business plan aiming at providing suitable
+financial services to MSMEs 
+Progress/Status: The 5-year business plan was prepared and endorsed by BDFCL&amp;apos;s Board of Directors in 2008 for adoption. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 4  Indicator 1</narrative></title><description><narrative>Output: 4. Strengthened business support infrastructure 
+Indicator: Established cost sharing facility to promote quality business development
+services 
+Progress/Status: The cost sharing facility was established in May 2011. 
+Data Source: Official copies of government&amp;apos;s
+confirmation on the undertaken actions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 4  Indicator 2</narrative></title><description><narrative>Output: 4. Strengthened business support infrastructure 
+Indicator: Draft Standards Act submitted to the National Assembly 
+Progress/Status: The Bill was submitted to the National Assembly on 9 August 2010. The proposed Bill was passed by the National Assembly and approved by His Majesty The King on the same day. 
+Data Source: Official copies of acts, laws and regulations</narrative></description></indicator><indicator measure="5"><title><narrative>Output 4  Indicator 3</narrative></title><description><narrative>Output: 4. Strengthened business support infrastructure 
+Indicator: Prepared draft plan for testing, establishment of standards and product
+certification 
+Progress/Status: The proposed Bhutan Standards Bill was prepared. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator></result><result aggregation-status="false" type="2"><title><narrative>Project Outcome</narrative></title><description><narrative>Improved enabling environment for doing business and greater access to key resources</narrative></description><indicator measure="1"><title><narrative>Indicator 1</narrative></title><description><narrative>At least 250 private sector businesses assisted by the cost-sharing facility by 2010 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description><baseline year="2010" value="0"/></indicator><indicator measure="2"><title><narrative>Indicator 2</narrative></title><description><narrative>Share of total loan portfolio in the MSME-oriented sector by the target financial institution, BDFC, exceeds 25% by 2010 
+Data Source: Official copies of government's
+confirmation on the actions
+undertaken</narrative></description><baseline year="2010" value="0"/></indicator><indicator measure="5"><title><narrative>Indicator 3</narrative></title><description><narrative>Days and procedures in setting up a new business reduce to 30 days or less by 2010 
+Data Source: Official copies and publication
+of government strategies</narrative></description></indicator></result></iati-activity>
+<iati-activity default-currency="USD" hierarchy="1" last-updated-datetime="2026-09-29T09:32:33+08:00" xml:lang="en"><iati-identifier>XM-DAC-46004-39221-022-GRNT0089</iati-identifier><reporting-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></reporting-org><title><narrative>Micro, Small, and Medium-Sized Enterprise Sector Development Program (former Small and Medium Enterprise/Micro Enterprise Development Program)</narrative></title><description><narrative>The overall objective of the proposed MSME SDP is to promote the expansion and growth of a vibrant MSME sector and encourage private sector development for broad-based, sustainable economic growth and employment. To achieve this goal, the MSME SDP will consist of a program grant to address policy reforms and strengthening of the enabling environment; and a project grant, to provide the required funding otherwise not available from the domestic market due to market failure. The Program objectives include (i) establishing an integrated policy, strategy, and institutional framework for MSME development; (ii) enhancing business laws and regulations to facilitate MSME operations; (iii) increasing access to market-based finance; and (iv) strengthening business support infrastructure.</narrative></description><participating-org activity-id="XM-DAC-46004-39221-022-GRNT0089" ref="XM-DAC-46004" role="2" type="40"><narrative>Asian Development Bank</narrative></participating-org><participating-org activity-id="XM-DAC-46004-39221-022-GRNT0089" ref="BT-COA-202.01" role="4" type="10"><narrative>Ministry of Finance</narrative></participating-org><other-identifier ref="46004" type="B1"><owner-org><narrative>Asian Development Bank</narrative></owner-org></other-identifier><activity-status code="3"/><activity-date iso-date="2008-02-19" type="1"/><activity-date iso-date="2008-02-19" type="2"/><activity-date iso-date="2012-06-30" type="3"/><activity-date iso-date="2014-09-29" type="4"/><contact-info><organisation><narrative>Asian Development Bank</narrative></organisation><person-name><narrative>Anqian Huang</narrative></person-name><website>https://www.adb.org/forms/request-information-form?topic=projects&amp;source=PDS&amp;subject=39221-022 (Closed)&amp;officer= ahuang@adb.org&amp;division= Public Management, Financial Sector and Trade Division, SARD&amp;projectcountry= Bhutan</website></contact-info><activity-scope code="4"/><recipient-country code="BT"/><location><location-reach code="1"/><location-id vocabulary="G1" code="1252634"/><name><narrative>Bhutan</narrative></name><point srsName="http://www.opengis.net/def/crs/EPSG/0/4326"><pos>27.5 90.5</pos></point><exactness code="2"/></location><sector code="32130" vocabulary="1"/><policy-marker code="Private sector development" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Private sector development</narrative></policy-marker><policy-marker code="Inclusive economic growth" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Inclusive economic growth</narrative></policy-marker><policy-marker code="Some gender elements (SGE)" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Some gender elements (SGE)</narrative></policy-marker><collaboration-type code="2"/><default-flow-type code="10"/><default-finance-type code="110"/><default-aid-type code="C01" vocabulary="1"/><default-tied-status code="5"/><capital-spend percentage="100"/><transaction><transaction-type code="2"/><transaction-date iso-date="2008-02-19"/><value value-date="2008-02-19">8296646</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2013-12-31"/><value value-date="2013-12-31">8296645.50</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-03-31"/><value value-date="2014-03-31">-42372.45</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-06-30"/><value value-date="2014-06-30">0.00</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-09-30"/><value value-date="2014-09-30">0.00</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org ref="BT-COA-202.01" type="10"><narrative>Ministry of Finance</narrative></receiver-org></transaction><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-bhu-grj.pdf; https://www.adb.org/sites/default/files/project-documents//39221-bhu-grg.pdf"><title><narrative>Grant Agreement</narrative></title><category code="A09"/><category code="A04"/><language code="en"/><document-date iso-date="2008-02-19"/></document-link><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-bhu-rrp.pdf"><title><narrative>Project/Program Completion Reports</narrative></title><category code="A01"/><category code="A02"/><category code="A03"/><category code="A05"/><category code="A08"/><language code="en"/><document-date iso-date="2013-09-30"/></document-link><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-022-bhu-pcr.pdf"><title><narrative>Project/Program Completion Reports</narrative></title><category code="A07"/><category code="A08"/><language code="en"/><document-date iso-date="2013-09-30"/></document-link><document-link format="application/pdf" url="https://www.adb.org/projects/39221-022/main#project-tenders"><title><narrative>Contract/s Awarded</narrative></title><category code="A11"/><language code="en"/><document-date iso-date="2026-08-31"/></document-link><document-link format="application/pdf" url="https://www.adb.org/projects/39221-022/main#project-tenders"><title><narrative>Tenders</narrative></title><category code="A10"/><language code="en"/><document-date iso-date="2026-08-31"/></document-link><conditions attached="1"><condition type="2"><narrative>Performance</narrative></condition><condition type="3"><narrative>Fiduciary</narrative></condition></conditions><result aggregation-status="false" type="1"><title><narrative>Project Output/s</narrative></title><description><narrative>Output/s as listed by the project staff.</narrative></description><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//39221-022-bhu-pcr.pdf"><title><narrative>Project/Program Completion Reports</narrative></title><category code="A08"/><language code="en"/><document-date iso-date="2013-09-30"/></document-link><indicator measure="5"><title><narrative>Output 1  Indicator 1</narrative></title><description><narrative>Output: 1. Establishment of a coordinated policy, strategy, and institutional framework for MSME development 
+Indicator: Establishment of an MSME division to facilitate coordination between different ministries and other stakeholders, including the private sector 
+Progress/Status: The MSME Division has been established at the Department of Cottage and Small Industry of the Ministry of Economic Affairs. 
+Data Source: Official copies of government&amp;apos;s
+confirmation on the actions
+undertaken
+
+Official copies and publication
+of government strategies</narrative></description></indicator><indicator measure="5"><title><narrative>Output 1  Indicator 2</narrative></title><description><narrative>Output: 1. Establishment of a coordinated policy, strategy, and institutional framework for MSME development 
+Indicator: Prepared and adopted longterm policy and strategy (i.e., white paper) for MSME
+development 
+Progress/Status: The draft white paper has been prepared by the consultants and is now available for government review. The draft white paper was based on significant analyses and surveys conducted in the field, including informal sector survey, enterprise survey, value-chain analyses, and in consultation with a diverse range of stakeholders, including the private sector. The draft is being prepared for submission for adoption by the legislative bodies. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 1</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Established OSS units at the RTIOs with approved and adopted action plans and
+performance benchmarks 
+Progress/Status: The introduction of government&amp;apos;s G2C (Government-to-Citizen) Initiatives in 2010 replaced the OSS&amp;apos; work, including that of the OSS working group. G2C covers the work that was originally designed for OSS on (i) simplified business formalization process and OSS, and (ii) minimizing relevant bureaucratic procedures. G2C signed a Compact with MOEA on simplification and automation of small and cottage business licensing requirement. The extensive performance benchmarks on the time taken for each business formalization step are included in the Compact signed between G2C and MOEA. 
+Data Source: Official copies of government&amp;apos;s
+confirmation on the undertaken actions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 2</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Reduced time involved in business formalization process from 62 days to 30
+or even closer to international best practice 
+Progress/Status: Based on the definition used by the World Bank, the government&amp;apos;s calculation summed the total number of days for business formalization in Bhutan to 29. 
+Data Source: Official publication of government strategies</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 3</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Piloted RIA on two selected draft business laws (e.g., Bhutan Enterprises
+Registration Act and/or Industries and Investment Act, or any other legislation
+relevant to MSME development ) 
+Progress/Status: The pilot RIA exercise did not cover suggested (i) Bhutan Enterprises Registration Act  and (ii) Industries and Investment Act.  Alternatively, the RIA working group conducted and completed two equivalent pilot RIA exercises on draft legislations of (i) Business Start-Up in Bhutan and (ii) Improving Entrepreneurial Skills Development and Access to Finance for Cottage and Small Industries in Bhutan. Both replacement legislations are equally relevant to MSME development in Bhutan. 
+Data Source: Official copies of laws and
+regulations</narrative></description></indicator><indicator measure="5"><title><narrative>Output 2  Indicator 4</narrative></title><description><narrative>Output: 2. Enhanced business laws and regulations 
+Indicator: Developed RIA methodology, policy, and
+guidelines 
+Progress/Status: The RIA working group has completed the preparation of the RIA policy of “Rules and Regulations for Regulatory Impact Assessment System in Bhutan, 2011” and “Regulatory RIA in Bhutan Guideline.” RIA methodology and procedures have also been developed. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 1</narrative></title><description><narrative>Output: 3. Increased access to market-based finance 
+Indicator: Establish a central registry for secured transactions at RMA 
+Progress/Status: Ongoing, 
+Data Source: Official copies of
+Government/RMA reports</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 2</narrative></title><description><narrative>Output: 3. Increased access to market-based finance 
+Indicator: Improved MSME lending practice at BDFC by increasing the share of total loan portfolio allocated in the MSME- riented sector, and reducing its NPL ratio (e.g., from 15% in 2006; increasing from 15% of total loan portfolio distributed in the manufacturing sector in
+2006) 
+Progress/Status: To be determined. 
+Data Source: Official copies of BDFC&amp;apos;s board
+decision
+
+BDFC&amp;apos;s financial statement</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 3</narrative></title><description><narrative>Output: 3. Increased access to market-based finance 
+Indicator: Approved and adopted BDFC 5-year business plan aiming at providing suitable
+financial services to MSMEs 
+Progress/Status: The 5-year business plan was prepared and endorsed by BDFCL&amp;apos;s Board of Directors in 2008 for adoption. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 4  Indicator 1</narrative></title><description><narrative>Output: 4. Strengthened business support infrastructure 
+Indicator: Established cost sharing facility to promote quality business development
+services 
+Progress/Status: The cost sharing facility was established in May 2011. 
+Data Source: Official copies of government&amp;apos;s
+confirmation on the undertaken actions</narrative></description></indicator><indicator measure="5"><title><narrative>Output 4  Indicator 2</narrative></title><description><narrative>Output: 4. Strengthened business support infrastructure 
+Indicator: Draft Standards Act submitted to the National Assembly 
+Progress/Status: The Bill was submitted to the National Assembly on 9 August 2010. The proposed Bill was passed by the National Assembly and approved by His Majesty The King on the same day. 
+Data Source: Official copies of acts, laws and regulations</narrative></description></indicator><indicator measure="5"><title><narrative>Output 4  Indicator 3</narrative></title><description><narrative>Output: 4. Strengthened business support infrastructure 
+Indicator: Prepared draft plan for testing, establishment of standards and product
+certification 
+Progress/Status: The proposed Bhutan Standards Bill was prepared. 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description></indicator></result><result aggregation-status="false" type="2"><title><narrative>Project Outcome</narrative></title><description><narrative>Improved enabling environment for doing business and greater access to key resources</narrative></description><indicator measure="1"><title><narrative>Indicator 1</narrative></title><description><narrative>At least 250 private sector businesses assisted by the cost-sharing facility by 2010 
+Data Source: Program progress reports
+
+ADB review missions</narrative></description><baseline year="2010" value="0"/></indicator><indicator measure="2"><title><narrative>Indicator 2</narrative></title><description><narrative>Share of total loan portfolio in the MSME-oriented sector by the target financial institution, BDFC, exceeds 25% by 2010 
+Data Source: Official copies of government's
+confirmation on the actions
+undertaken</narrative></description><baseline year="2010" value="0"/></indicator><indicator measure="5"><title><narrative>Indicator 3</narrative></title><description><narrative>Days and procedures in setting up a new business reduce to 30 days or less by 2010 
+Data Source: Official copies and publication
+of government strategies</narrative></description></indicator></result></iati-activity>
+<iati-activity default-currency="USD" hierarchy="1" last-updated-datetime="2026-09-29T09:32:33+08:00" xml:lang="en"><iati-identifier>XM-DAC-46004-37399-013-GRNT0119</iati-identifier><reporting-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></reporting-org><title><narrative>Green Power Development Project</narrative></title><description><narrative>The Green Power Development Project has two components: (i) regional clean power trade, and (ii) renewable energy access for the poor. Under the first component, the Dagachhu hydropower development (a 126-megawatt [MW] run-of-river type) aims to export power from Bhutan to India through the existing grid to India. The rural electrification component will provide access to electricity sourced from hydropower to 8,767 households and facilities with grid extensions, and electricity sourced from solar energy to 119 remote public facilities (e.g., schools, health clinics, and other community facilities) on an off grid basis.
+
+The Dagachhu hydropower development will be promoted by a joint venture company between Druk Green Power Corporation (DGPC) in Bhutan and Tata Power Company (TPC) in India through a public private partnership (PPP). The rural electrification component will be mainly served by Bhutan Power Corporation (BPC), a public utility service company.
+</narrative></description><participating-org activity-id="XM-DAC-46004-37399-013-GRNT0119" ref="XM-DAC-46004" role="2" type="40"><narrative>Asian Development Bank</narrative></participating-org><participating-org activity-id="XM-DAC-46004-37399-013-GRNT0119" role="4" type="10"><narrative>Druk Green Power Corporation Limited</narrative></participating-org><other-identifier ref="46004" type="B1"><owner-org><narrative>Asian Development Bank</narrative></owner-org></other-identifier><activity-status code="3"/><activity-date iso-date="2009-02-13" type="1"/><activity-date iso-date="2009-02-13" type="2"/><activity-date iso-date="2013-12-31" type="3"/><activity-date iso-date="2015-02-28" type="4"/><contact-info><organisation><narrative>Asian Development Bank</narrative></organisation><person-name><narrative>Hazel Verian</narrative></person-name><website>https://www.adb.org/forms/request-information-form?topic=projects&amp;source=PDS&amp;subject=37399-013 (Closed)&amp;officer= &amp;division= Energy Division, SARD&amp;projectcountry= Bhutan</website></contact-info><activity-scope code="5"/><recipient-country code="BT"/><location><location-reach code="1"/><location-id vocabulary="G1" code="1337295"/><name><narrative>Wangdue Phodrang Dzongkhag</narrative></name><point srsName="http://www.opengis.net/def/crs/EPSG/0/4326"><pos>27.5 90.13333</pos></point><exactness code="2"/></location><location><location-reach code="1"/><location-id vocabulary="G1" code="1337281"/><name><narrative>Tsirang Dzongkhag</narrative></name><point srsName="http://www.opengis.net/def/crs/EPSG/0/4326"><pos>27.03333 90.16667</pos></point><exactness code="2"/></location><location><location-reach code="1"/><location-id vocabulary="G1" code="1337280"/><name><narrative>Dagana Dzongkhag</narrative></name><point srsName="http://www.opengis.net/def/crs/EPSG/0/4326"><pos>27.1 89.86667</pos></point><exactness code="2"/></location><sector code="23220" vocabulary="1"/><policy-marker code="Environmentally sustainable growth" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Environmentally sustainable growth</narrative></policy-marker><policy-marker code="Private sector development" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Private sector development</narrative></policy-marker><policy-marker code="Regional integration" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Regional integration</narrative></policy-marker><policy-marker code="Partnerships" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Partnerships</narrative></policy-marker><policy-marker code="Inclusive economic growth" vocabulary="99" vocabulary-uri="https://www.adb.org/sites/default/files/institutional-document/42823/project-classification-system-final-report_0.pdf"><narrative>Inclusive economic growth</narrative></policy-marker><collaboration-type code="2"/><default-flow-type code="10"/><default-finance-type code="110"/><default-aid-type code="C01" vocabulary="1"/><default-tied-status code="5"/><capital-spend percentage="100"/><transaction><transaction-type code="2"/><transaction-date iso-date="2009-02-13"/><value value-date="2009-02-13">25280000</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2013-12-31"/><value value-date="2013-12-31">23082865.52</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-03-31"/><value value-date="2014-03-31">856598.69</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-06-30"/><value value-date="2014-06-30">0.00</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-09-30"/><value value-date="2014-09-30">0.00</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2014-12-31"/><value value-date="2014-12-31">65612.83</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><transaction><transaction-type code="3"/><transaction-date iso-date="2015-03-31"/><value value-date="2015-03-31">0.00</value><provider-org ref="XM-DAC-46004" type="40"><narrative>Asian Development Bank</narrative></provider-org><receiver-org type="10"><narrative>Druk Green Power Corporation Limited</narrative></receiver-org></transaction><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//37399-bhu-grj1.pdf"><title><narrative>Grant Agreement</narrative></title><category code="A09"/><category code="A04"/><language code="en"/><document-date iso-date="2009-02-13"/></document-link><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents//37399-043-bhu-rrp.pdf"><title><narrative>Validations of Project Completion Reports</narrative></title><category code="A01"/><category code="A02"/><category code="A03"/><category code="A05"/><category code="A08"/><language code="en"/><document-date iso-date="2018-12-31"/></document-link><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents/37399/37399-013-pcr-en.pdf"><title><narrative>Validations of Project Completion Reports</narrative></title><category code="A07"/><category code="A08"/><language code="en"/><document-date iso-date="2018-12-31"/></document-link><document-link format="application/pdf" url="https://www.adb.org/projects/37399-013/main#project-tenders"><title><narrative>Contract/s Awarded</narrative></title><category code="A11"/><language code="en"/><document-date iso-date="2026-08-31"/></document-link><document-link format="application/pdf" url="https://www.adb.org/projects/37399-013/main#project-tenders"><title><narrative>Tenders</narrative></title><category code="A10"/><language code="en"/><document-date iso-date="2026-08-31"/></document-link><conditions attached="1"><condition type="2"><narrative>Performance</narrative></condition><condition type="3"><narrative>Fiduciary</narrative></condition></conditions><result aggregation-status="false" type="1"><title><narrative>Project Output/s</narrative></title><description><narrative>Output/s as listed by the project staff.</narrative></description><document-link format="application/pdf" url="https://www.adb.org/sites/default/files/project-documents/37399/37399-013-pcr-en.pdf"><title><narrative>Validations of Project Completion Reports</narrative></title><category code="A08"/><language code="en"/><document-date iso-date="2018-12-31"/></document-link><indicator measure="5"><title><narrative>Output 2  Indicator 1</narrative></title><description><narrative>Output: Dagachhu Hydropower Development and Rural Electrification 
+Indicator: Full operation of the Druk Green Power
+Corporation, through the corporate accounting policy (2009) and integrated management information system (2011) 
+Data Source: ADB review missions&amp;apos; aide memoires
+
+Quarterly project progress reports
+
+Project completion report
+
+Withdrawal applications, and disbursement and contract award records
+
+Audit of financial accounts and reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2011 
+Target value: Y</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 2</narrative></title><description><narrative>Output: Indicator 
+Indicator: Implementation of the Hydropower Development Policy, through two sample
+projects with public and/or private
+investments 
+Data Source: ADB review missions&amp;apos; aide memoires
+
+Quarterly project progress reports
+
+Project completion report
+
+Withdrawal applications, and disbursement and contract award records
+
+Audit of financial accounts and reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2013 
+Target value: Y</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 3</narrative></title><description><narrative>Output: Indicator 
+Indicator: Financial structuring proposals of Nikachhu (210 MW) and Khomachhu (326 MW) development before 2011 
+Data Source: ADB review missions&amp;apos; aide memoires
+
+Quarterly project progress reports
+
+Project completion report
+
+Withdrawal applications, and disbursement and contract award records
+
+Audit of financial accounts and reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2010 
+Target value: Y</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 1</narrative></title><description><narrative>Output: Indicator 
+Indicator: Construction of a 114 MW run-of-river
+Dagachhu hydropower plant by 2012 
+Progress/Status: Dagachhu Hydropower Development: 
+The Dagachhu hydropower plant has been operated since March 2015. No houses and buildings were relocated for the plant construction, but 25 households were compensated for partial loss of land for the construction of access roads. There are no outstanding safeguard issues. 
+
+Rural Electrification: 
+BPC has achieved the target number of households electrified on a grid extension sourced from hydropower electricity. Where there are very remote and economically unviable places for on-grid extensions, the solar home systems were installed. Particularly, the off-grid electrification focused on schools, clinics, and public community facilities. Because of a series of support from ADB and other donors, Bhutan is almost achieving electrification to all the households (As of the end 2014, the national electrification ratio stood at 98%). 
+ 
+Data Source: ADB review missions&amp;apos; aide
+memoires 
+
+Quarterly project progress reports 
+
+Project completion report
+
+Withdrawal applications, and
+disbursement and contract
+award records
+
+Audit of financial accounts and
+reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2012 
+Target value: Y</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 2</narrative></title><description><narrative>Output: Indicator 
+Indicator: Construction of a 19 km transmission line to evacuate to the grid system by 2012 
+Data Source: ADB review missions&amp;apos; aide
+memoires 
+
+Quarterly project progress reports 
+
+Project completion report
+
+Withdrawal applications, and
+disbursement and contract
+award records
+
+Audit of financial accounts and
+reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2012 
+Target value: Y</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 3</narrative></title><description><narrative>Output: Indicator 
+Indicator: Clean and renewable energy export of
+additional 250 GWh to India by 2012 and
+500 GWh after 2012 
+Data Source: ADB review missions&amp;apos; aide
+memoires 
+
+Quarterly project progress reports 
+
+Project completion report
+
+Withdrawal applications, and
+disbursement and contract
+award records
+
+Audit of financial accounts and
+reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2012 
+Target value: Y</narrative></description></indicator><indicator measure="5"><title><narrative>Output 3  Indicator 4</narrative></title><description><narrative>Output: Indicator 
+Indicator: Provision of reliable power supply and service to 8,767 rural households
+and 119 off-grid public institutions (schools, health clinics, and other
+community facilities) in seven subprojects by 2012 
+Data Source: ADB review missions&amp;apos; aide
+memoires 
+
+Quarterly project progress reports 
+
+Project completion report
+
+Withdrawal applications, and
+disbursement and contract
+award records
+
+Audit of financial accounts and
+reports
+
+Government&amp;apos;s fiscal statement
+
+CDM monitoring report 
+Baseline year: 2008 
+Baseline value: N 
+Baseline year: 2008 
+Baseline value: N 
+Target year: 2012 
+Target value: Y</narrative></description></indicator></result><result aggregation-status="false" type="2"><title><narrative>Project Outcome</narrative></title><description><narrative>Expanded coverage of clean power development</narrative></description><indicator measure="2"><title><narrative>Indicator 1</narrative></title><description><narrative>Increase in access to electricity by rural and urban households, achieving a cumulative national electrification
+ratio from 60% to 84% (2012) 
+Progress/Status: Bhutan has almost achieved 100% electrification goal (95% coverage in HH, as of end Sep 2013). 
+Data Source: Quarterly project progress reports and completion report
+
+Audit financial accounts and reports
+
+National statistics
+
+Government's fiscal statements
+
+Economic reports of Government, ADB, IMF, and World Bank 
+Actual value: </narrative></description><baseline year="2009" value="60"/><period><period-start iso-date="2012-01-01"/><period-end iso-date="2012-12-31"/><target value="84"/></period></indicator><indicator measure="2"><title><narrative>Indicator 2</narrative></title><description><narrative>Increase in hydropower export revenue of the total national account from 40% to 45% (2013) 
+Progress/Status: Ongoing. DHPC already completed 9.3 km tunnel excavation work (1.2 km) where the rock conditions are estimated to be relatively good. The North Head Race Tunnerl (HRT) has been broken through on 8 Oct 2013. Commercial operation of each unit is targeted by end Mar 2014. 
+Data Source: Quarterly project progress reports and completion report
+
+Audit financial accounts and reports
+
+National statistics
+
+Government's fiscal statements
+
+Economic reports of Government, ADB, IMF, and World Bank 
+Actual value: </narrative></description><baseline year="2009" value="40"/><period><period-start iso-date="2013-01-01"/><period-end iso-date="2013-12-31"/><target value="45"/></period></indicator><indicator measure="1"><title><narrative>Indicator 3</narrative></title><description><narrative>Increase in investment size from the public and private sectors to hydropower development projects with minimum
+additional 1,314 MW (2014) 
+Progress/Status: Ongoing 
+Data Source: Quarterly project progress reports and completion report
+
+Audit financial accounts and reports
+
+National statistics
+
+Government's fiscal statements
+
+Economic reports of Government, ADB, IMF, and World Bank 
+Actual value: </narrative></description><baseline year="2009" value="0"/><period><period-start iso-date="2014-01-01"/><period-end iso-date="2014-12-31"/><target value="1314"/></period></indicator><indicator measure="5"><title><narrative>Indicator 4</narrative></title><description><narrative>Annual reduction of emission gas equivalent CO2 by 250,000 tons by
+2012 and by 500,000 tons in a cross-country basis after 2012 on onward 
+Progress/Status: The Dagachhu hydropower was registered by UNFCC in Mar 2010 as the world first cross-border CDM 
+Data Source: Quarterly project progress reports and completion report
+
+Audit financial accounts and reports
+
+National statistics
+
+Government's fiscal statements
+
+Economic reports of Government, ADB, IMF, and World Bank 
+Base year: 2009 
+Baseline value: N</narrative></description><period><period-start iso-date="2012-01-01"/><period-end iso-date="2012-12-31"/></period></indicator><indicator measure="5"><title><narrative>Indicator 5</narrative></title><description><narrative>Continued overall power system loss below 10% and power sector's
+financial health including sufficient debt service coverage (minimum 1.2) and net profit generation 
+Progress/Status: Ongoing 
+Data Source: Quarterly project progress reports and completion report
+
+Audit financial accounts and reports
+
+National statistics
+
+Government's fiscal statements
+
+Economic reports of Government, ADB, IMF, and World Bank 
+Base year: 2009 
+Baseline value: N</narrative></description><period><period-start iso-date="2013-01-01"/><period-end iso-date="2013-12-31"/></period></indicator></result></iati-activity>
+</iati-activities>

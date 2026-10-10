@@ -11,7 +11,8 @@ export async function fetchWithRetry(url, { retries = 3, timeoutMs = 60000, acce
       if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
       return res;
     } catch (e) {
-      last = e;
+      const cause = e?.cause?.code || e?.cause?.message || (e?.name === 'TimeoutError' ? 'timeout' : '');
+      last = e?.message?.startsWith('HTTP ') ? e : new Error(`${e?.message ?? e}${cause ? ` (${cause})` : ''} for ${url}`);
       if (i < retries) await new Promise(r => setTimeout(r, 1000 * 2 ** i));
     }
   }
@@ -28,10 +29,17 @@ export function parseAmount(v) {
   return Number.isFinite(n) ? n : null;
 }
 
+/** -> "YYYY-MM-DD" | null. Accepts ISO ("2024-12-11T00:00:00Z") and US style ("12/31/2027 12:00:00 AM"); timezone-independent. */
 export function isoDate(v) {
   if (!v) return null;
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+  const t = String(v).trim();
+  let y, m, d;
+  let r = t.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (r) [, y, m, d] = r;
+  else if ((r = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) { y = r[3]; m = r[1].padStart(2, '0'); d = r[2].padStart(2, '0'); }
+  else return null;
+  const dt = new Date(Date.UTC(+y, +m - 1, +d));
+  return dt.getUTCFullYear() === +y && dt.getUTCMonth() === +m - 1 && dt.getUTCDate() === +d ? `${y}-${m}-${d}` : null;
 }
 
 export function httpsUrl(u) {
