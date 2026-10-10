@@ -12,8 +12,16 @@ export async function query<T extends QueryResultRow = QueryResultRow>(text: str
   return (await pool().query<T>(text, params)).rows;
 }
 
-/** True when a database is configured and reachable; pages degrade to an honest "no data" state otherwise. */
-export async function dbReady(): Promise<boolean> {
-  if (!process.env.DATABASE_URL) return false;
-  try { await pool().query('select 1'); return true; } catch { return false; }
+export type DbStatus = 'no-url' | 'unreachable' | 'no-schema' | 'ok';
+
+/** Distinguishes "not configured", "cannot connect", "connected but tables missing" and "ready". */
+export async function dbStatus(): Promise<DbStatus> {
+  if (!process.env.DATABASE_URL) return 'no-url';
+  try {
+    const r = await pool().query("select to_regclass('public.dzongkhags') is not null as ok");
+    return r.rows[0]?.ok ? 'ok' : 'no-schema';
+  } catch { return 'unreachable'; }
 }
+
+/** True only when the database is reachable AND initialised; pages otherwise show an honest setup message. */
+export async function dbReady(): Promise<boolean> { return (await dbStatus()) === 'ok'; }

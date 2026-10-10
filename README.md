@@ -42,9 +42,19 @@ npm run dev                         # http://localhost:3000
 Tests: `npm test` (unit). Database integration tests run when `TEST_DATABASE_URL` points at a **throwaway** Postgres database (CI does this automatically; the suite drops and recreates the `public` schema there).
 
 ## Deploy (Vercel)
-1. Create a Postgres database (Neon / Supabase / Vercel Postgres) and set `DATABASE_URL`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`.
-2. Run `npm run db:migrate && npm run db:seed` once against it.
-3. Deploy; Vercel Cron then calls the collectors. Trigger one manually: `curl -H "Authorization: Bearer $CRON_SECRET" https://<site>/api/cron/worldbank`.
+1. Import the repo into Vercel and attach a Postgres database (Neon via the Storage tab). Set `CRON_SECRET` (any long random string) and `NEXT_PUBLIC_SITE_URL`, then redeploy.
+2. **One-time setup (creates the tables and seeds the 20 dzongkhags)** — no local tools needed:
+   ```bash
+   curl -H "Authorization: Bearer $CRON_SECRET" https://<site>/api/cron/setup
+   ```
+   It is idempotent; running it again is harmless. (Alternative from a terminal: `npm run db:migrate && npm run db:seed`.)
+3. Load data by calling each collector once (Vercel Cron then repeats them on schedule):
+   ```bash
+   for j in manual worldbank adb weather boundaries; do curl -H "Authorization: Bearer $CRON_SECRET" https://<site>/api/cron/$j; echo; done
+   ```
+   Then check the **Data sources** page: any failing job shows its exact error.
+
+Until step 2 the site shows "The database needs one-time setup" rather than data.
 
 ## Known gaps
 - World Bank field names, the ADB IATI URL and the geoBoundaries response were written from public docs and **have not yet been exercised against the live services** (the build sandbox blocked them). After deploying, check **Data sources** — any failing job shows its exact error.

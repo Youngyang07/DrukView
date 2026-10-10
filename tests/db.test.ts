@@ -14,7 +14,10 @@ d('database layer', () => {
     process.env.DATABASE_URL = url;
     db = await import('../src/server/db'); ing = await import('../src/server/ingest'); q = await import('../src/server/queries');
     const { migrate } = await import('../scripts/migrate'); const { seed } = await import('../scripts/seed');
-    await db.query('drop schema public cascade; create schema public;'); await migrate(); await seed();
+    await db.query('drop schema public cascade; create schema public;');
+    expect(await db.dbStatus()).toBe('no-schema'); // connected, but tables missing → must not crash pages
+    await migrate(); await seed();
+    expect(await db.dbStatus()).toBe('ok');
     await db.query(`insert into sources(id,name,kind) values ('worldbank','WB','api'),('adb','ADB','iati'),('weather','WX','api')`);
   });
   afterAll(async () => { await db.pool().end(); });

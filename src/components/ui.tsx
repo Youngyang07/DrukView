@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { ago, safeUrl, STATUS_LABEL } from '@/lib/format';
+import { dbStatus } from '@/server/db';
 
 export function Ext({ href, children }: { href: string | null | undefined; children: ReactNode }) {
   const u = safeUrl(href);
@@ -42,9 +43,16 @@ export function Stacked({ parts, fmt }: { parts: [string, number][]; fmt: (v: nu
   );
 }
 
-export function NoDatabase() {
+export async function NoDatabase() {
+  const st = await dbStatus();
+  const msg = {
+    'no-url': <>No database is configured. Set <code>DATABASE_URL</code> in the hosting environment variables, then redeploy.</>,
+    unreachable: <>The database is configured but cannot be reached. Check that <code>DATABASE_URL</code> is correct and the database is running.</>,
+    'no-schema': <>The database is connected but not set up yet. Call <code>/api/cron/setup</code> once with the <code>CRON_SECRET</code> bearer token (see the README), or run <code>npm run db:migrate &amp;&amp; npm run db:seed</code>.</>,
+    ok: <>The database is ready.</>,
+  }[st];
   return (
-    <div className="banner warn"><b>The database is not connected</b>
-      Set <code>DATABASE_URL</code>, then run <code>npm run db:migrate</code> and <code>npm run db:seed</code>. Nothing is shown until real data is loaded — DrukView never fills gaps with estimates.</div>
+    <div className="banner warn"><b>{st === 'no-schema' ? 'The database needs one-time setup' : 'The database is not connected'}</b>
+      {msg} Nothing is shown until real data is loaded — DrukView never fills gaps with estimates.</div>
   );
 }
