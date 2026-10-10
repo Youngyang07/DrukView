@@ -3,6 +3,7 @@ import { issueUrl, MODULES, type ModuleSlug } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
+import { Health, Population } from './RefViews';
 
 type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: q.Filters };
 const scopeName = (s: q.Dz | null) => (s ? `${s.name} Dzongkhag` : 'Bhutan');
@@ -133,5 +134,7 @@ export default async function ModuleView(p: Props) {
     case 'weather': return <Weather {...p} />;
     case 'tenders': return <Tenders {...p} />;
     case 'offices': return <Offices {...p} />;
+    case 'population': return <Population scope={p.scope} locale={p.locale} />;
+    case 'health': return <Health scope={p.scope} locale={p.locale} />;
   }
 }

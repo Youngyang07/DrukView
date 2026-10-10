@@ -4,6 +4,8 @@ export const isLocale = (l: string): l is Locale => (LOCALES as readonly string[
 
 export const MODULES = [
   { slug: '', label: 'Overview', blurb: 'Headline numbers and map' },
+  { slug: 'population', label: 'Population', blurb: 'Census 2017: people, sex ratio, growth since 2005' },
+  { slug: 'health', label: 'Health facilities', blurb: 'Hospitals, beds, PHCs and sub-posts by name' },
   { slug: 'budget', label: 'Budget & allocations', blurb: 'Published government and sector allocations' },
   { slug: 'projects', label: 'Projects', blurb: 'Development projects, active and completed' },
   { slug: 'funders', label: 'Funding sources', blurb: 'Who pays: RGoB, World Bank, ADB…' },
@@ -11,6 +13,8 @@ export const MODULES = [
   { slug: 'tenders', label: 'Tenders', blurb: 'Public procurement notices' },
   { slug: 'offices', label: 'Leadership & offices', blurb: 'Who is responsible, how to reach them' },
 ] as const;
+/** Modules served from bundled, cited reference files: they work even when the database is down. */
+export const STATIC_MODULES: readonly string[] = ['population', 'health'];
 export type ModuleSlug = (typeof MODULES)[number]['slug'];
 
 export const RESERVED = new Set(['about', 'compare', 'contribute', 'data-sources', 'updates', 'disclaimer', 'bhutan']);

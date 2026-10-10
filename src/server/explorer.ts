@@ -1,9 +1,11 @@
 import { query } from './db';
 import { getAllocations, getDzongkhags, mapMetrics, type Alloc } from './queries';
+import { health, population } from '@/lib/reference';
 
 export type ExplorerProject = { id: string; title: string; funder: string; status: string; sector: string | null; agency: string | null; committed: number | null; disbursed: number | null; currency: string;
   start: string | null; end: string | null; basis: string; description: string | null; url: string | null };
-export type ExplorerDz = { id: string; slug: string; name: string; col: number; row: number; n: number; usd: number; btn: number; projects: ExplorerProject[]; allocations: Alloc[]; usdAll: number; active: number; completed: number };
+export type ExplorerDz = { id: string; slug: string; name: string; col: number; row: number; n: number; usd: number; btn: number; projects: ExplorerProject[]; allocations: Alloc[]; usdAll: number; active: number; completed: number;
+  pop: number; hospitals: number; beds: number; phc: number; subpost: number };
 
 export async function getExplorerData() {
   const [dz, metrics, allocs] = await Promise.all([getDzongkhags(), mapMetrics(), getAllocations(null)]);
@@ -17,7 +19,9 @@ export async function getExplorerData() {
     const ps = (byDz.get(d.id) ?? []).sort((a, b) => (b.committed ?? -1) - (a.committed ?? -1));
     return { id: d.id, slug: d.slug, name: d.name, col: d.grid_col, row: d.grid_row, n: mById[d.id]?.n ?? 0, usd: mById[d.id]?.usd ?? 0, btn: mById[d.id]?.btn ?? 0,
       projects: ps.slice(0, 40), allocations: allocs.filter(a => a.dzongkhag === d.name),
-      usdAll: ps.filter(p => p.currency === 'USD').reduce((s, p) => s + (p.committed ?? 0), 0), active: ps.filter(p => p.status === 'active').length, completed: ps.filter(p => p.status === 'completed').length };
+      usdAll: ps.filter(p => p.currency === 'USD').reduce((s, p) => s + (p.committed ?? 0), 0), active: ps.filter(p => p.status === 'active').length, completed: ps.filter(p => p.status === 'completed').length,
+      pop: population.dzongkhags[d.slug]?.total ?? 0, hospitals: health.dzongkhags[d.slug]?.totals.hospitals ?? 0, beds: health.dzongkhags[d.slug]?.totals.beds ?? 0,
+      phc: health.dzongkhags[d.slug]?.totals.phc ?? 0, subpost: health.dzongkhags[d.slug]?.totals.subpost ?? 0 };
   });
   return { dz: out, hasAlloc: allocs.length > 0 };
 }

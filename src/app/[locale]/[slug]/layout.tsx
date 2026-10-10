@@ -3,12 +3,14 @@ import { notFound } from 'next/navigation';
 import { MODULES, RESERVED } from '@/lib/modules';
 import { getDzBySlug } from '@/server/queries';
 import SideNav from '@/components/SideNav';
+import { dzBySlug } from '@/lib/reference';
 
 export default async function ScopeLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
   const national = slug === 'bhutan';
   if (!national && RESERVED.has(slug)) notFound();
-  const dz = national ? null : await getDzBySlug(slug).catch(() => null);
+  // Fall back to the bundled list so census/health pages still work while the database is unavailable.
+  const dz = national ? null : (await getDzBySlug(slug).catch(() => null)) ?? dzBySlug(slug);
   if (!national && !dz) notFound();
   const base = `/${locale}/${slug}`;
   return (

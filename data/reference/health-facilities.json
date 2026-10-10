@@ -1,0 +1,1825 @@
+{
+ "source": {
+  "publisher": "Ministry of Health, Royal Government of Bhutan",
+  "title": "Annual Health Bulletin 2025",
+  "table": "Table 6.1: Health facilities distribution by districts",
+  "url": "https://moh.gov.bt/wp-content/uploads/2025/06/Annual-Health-Bulleti-2025.pdf",
+  "checked": "2026-10-10"
+ },
+ "notes": [
+  "Names are as printed in the Bulletin; where the PDF text was clearly garbled the corrected spelling is shown, with the printed form in brackets.",
+  "Trongsa's totals row reports 4 sub-posts but only 3 are named in Table 6.1 (the 2024 Bulletin also names 3).",
+  "Haa's totals row is not legible in the PDF; its figures are the national Grand Total minus the other 19 dzongkhags.",
+  "Thromde Health Centres (6 in total) are counted under PHC, as in the Bulletin."
+ ],
+ "grandTotal": {
+  "hospitals": 59,
+  "beds": 1660,
+  "phc": 194,
+  "subpost": 51,
+  "hisc": 7,
+  "orcs": 555
+ },
+ "dzongkhags": {
+  "bumthang": {
+   "totals": {
+    "hospitals": 1,
+    "beds": 20,
+    "phc": 5,
+    "subpost": 0,
+    "hisc": 0,
+    "orcs": 11
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Wangdicholing Hospital",
+     "beds": 20
+    },
+    {
+     "type": "phc",
+     "name": "Choekhor Toe PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Churney PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dhur PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ura PHC",
+     "beds": null
+    }
+   ]
+  },
+  "chukha": {
+   "totals": {
+    "hospitals": 5,
+    "beds": 120,
+    "phc": 17,
+    "subpost": 3,
+    "hisc": 1,
+    "orcs": 41
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Phuntsholing Hospital",
+     "beds": 60
+    },
+    {
+     "type": "hospital",
+     "name": "Gedu Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Tsimalakha Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Chhukha Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Khatoekha Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Arikha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Bongo PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Chapcha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Chongeykha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Darla PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Doogna PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Getana PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kamji PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lingdhen PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lokchina PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Metakha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Rangaytung PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Rinchentsey PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Piping PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Phuntsholing Thromde Health Centre",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sinchula PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Trashigatshel MI",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Baikunza Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Chimuna Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Trashigatshel RBP MI",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Phuntsholing HISC",
+     "beds": null
+    }
+   ]
+  },
+  "dagana": {
+   "totals": {
+    "hospitals": 3,
+    "beds": 40,
+    "phc": 8,
+    "subpost": 0,
+    "hisc": 0,
+    "orcs": 34
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Dagapela Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Daga Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Lhamizingkhar Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Akochen PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Bjurugang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Drukjeygang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Karmaling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Khagochen PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lajab PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Nimtola PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tsangkha PHC",
+     "beds": null
+    }
+   ]
+  },
+  "gasa": {
+   "totals": {
+    "hospitals": 1,
+    "beds": 10,
+    "phc": 3,
+    "subpost": 0,
+    "hisc": 0,
+    "orcs": 5
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Gasa Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Damji PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Laya PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lunana PHC",
+     "beds": null
+    }
+   ]
+  },
+  "haa": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 20,
+    "phc": 4,
+    "subpost": 2,
+    "hisc": 0,
+    "orcs": 17
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Haa Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "IMTRAT Hospital",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dorithasa PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ngatsena PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sanghoyka PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yangthang PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Bebji Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Subjithang Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "lhuntse": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 30,
+    "phc": 13,
+    "subpost": 0,
+    "hisc": 0,
+    "orcs": 32
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Lhuentse Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Autsho Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Dangling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dungkar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ganglakhema PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Gotsum PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Khona PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ladrong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Minjey PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ney PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Patpachu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tagmochu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Thinyul PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tsaenkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Zangkhar PHC",
+     "beds": null
+    }
+   ]
+  },
+  "mongar": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 160,
+    "phc": 22,
+    "subpost": 5,
+    "hisc": 0,
+    "orcs": 61
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "ERR Hospital",
+     "beds": 150
+    },
+    {
+     "type": "hospital",
+     "name": "Gyalpoizhing Hospital",
+     "beds": 10,
+     "nameInSource": "Cyalpoizhing Hospital"
+    },
+    {
+     "type": "phc",
+     "name": "Baanjar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Balam PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Boompazor PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Chaskhar PHC",
+     "beds": null,
+     "nameInSource": "Chagssskar PHC"
+    },
+    {
+     "type": "phc",
+     "name": "Chhaling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Daagsa PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dramatse PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ganglapong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jurmed PHC",
+     "beds": null,
+     "nameInSource": "Jurned PHC"
+    },
+    {
+     "type": "phc",
+     "name": "Kengkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lingmethang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Muhoong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Nagor PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Narang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ngatshang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sengor PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Serzhong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Thang-Rong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tsakaling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tsamang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yadi PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yangbari PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Pangthang Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Resa Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Silambi Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Takambi Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Tongla Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "paro": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 50,
+    "phc": 4,
+    "subpost": 3,
+    "hisc": 0,
+    "orcs": 21
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Paro Hospital",
+     "beds": 40
+    },
+    {
+     "type": "hospital",
+     "name": "Pangbesa Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Bueltikha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dawakha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dotey PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Drugyal PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Gunitsawa Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "International Airport Health Post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Pangbesa Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "pemagatshel": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 30,
+    "phc": 11,
+    "subpost": 7,
+    "hisc": 0,
+    "orcs": 36
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Pemagatshel Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Nganglam Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Chhimoong PHC",
+     "beds": null,
+     "nameInSource": "Chhimooong PHC"
+    },
+    {
+     "type": "phc",
+     "name": "Chhoekhorling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dechhenling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dungmaed PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Gonpasingma PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Nanong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Norboogang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tsebar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Thrumchung PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tsatse PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yurung PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Borangma Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Chongshing Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Khangma Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Mikuri Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Nyaskhar Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Sali Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Thongsa Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "punakha": {
+   "totals": {
+    "hospitals": 1,
+    "beds": 40,
+    "phc": 7,
+    "subpost": 1,
+    "hisc": 1,
+    "orcs": 10
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Punakha Hospital",
+     "beds": 40
+    },
+    {
+     "type": "phc",
+     "name": "Goenshari PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kabisa PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Noengang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Samdingkha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Stegana PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Thinleygang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tshochasa PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Lobesa Sub-post",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Lobesa HISC",
+     "beds": null,
+     "nameInSource": "Lobesa HIISC"
+    }
+   ]
+  },
+  "samdrup-jongkhar": {
+   "totals": {
+    "hospitals": 5,
+    "beds": 90,
+    "phc": 7,
+    "subpost": 3,
+    "hisc": 1,
+    "orcs": 30
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Igme Dorji Wangchuck Military Hospital, Deothang",
+     "beds": 40
+    },
+    {
+     "type": "hospital",
+     "name": "Samdrup Jongkhar Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Gomdar Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Jomotsangkha Hospital",
+     "beds": 10,
+     "nameInSource": "Jomotsangka Hospital"
+    },
+    {
+     "type": "hospital",
+     "name": "Samdrupcholing Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Lauri PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Martshalla PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Menjwoong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Orong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Pemathang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Wangphu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Zangthi PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Samrang Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Sarjung Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Wooling Sub-post",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Samdrup Jongkhar HISC",
+     "beds": null
+    }
+   ]
+  },
+  "samtse": {
+   "totals": {
+    "hospitals": 4,
+    "beds": 80,
+    "phc": 12,
+    "subpost": 2,
+    "hisc": 1,
+    "orcs": 48
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Samtse Hospital",
+     "beds": 40
+    },
+    {
+     "type": "hospital",
+     "name": "Gomtu Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Dorokha Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Tashichholing Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Doongtoed PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Duenchukha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Gangthog PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Norbugang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Norgaygang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Panbari PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Pemaling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sangacholing PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sengdhen PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tendruk PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ugyentse PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yoeseltse PHC",
+     "beds": null,
+     "nameInSource": "YoelselsePHC"
+    },
+    {
+     "type": "subpost",
+     "name": "Gashingma Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Gawaling Sub-post",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Samtse HISC",
+     "beds": null
+    }
+   ]
+  },
+  "sarpang": {
+   "totals": {
+    "hospitals": 3,
+    "beds": 180,
+    "phc": 11,
+    "subpost": 1,
+    "hisc": 1,
+    "orcs": 13
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "CRR Hospital",
+     "beds": 150
+    },
+    {
+     "type": "hospital",
+     "name": "Sarpang Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Chhuzergang Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Chokhorling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Gakiding PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jangchubling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jigmechholing PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jigmeling PHC (RBP)",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lhayul PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Menchulam PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Norbuling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sengay PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tarraythang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Umling PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Phiboo Sub-post",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Gelephu HISC",
+     "beds": null
+    }
+   ]
+  },
+  "thimphu": {
+   "totals": {
+    "hospitals": 6,
+    "beds": 430,
+    "phc": 15,
+    "subpost": 0,
+    "hisc": 1,
+    "orcs": 16
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "JDWNR Hospital",
+     "beds": 350
+    },
+    {
+     "type": "hospital",
+     "name": "NTMH",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Gidakom Hospital",
+     "beds": 60
+    },
+    {
+     "type": "hospital",
+     "name": "Dechhencholing Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Lungtenphu Hospital",
+     "beds": null
+    },
+    {
+     "type": "hospital",
+     "name": "Indo-Bhutan Friendship Hospital",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Debsi Thromde Health Centre",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Changjiji Thromde Health Centre",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Baybena Thromde Health Centre",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Motithang Thromde Health Centre",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Semtokha Thromde Health Centre",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Barshong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Changgang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Changgang Jail Health Post",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Changgang RBP",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Genyekha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Hongtsho PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kuzhuchen PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lingzhi PHC",
+     "beds": null,
+     "nameInSource": "Lingzhih PHC"
+    },
+    {
+     "type": "phc",
+     "name": "RBP-HQ Health Post",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Soe PHC",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Thimphu HISC",
+     "beds": null
+    }
+   ]
+  },
+  "trashigang": {
+   "totals": {
+    "hospitals": 7,
+    "beds": 110,
+    "phc": 14,
+    "subpost": 4,
+    "hisc": 0,
+    "orcs": 54
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Trashigang Hospital",
+     "beds": 40
+    },
+    {
+     "type": "hospital",
+     "name": "Riserboo Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Bartsham Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Kanglung Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Khaling Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Rangjung Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Tsangpo Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Bidung PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Bikhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Changmi PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kangpara PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Lumang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Merak PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Phongmaed PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Radi PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sakteng PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Thoongkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Udzorong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yabrang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Yangnyer PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Joenkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Chaling Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Passaphug Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Phegpari Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Thongrong Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "trashiyangtse": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 30,
+    "phc": 7,
+    "subpost": 2,
+    "hisc": 0,
+    "orcs": 26
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Trashiyangtse Hospital",
+     "beds": 20
+    },
+    {
+     "type": "hospital",
+     "name": "Khamdang Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Dungzam PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jamkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kheni PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Melongkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Ramjar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Thragom PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tongmejangsa PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Jangphutse Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Rabtey Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "trongsa": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 30,
+    "phc": 6,
+    "subpost": 4,
+    "hisc": 1,
+    "orcs": 19
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Trongsa Hospital",
+     "beds": 20,
+     "nameInSource": "Trongs Hospital"
+    },
+    {
+     "type": "hospital",
+     "name": "Dangdung Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Bemji PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jangbi PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kuenga Rabten PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Korphu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tashiling PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Taktse PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Kella Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Nabji Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Nimshong Sub-post",
+     "beds": null
+    },
+    {
+     "type": "hisc",
+     "name": "Kingarabten HISC",
+     "beds": null
+    }
+   ]
+  },
+  "tsirang": {
+   "totals": {
+    "hospitals": 2,
+    "beds": 50,
+    "phc": 6,
+    "subpost": 1,
+    "hisc": 0,
+    "orcs": 20
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Damphu Hospital",
+     "beds": 40
+    },
+    {
+     "type": "hospital",
+     "name": "Tsirangtoe Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Barshong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dunglagang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Mendrelgang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Pungfenchhu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Semjong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sergithang PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Patshaling Sub-post",
+     "beds": null,
+     "nameInSource": "Patshaling PHC"
+    }
+   ]
+  },
+  "wangdue-phodrang": {
+   "totals": {
+    "hospitals": 3,
+    "beds": 70,
+    "phc": 12,
+    "subpost": 8,
+    "hisc": 0,
+    "orcs": 27
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Wangdue Hospital",
+     "beds": 60
+    },
+    {
+     "type": "hospital",
+     "name": "Eusa Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Tencholing Military Hospital",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Dangchu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Gaselo PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Jalla PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Bjimthangkha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kamichu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kashi PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Samtengang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Sephu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Teki-Agona PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Una PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Nobding PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Khotokha PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Gangray Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Hebesa Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Ramachen Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Lopokha Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Migtana Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Nahi Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Nobding Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Taksha Sub-post",
+     "beds": null
+    }
+   ]
+  },
+  "zhemgang": {
+   "totals": {
+    "hospitals": 4,
+    "beds": 70,
+    "phc": 10,
+    "subpost": 5,
+    "hisc": 0,
+    "orcs": 34
+   },
+   "facilities": [
+    {
+     "type": "hospital",
+     "name": "Yebilaptsa Hospital",
+     "beds": 40
+    },
+    {
+     "type": "hospital",
+     "name": "Panbang Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Zhemgang Hospital",
+     "beds": 10
+    },
+    {
+     "type": "hospital",
+     "name": "Buli Hospital",
+     "beds": 10
+    },
+    {
+     "type": "phc",
+     "name": "Bjokha PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Gongphu PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Goshing PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kaktong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Khomshar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Kradijong PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Langdurbi PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Pantang PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Shingkhar PHC",
+     "beds": null
+    },
+    {
+     "type": "phc",
+     "name": "Tshaidang PHC",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Duemang Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Manas Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Namergang Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Nimshong Sub-post",
+     "beds": null
+    },
+    {
+     "type": "subpost",
+     "name": "Tashibee Sub-post",
+     "beds": null
+    }
+   ]
+  }
+ }
+}

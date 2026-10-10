@@ -5,7 +5,7 @@ import MapView from './MapView';
 import { money, moneyFull, num, plural, STATUS_LABEL } from '@/lib/format';
 import type { ExplorerDz } from '@/server/explorer';
 
-type Metric = 'usd' | 'count' | 'btn';
+type Metric = 'usd' | 'count' | 'btn' | 'pop' | 'beds' | 'fac';
 const sum = <T,>(xs: T[], k: (x: T) => number) => xs.reduce((s, x) => s + k(x), 0);
 function group<T>(xs: T[], key: (x: T) => string, val: (x: T) => number): [string, number][] {
   const m = new Map<string, number>(); for (const x of xs) m.set(key(x), (m.get(key(x)) ?? 0) + val(x));
@@ -27,8 +27,15 @@ export default function Explorer({ dz, hasAlloc, locale }: { dz: ExplorerDz[]; h
   const [sector, setSector] = useState(''); const [src, setSrc] = useState(''); const [gewog, setGewog] = useState('');
   const d = dz.find(x => x.id === sel) ?? null;
 
-  const values = useMemo(() => Object.fromEntries(dz.map(x => [x.id, metric === 'usd' ? x.usd : metric === 'count' ? x.n : x.btn])), [dz, metric]);
-  const fmtMap = (id: string, v: number) => { const x = dz.find(z => z.id === id)!; return `${plural(x.n, 'project')}, ${v > 0 ? (metric === 'count' ? num(v) : money(v, metric === 'btn' ? 'BTN' : 'USD')) : 'no figures'}`; };
+  const val = (x: ExplorerDz) => ({ usd: x.usd, count: x.n, btn: x.btn, pop: x.pop, beds: x.beds, fac: x.hospitals + x.phc + x.subpost })[metric];
+  const values = useMemo(() => Object.fromEntries(dz.map(x => [x.id, val(x)])), [dz, metric]);
+  const fmtMap = (id: string, v: number) => {
+    const x = dz.find(z => z.id === id)!;
+    if (metric === 'pop') return `${num(v)} people (2017 census)`;
+    if (metric === 'beds') return `${plural(x.hospitals, 'hospital')}, ${num(v)} official beds (2025)`;
+    if (metric === 'fac') return `${plural(v, 'health facility', 'health facilities')}: ${x.hospitals} hospitals, ${x.phc} PHCs, ${x.subpost} sub-posts`;
+    return `${plural(x.n, 'project')}, ${v > 0 ? (metric === 'count' ? num(v) : money(v, metric === 'btn' ? 'BTN' : 'USD')) : 'no figures'}`;
+  };
   const pick = (id: string | null) => { setSel(id); setFy(''); setSector(''); setSrc(''); setGewog(''); };
 
   const years = d ? [...new Set(d.allocations.map(a => a.fiscal_year))].sort().reverse() : [];
@@ -49,7 +56,8 @@ export default function Explorer({ dz, hasAlloc, locale }: { dz: ExplorerDz[]; h
         <div className="card-h"><h2>Click a dzongkhag to open its budget</h2>
           <label className="inline">Colour by <select value={metric} onChange={e => setMetric(e.target.value as Metric)}>
             <option value="usd">Committed US$</option><option value="count">Number of projects</option>
-            {hasAlloc ? <option value="btn">Budget (Nu.)</option> : null}</select></label>
+            {hasAlloc ? <option value="btn">Budget (Nu.)</option> : null}
+            <option value="pop">Population (census 2017)</option><option value="beds">Hospital beds</option><option value="fac">Health facilities</option></select></label>
         </div>
         <MapView values={values} format={fmtMap} selected={sel} onSelect={pick}
           gewogValues={gewogValues} selectedGewog={gewog} onGewog={g => setGewog(cur => (cur.toLowerCase() === g.toLowerCase() ? '' : g))}
@@ -68,6 +76,11 @@ export default function Explorer({ dz, hasAlloc, locale }: { dz: ExplorerDz[]; h
             <div className="kpi"><small>Budget {year}</small><b>{alFy.length ? money(sum(alFy, a => a.amount), 'BTN') : 'n/a'}</b><span>{alFy.length ? `${alFy.length} line${alFy.length === 1 ? '' : 's'}` : 'none published here yet'}</span></div>
             <div className="kpi"><small>Partner commitments</small><b>{d.projects.length ? money(d.usdAll, 'USD') : 'n/a'}</b><span>US$, all projects here</span></div>
             <div className="kpi"><small>Projects</small><b>{d.n}</b><span>{d.active} active · {d.completed} completed</span></div>
+          </div>
+          <div className="kpis small">
+            <div className="kpi"><small>Population</small><b>{num(d.pop)}</b><span><Link href={`/${locale}/${d.slug}/population`}>census 2017 →</Link></span></div>
+            <div className="kpi"><small>Hospitals</small><b>{d.hospitals}</b><span>{num(d.beds)} beds · <Link href={`/${locale}/${d.slug}/health`}>list →</Link></span></div>
+            <div className="kpi"><small>PHCs · sub-posts</small><b>{d.phc} · {d.subpost}</b><span>Health Bulletin 2025</span></div>
           </div>
           {years.length > 1 ? <label className="inline">Fiscal year <select value={year} onChange={e => setFy(e.target.value)}>{years.map(y => <option key={y}>{y}</option>)}</select></label> : null}
           {filtered.length ? <p className="note">Filtered by {filtered.join(' · ')} <button type="button" className="link" onClick={() => { setSector(''); setSrc(''); setGewog(''); }}>clear filters</button></p> : null}

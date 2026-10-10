@@ -70,7 +70,7 @@ td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.nw
 .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--q0);margin:4px 0}.bar span{display:block;height:100%}
 .keyi{margin-right:12px;white-space:nowrap}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
 .row{display:grid;grid-template-columns:minmax(120px,1fr) 2fr auto;gap:10px;align-items:center;padding:5px 0;font-size:.9rem}
-.row .track{height:12px;background:var(--q0);border-radius:6px;overflow:hidden}.row .track i{display:block;height:100%;background:var(--maroon);border-radius:6px}.row .v{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.row .track{height:12px;background:var(--q0);border-radius:6px;overflow:hidden}.row .track i{display:block;height:100%;background:var(--maroon);border-radius:6px}.row .v{font-variant-numeric:tabular-nums;min-width:5.5ch;text-align:right;color:var(--muted);white-space:nowrap}
 button.row{width:100%;background:none;border:0;border-radius:8px;text-align:left;font-weight:400;padding:5px 6px}button.row:hover{background:var(--bg)}button.row.on{background:var(--q1);outline:2px solid var(--saffron)}
 .plist{list-style:none;margin:0;padding:0}.plist li{padding:9px 0;border-bottom:1px solid var(--line)}.plist .t{font-weight:600}.plist .m{font-size:.8rem;color:var(--muted)}
 details summary{cursor:pointer;list-style:none}details summary::before{content:"▸ ";color:var(--muted)}details[open] summary::before{content:"▾ "}
@@ -86,3 +86,7 @@ details summary{cursor:pointer;list-style:none}details summary::before{content:"
 .loaddata button[disabled]{opacity:.6;cursor:wait}
 .plist li,td,.note,.banner{overflow-wrap:anywhere}
 @media(max-width:520px){.mapctl button{width:30px;height:30px;font-size:1rem;opacity:.92}.mapback{font-size:.85rem;padding:5px 8px}}
+/* reference-data modules */
+.srcbox{margin-top:18px;padding:10px 14px;border-left:3px solid var(--maroon);background:var(--q0);border-radius:6px;font-size:.84rem}.srcbox p{margin:.3em 0}.srcbox ul{margin:.3em 0;padding-left:1.2em}
+.chip{display:inline-block;padding:4px 10px;border:1px solid var(--line);border-radius:999px;font-size:.85rem;background:var(--surface)}
+tr.tot td{font-weight:700;border-top:2px solid var(--line)}
