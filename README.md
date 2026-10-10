@@ -21,7 +21,7 @@ Next.js 15 (App Router, TypeScript) · PostgreSQL (`pg`, plain SQL migrations) �
 | geoBoundaries (map shapes) | automated (`pipeline/boundaries.mjs`) | weekly |
 | MoF / MoHCA / MoAL & other ministries' budgets, allocations, tenders, offices | **curated CSV** in `data/manual/` — these are PDFs/web pages with no API. Every row must cite its public document | on commit |
 
-Collectors run via `vercel.json` crons → `/api/cron/<job>` (protected by `CRON_SECRET`; disabled if unset). Each job is isolated: on failure the previous good rows stay, the source is flagged **stale** on the Data sources page, and the run is written to the update log. A batch with any invalid record loads nothing.
+Collectors run via `vercel.json` crons → `/api/cron/<job>` (rate-limited per job; a `CRON_SECRET` bearer skips the limit), and from the **Load / refresh data now** button on the Data sources page. Each job is isolated: on failure the previous good rows stay, the source is flagged **stale** on the Data sources page, and the run is written to the update log. A batch with any invalid record loads nothing.
 
 ## Honesty rules (enforced in code and tests)
 - No sample/estimated data ships. With no data, the UI says so.
@@ -32,9 +32,9 @@ Collectors run via `vercel.json` crons → `/api/cron/<job>` (protected by `CRON
 
 ## Run locally
 ```bash
-cp .env.example .env.local          # set DATABASE_URL, CRON_SECRET
+cp .env.example .env.local          # set DATABASE_URL (CRON_SECRET optional)
 npm install
-npm run db:migrate && npm run db:seed
+npm run db:migrate && npm run db:seed   # optional: the app also does this itself on first visit
 npm run job -- manual               # load data/manual/*.csv
 npm run job -- worldbank            # needs network access to the source
 npm run dev                         # http://localhost:3000
@@ -42,19 +42,11 @@ npm run dev                         # http://localhost:3000
 Tests: `npm test` (unit). Database integration tests run when `TEST_DATABASE_URL` points at a **throwaway** Postgres database (CI does this automatically; the suite drops and recreates the `public` schema there).
 
 ## Deploy (Vercel)
-1. Import the repo into Vercel and attach a Postgres database (Neon via the Storage tab). Set `CRON_SECRET` (any long random string) and `NEXT_PUBLIC_SITE_URL`, then redeploy.
-2. **One-time setup (creates the tables and seeds the 20 dzongkhags)** — no local tools needed:
-   ```bash
-   curl -H "Authorization: Bearer $CRON_SECRET" https://<site>/api/cron/setup
-   ```
-   It is idempotent; running it again is harmless. (Alternative from a terminal: `npm run db:migrate && npm run db:seed`.)
-3. Load data by calling each collector once (Vercel Cron then repeats them on schedule):
-   ```bash
-   for j in manual worldbank adb weather boundaries; do curl -H "Authorization: Bearer $CRON_SECRET" https://<site>/api/cron/$j; echo; done
-   ```
-   Then check the **Data sources** page: any failing job shows its exact error.
+1. Import the repo into Vercel and attach a Postgres database (Neon, via the project's **Storage** tab). That sets `DATABASE_URL` — the only required setting.
+2. Open the site. **The tables are created automatically on the first visit.**
+3. Go to **Data sources → Load / refresh data now** (about a minute). Every source then also refreshes automatically once a day via Vercel Cron.
 
-Until step 2 the site shows "The database needs one-time setup" rather than data.
+Optional: `CRON_SECRET`. The data jobs only read public data, so they run without a secret but at most once per interval (World Bank/ADB 6 h, map 12 h, weather 2 h, curated CSVs 10 min; 5 min after a failure). A request carrying `Authorization: Bearer $CRON_SECRET` skips that interval. Every job stops after 50 s and records why, so a slow source can never fail silently.
 
 ## Data-source verification (2026-10-10)
 The four automated sources were checked against their **real responses**, and the parsers' tests use trimmed copies of those (`tests/fixtures/*real*`):

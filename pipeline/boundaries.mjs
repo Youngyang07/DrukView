@@ -5,7 +5,7 @@ export const SOURCE = {
   name: 'geoBoundaries – Bhutan ADM1 (dzongkhag) boundaries',
   url: 'https://www.geoboundaries.org/countries.html?country=BTN',
   kind: 'api',
-  notes: 'Open boundary data (CC BY 4.0 / per-layer licence). Used only to draw the map; boundaries carry no legal or political meaning.',
+  notes: 'Open boundary data (geoBoundaries; licence as published with each release, CC BY 3.0 as of 2026-10). Used only to draw the map; boundaries carry no legal or political meaning.',
 };
 
 /** Attach dzongkhag ids to features; drop geometry-less ones; report unmatched shapes. */
@@ -21,10 +21,10 @@ export function tagFeatures(fc, matcher) {
 }
 
 export async function fetchBoundaries(matcher) {
-  const meta = await fetchJson('https://www.geoboundaries.org/api/current/gbOpen/BTN/ADM1/');
+  const meta = await fetchJson('https://www.geoboundaries.org/api/current/gbOpen/BTN/ADM1/', { retries: 1 });
   const url = meta.simplifiedGeometryGeoJSON || meta.gjDownloadURL;
   if (!url) throw new Error('geoBoundaries metadata has no GeoJSON URL');
-  const { fc, unmatched } = tagFeatures(await fetchJson(url, { timeoutMs: 120000 }), matcher);
+  const { fc, unmatched } = tagFeatures(await fetchJson(url, { timeoutMs: 20000, retries: 1 }), matcher);
   if (fc.features.length !== 20) throw new Error(`Expected 20 dzongkhag shapes, matched ${fc.features.length} (unmatched: ${unmatched.join(', ') || 'none'}). Add the new spelling to shared/dzongkhags.json aliases.`);
   return { fc, unmatched, license: meta.boundaryLicense ?? null };
 }

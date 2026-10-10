@@ -1,6 +1,7 @@
 export const UA = 'DrukView-data-bot/0.1 (+https://github.com/youngyang07/drukview)';
 
-export async function fetchWithRetry(url, { retries = 3, timeoutMs = 60000, accept } = {}) {
+// Defaults keep a whole job well inside a 60 s serverless limit (worst case ≈ 3 × 15 s + 3 s backoff).
+export async function fetchWithRetry(url, { retries = 2, timeoutMs = 15000, accept } = {}) {
   let last;
   for (let i = 0; i <= retries; i++) {
     try {

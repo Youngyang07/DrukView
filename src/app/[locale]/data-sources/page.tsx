@@ -1,3 +1,4 @@
+import LoadData from '@/components/LoadData';
 import { Ext, Fresh, NoDatabase } from '@/components/ui';
 import { ago } from '@/lib/format';
 import { dbReady, getSources } from '@/server/queries';
@@ -9,8 +10,8 @@ export default async function DataSources() {
   const ready = await dbReady(); const src = ready ? await getSources() : [];
   return (<div className="wrap page"><h1 className="pagetitle">Data sources</h1>
     <p>Everything on DrukView comes from the sources below. Automated sources refresh on a schedule; if one fails, its last good data stays visible and is marked <b>stale</b> — it is never silently wiped or replaced with estimates.</p>
-    {!ready ? <NoDatabase /> : null}
-    {ready && !src.length ? <div className="empty">No collector has run yet, so no source has reported a status.</div> : null}
+    {!ready ? <NoDatabase /> : <LoadData />}
+    {ready && !src.length ? <div className="empty">No source has been loaded yet — press <b>Load / refresh data now</b> above.</div> : null}
     {src.length ? <div className="card scroll"><table><thead><tr><th>Source</th><th>Status</th><th>Last success</th><th>Records</th><th>Notes</th></tr></thead><tbody>
       {src.map(s => <tr key={s.id}><td><Ext href={s.url}>{s.name}</Ext></td><td><span className={`badge b-${s.status}`}>{s.status.replace('_', ' ')}</span></td><td><Fresh at={s.last_success} label="" /> <small>(tried {ago(s.last_attempt)})</small></td><td className="num">{s.records}</td>
         <td>{s.notes}{s.error ? <div className="note">Last error: {s.error}</div> : null}</td></tr>)}</tbody></table></div> : null}
