@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import type { PoolClient } from 'pg';
 import { pool, query } from './db';
+import sectors from '../../shared/iati-sectors.json';
 import { makeGeoMatcher } from '../../pipeline/lib.mjs';
 import { fetchWorldBank, SOURCE as WB } from '../../pipeline/worldbank.mjs';
 import { fetchAdb, SOURCE as ADB } from '../../pipeline/adb.mjs';
@@ -60,7 +61,7 @@ export async function saveWeather(rows: any[]) {
   return rows.length;
 }
 
-async function saveBoundaries(fc: any, license: string | null) {
+export async function saveBoundaries(fc: any, license: string | null) {
   await withTx(async c => {
     for (const f of fc.features) await c.query(`insert into boundaries(dzongkhag_id,geometry,license,retrieved_at) values ($1,$2,$3,now())
       on conflict (dzongkhag_id) do update set geometry=$2,license=$3,retrieved_at=now()`, [f.properties.dzongkhag_id, JSON.stringify(f.geometry), license]);
@@ -103,7 +104,7 @@ export async function runJob(job: JobName): Promise<JobResult> {
   try {
     let n = 0;
     if (job === 'worldbank') n = await replaceProjects('worldbank', await fetchWorldBank(await matcherOf()));
-    if (job === 'adb') n = await replaceProjects('adb', await fetchAdb(await matcherOf()));
+    if (job === 'adb') n = await replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
     if (job === 'boundaries') { const r = await fetchBoundaries(await matcherOf()); n = await saveBoundaries(r.fc, r.license); }
     if (job === 'weather') n = await saveWeather(await fetchWeather(await loadDz()));
     if (job === 'manual') n = await saveManual(await readManualFiles(), await matcherOf());

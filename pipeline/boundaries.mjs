@@ -25,6 +25,6 @@ export async function fetchBoundaries(matcher) {
   const url = meta.simplifiedGeometryGeoJSON || meta.gjDownloadURL;
   if (!url) throw new Error('geoBoundaries metadata has no GeoJSON URL');
   const { fc, unmatched } = tagFeatures(await fetchJson(url, { timeoutMs: 120000 }), matcher);
-  if (fc.features.length < 15) throw new Error(`Only ${fc.features.length}/20 dzongkhag shapes matched (unmatched: ${unmatched.join(', ')})`);
+  if (fc.features.length !== 20) throw new Error(`Expected 20 dzongkhag shapes, matched ${fc.features.length} (unmatched: ${unmatched.join(', ') || 'none'}). Add the new spelling to shared/dzongkhags.json aliases.`);
   return { fc, unmatched, license: meta.boundaryLicense ?? null };
 }

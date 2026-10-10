@@ -1,0 +1,102 @@
+{
+ "rows": 5,
+ "os": "0",
+ "page": "1",
+ "total": "63",
+ "projects": {
+  "P500536": {
+   "id": "P500536",
+   "lendinginstr": "Development Policy Lending",
+   "project_name": "Bhutan Climate and Disaster Resilience Development Policy Financing with a Catastrophe Deferred Drawdown Option",
+   "sector1": {
+    "Name": "",
+    "Percent": 0
+   },
+   "totalcommamt": "0",
+   "boardapprovaldate": "2024-12-11T00:00:00Z",
+   "closingdate": "12/31/2027 12:00:00 AM",
+   "url": "https://projects.worldbank.org/en/projects-operations/project-detail/P500536",
+   "status": "Active",
+   "project_abstract": {
+    "cdata!": "The operation will provide the Royal Government of Bhutan (RGoB) access to immediate liquidity in the aftermath of natural disasters including disease outbreaks through an IDA US$40 million Climate and Disaster Resilience Development Policy Financing (DPF) with a Catastrophe Deferred Drawdown Option"
+   }
+  },
+  "P178635": {
+   "id": "P178635",
+   "lendinginstr": "Development Policy Lending",
+   "project_name": "Bhutan Second Green and Resilient Growth Development Policy Credit",
+   "borrower": "The Kingdom of Bhutan",
+   "impagency": "Ministry of Finance",
+   "sector1": {
+    "Name": "Livestock",
+    "Percent": 7
+   },
+   "totalcommamt": "50,000,000",
+   "boardapprovaldate": "2023-08-22T00:00:00Z",
+   "closingdate": "6/30/2024 12:00:00 AM",
+   "url": "https://projects.worldbank.org/en/projects-operations/project-detail/P178635",
+   "status": "Closed",
+   "project_abstract": {
+    "cdata!": "The Bhutan Second Green and Resilient Growth Development Policy Credit aims to (i) strengthen resilient and private sector-led growth through fiscal sustainability and enhanced access to finance and markets, and (ii) foster green growth focused on renewable natural resources. This operation supports"
+   },
+   "pdo": "The operation aims to (i) strengthen resilient and private sector-led growth through fiscal sustainability and enhanced access to finance and markets, and (ii) foster green growth focused on renewable natural resources."
+  },
+  "P177712": {
+   "id": "P177712",
+   "lendinginstr": "Development Policy Lending",
+   "project_name": "Green and Resilient Growth DPC-1",
+   "borrower": "The Kingdom of Bhutan",
+   "impagency": "Ministry of Finance",
+   "sector1": {
+    "Name": "ICT Infrastructure",
+    "Percent": 20
+   },
+   "totalcommamt": "52,500,000",
+   "boardapprovaldate": "2022-06-21T00:00:00Z",
+   "closingdate": "6/30/2023 12:00:00 AM",
+   "url": "https://projects.worldbank.org/en/projects-operations/project-detail/P177712",
+   "status": "Closed",
+   "project_abstract": {
+    "cdata!": "The development objective of the First Green and Resilient Growth Development Policy Credit for Bhutan is to: (i) strengthen resilient and private sector-led growth through fiscal sustainability and enhanced access to finance and markets; and (ii) foster green growth focused on renewable natural res"
+   },
+   "pdo": "The operation aims to (i) strengthen resilient and private sector-led growth through fiscal sustainability and enhanced access to finance and markets, and (ii) foster green growth focused on renewable natural resources."
+  },
+  "P174399": {
+   "id": "P174399",
+   "lendinginstr": "Program-for-Results Financing",
+   "project_name": "Human Capital Recovery & Resilience Program",
+   "borrower": "Ministry of Finance",
+   "impagency": "Ministry of Industry, Commerce & Employment, Ministry of Education & Skills Development",
+   "sector1": {
+    "Name": "Public Administration - Education",
+    "Percent": 35
+   },
+   "totalcommamt": "20,000,000",
+   "boardapprovaldate": "2022-02-03T00:00:00Z",
+   "closingdate": "6/30/2026 12:00:00 AM",
+   "url": "https://projects.worldbank.org/en/projects-operations/project-detail/P174399",
+   "status": "Active",
+   "pdo": "Support building, protecting, and utilizing human capital in Bhutan"
+  },
+  "P175758": {
+   "id": "P175758",
+   "lendinginstr": "Development Policy Lending",
+   "project_name": "Bhutan - COVID-19 Crisis Response DPC",
+   "borrower": "The Kingdom of Bhutan",
+   "impagency": "Ministry of Finance",
+   "sector1": {
+    "Name": "Other Public Administration",
+    "Percent": 30
+   },
+   "totalcommamt": "35,000,000",
+   "boardapprovaldate": "2021-06-23T00:00:00Z",
+   "closingdate": "6/30/2022 12:00:00 AM",
+   "url": "https://projects.worldbank.org/en/projects-operations/project-detail/P175758",
+   "status": "Closed",
+   "project_abstract": {
+    "cdata!": "The development objectives of the COVID-19 Crisis Response Development Policy Credit in Bhutan: (i) strengthen policies for economic resilience and environmental sustainability and (ii) enhance programs to address the economic, social and health impact of COVID-19. The operation supports reforms tha"
+   },
+   "pdo": "The operation aims to (i) strengthen policies for economic resilience and environmental sustainability and (ii) enhance programs toaddress the economic, social and health impact of COVID-19."
+  }
+ }
+}

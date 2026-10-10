@@ -17,7 +17,9 @@ export function normalizeWorldBank(raw, matcher, fetchedAt) {
   for (const p of items) {
     if (!p || !p.id) continue;
     const title = p.project_name || p.id;
-    const objective = (typeof p.pdo === 'string' ? p.pdo : '') || (typeof p.project_abstract === 'object' ? p.project_abstract?.cdata : p.project_abstract) || '';
+    // Live API shape: project_abstract = { "cdata!": "text" } (verified against the real response)
+    const abstract = typeof p.project_abstract === 'object' ? p.project_abstract?.['cdata!'] ?? p.project_abstract?.cdata : p.project_abstract;
+    const objective = (typeof p.pdo === 'string' ? p.pdo : '') || abstract || '';
     const loc = resolveLocations({ text: `${title}. ${objective}` }, matcher);
     const sector = Array.isArray(p.sector1) ? p.sector1[0]?.Name : p.sector1?.Name;
     out.push({
@@ -29,7 +31,8 @@ export function normalizeWorldBank(raw, matcher, fetchedAt) {
       status: STATUS[String(p.status || '').toLowerCase()] ?? 'unknown',
       sector: sector || null,
       implementing_agency: p.impagency || p.borrower || null,
-      amount_committed: parseAmount(p.totalcommamt),
+      // The API reports totalcommamt "0" for approved operations whose amount it does not carry; 0 means "not reported", never "US$0".
+      amount_committed: parseAmount(p.totalcommamt) || null,
       amount_disbursed: null,
       currency: 'USD',
       start_date: isoDate(p.boardapprovaldate),
