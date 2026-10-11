@@ -5,12 +5,19 @@ updates:
     schedule: { interval: monthly }
     open-pull-requests-limit: 5
     groups:
-      # One pull request for the framework, one for everything else: fewer, more reviewable bumps.
+      # One pull request for the framework, and one for the low-risk remainder. The two toolchain packages
+      # get a group each, because a TypeScript or Vitest major needs code changes of its own and must not
+      # ride along with — or be blocked by — an unrelated type bump. (A grouped PR carrying TypeScript 7 and
+      # Vitest 5 together was red on arrival and held up a harmless @types/node bump: see PR #13.)
       next:
         patterns: ['next', 'react', 'react-dom', '@types/react', '@types/react-dom']
+      typescript:
+        patterns: ['typescript']
+      vitest:
+        patterns: ['vitest']
       rest:
         patterns: ['*']
-        exclude-patterns: ['next', 'react', 'react-dom', '@types/react', '@types/react-dom']
+        exclude-patterns: ['next', 'react', 'react-dom', '@types/react', '@types/react-dom', 'typescript', 'vitest']
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }
