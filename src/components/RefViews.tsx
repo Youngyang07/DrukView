@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { issueUrl } from '@/lib/modules';
-import { num } from '@/lib/format';
-import { DZONGKHAGS, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type RefSource, type SchoolLevel } from '@/lib/reference';
+import { money, moneyFull, num } from '@/lib/format';
+import { budget, DZONGKHAGS, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type RefSource, type SchoolLevel } from '@/lib/reference';
 import FacilityList, { type FacilityRow } from './FacilityList';
 import { Bars, Ext, Stat } from './ui';
 
@@ -173,5 +173,74 @@ export function Leaders({ scope, locale }: Props) {
   return (<div className="card"><div className="card-h"><h2>Elected leaders — {scope.name}</h2><span className="fresh">4th Parliament, 2023–2028</span></div>
     <h3>National Assembly ({x.nationalAssembly.length})</h3><MemberList items={x.nationalAssembly} />
     <h3>National Council</h3><MemberList items={x.nationalCouncil} />
+    {src}</div>);
+}
+
+const SECTOR_PAD: Record<string, string> = { child: 'padleft', parent: '', top: '' };
+
+export function MofBudget({ scope, locale }: Props) {
+  const B = budget; const N = B.national; const LG = B.localGovernment;
+  const fy = `FY ${B.fiscalYear}`;
+  const src = <SourceNote source={B.source} notes={B.notes} what={`National budget ${fy}${scope ? ' – ' + scope.name : ''}`} />;
+  if (!scope) {
+    const dzRows = DZONGKHAGS.map(d => ({ d, b: B.dzongkhags[d.slug], p: population.dzongkhags[d.slug]?.total ?? 0 })).filter(x => x.b);
+    return (<div className="card"><div className="card-h"><h2>National budget — {fy}</h2><span className="fresh">Ministry of Finance</span></div>
+      <div className="kpis">
+        <Stat label="Total appropriation" value={money(N.totalAppropriation, 'BTN')} sub={`${money(N.current, 'BTN')} running costs · ${money(N.capital, 'BTN')} investment`} />
+        <Stat label="Domestic revenue" value={money(N.domesticRevenue, 'BTN')} sub={`${money(N.tax, 'BTN')} tax · ${money(N.nonTax, 'BTN')} non-tax`} />
+        <Stat label="External resources" value={money(N.externalResources, 'BTN')} sub={`incl. ${money(N.grantsGoI, 'BTN')} from the Government of India`} />
+        <Stat label="Fiscal deficit" value={money(N.fiscalDeficit, 'BTN')} sub={`${Math.abs(N.deficitPctGdp).toFixed(2)}% of GDP`} />
+      </div>
+      <h3>What the money is for</h3>
+      <Bars rows={B.sectors.filter(s => s.level !== 'child').map(s => ({ k: s.name, v: s.total }))} fmt={v => money(v, 'BTN')} />
+      <div className="scroll"><table><thead><tr><th>Sector</th><th>Running costs</th><th>Investment</th><th>Total</th><th>Share</th></tr></thead><tbody>
+        {B.sectors.map(s => <tr key={s.name} className={s.level === 'parent' ? 'tot' : undefined}><td className={SECTOR_PAD[s.level]}>{s.name}</td>
+          <td className="num">{moneyFull(s.current, 'BTN')}</td><td className="num">{moneyFull(s.capital, 'BTN')}</td><td className="num">{moneyFull(s.total, 'BTN')}</td>
+          <td className="num">{((s.total / N.totalAppropriation) * 100).toFixed(1)}%</td></tr>)}</tbody></table></div>
+      <p className="note">Indented rows are part of the sector above them and are not counted twice in the total.</p>
+      <h3>Local government — {money(LG.total, 'BTN')}</h3>
+      <p className="note">Dzongkhags {money(LG.dzongkhags.total, 'BTN')} · gewogs {money(LG.gewogsTotal, 'BTN')} · thromdes {money(LG.thromdesTotal, 'BTN')}. That is {((LG.total / N.totalAppropriation) * 100).toFixed(1)}% of the national budget, up from {money(LG.previousYearTotal, 'BTN')} last year.</p>
+      <Bars rows={[...dzRows].sort((a, b) => b.b.total - a.b.total).map(x => ({ k: x.d.name, v: x.b.total, href: `/${locale}/${x.d.slug}/budget` }))} fmt={v => money(v, 'BTN')} />
+      <div className="scroll"><table><thead><tr><th>Dzongkhag</th><th>Running costs</th><th>Investment</th><th>Total</th><th title="Dzongkhag allocation divided by the 2017 census population">Per person*</th></tr></thead><tbody>
+        {[...dzRows].sort((a, b) => a.d.name.localeCompare(b.d.name)).map(({ d, b, p }) => <tr key={d.slug}><td><Link href={`/${locale}/${d.slug}/budget`}>{d.name}</Link></td>
+          <td className="num">{moneyFull(b.current, 'BTN')}</td><td className="num">{moneyFull(b.capital, 'BTN')}</td><td className="num">{moneyFull(b.total, 'BTN')}</td>
+          <td className="num">{p ? moneyFull(Math.round(b.total / p), 'BTN') : '–'}</td></tr>)}
+        <tr className="tot"><td>All dzongkhags</td><td className="num">{moneyFull(LG.dzongkhags.current, 'BTN')}</td><td className="num">{moneyFull(LG.dzongkhags.capital, 'BTN')}</td><td className="num">{moneyFull(LG.dzongkhags.total, 'BTN')}</td><td /></tr></tbody></table></div>
+      <p className="note">* Indicative only: the {fy} allocation divided by the 2017 census population. It excludes the gewog and thromde budgets below, and money that central ministries spend in the dzongkhag.</p>
+      <h3>Thromdes (city administrations)</h3>
+      <div className="scroll"><table><thead><tr><th>Thromde</th><th>Dzongkhag</th><th>Running costs</th><th>Investment</th><th>Total</th></tr></thead><tbody>
+        {B.thromdes.map(t => <tr key={t.name}><td>{t.name}</td><td><Link href={`/${locale}/${t.dz}/budget`}>{DZONGKHAGS.find(d => d.slug === t.dz)?.name}</Link></td>
+          <td className="num">{moneyFull(t.current, 'BTN')}</td><td className="num">{moneyFull(t.capital, 'BTN')}</td><td className="num">{moneyFull(t.total, 'BTN')}</td></tr>)}</tbody></table></div>
+      {src}</div>);
+  }
+  const b = B.dzongkhags[scope.slug];
+  if (!b) return <div className="card"><div className="empty">No budget line recorded for {scope.name}.</div></div>;
+  const gewogs = B.gewogs.filter(g => g.dz === scope.slug).sort((a, b2) => b2.total - a.total);
+  const thromde = B.thromdes.filter(t => t.dz === scope.slug);
+  const pop = population.dzongkhags[scope.slug]?.total ?? 0;
+  const gTotal = gewogs.reduce((s, g) => s + g.total, 0);
+  const rank = Object.values(B.dzongkhags).filter(x => x.total > b.total).length + 1;
+  return (<div className="card"><div className="card-h"><h2>Budget — {scope.name}, {fy}</h2><span className="fresh">Ministry of Finance</span></div>
+    <div className="kpis">
+      <Stat label="Dzongkhag administration" value={money(b.total, 'BTN')} sub={`rank ${rank} of 20 · ${((b.total / B.localGovernment.dzongkhags.total) * 100).toFixed(1)}% of all dzongkhags`} />
+      <Stat label="Running costs" value={money(b.current, 'BTN')} sub="salaries and day-to-day operations" />
+      <Stat label="Investment" value={money(b.capital, 'BTN')} sub="construction, equipment, projects" />
+      <Stat label={`Its ${gewogs.length} gewogs`} value={money(gTotal, 'BTN')} sub="budgeted separately, listed below" />
+    </div>
+    <h3>How the investment budget is provided</h3>
+    <Bars rows={[
+      { k: 'Block grant the dzongkhag decides on', v: b.capitalBlock },
+      { k: 'Project-tied, development partners', v: b.capitalProjectExternal },
+      { k: 'Project-tied, government', v: b.capitalProjectRgob },
+      { k: 'Spent here by central agencies', v: b.capitalCentral },
+    ].filter(r => r.v > 0)} fmt={v => money(v, 'BTN')} />
+    {thromde.length ? <><h3>Thromde (city administration)</h3>
+      <ul className="plist">{thromde.map(t => <li key={t.name}><div className="t">{t.name} — {moneyFull(t.total, 'BTN')}</div><div className="m">{moneyFull(t.current, 'BTN')} running costs · {moneyFull(t.capital, 'BTN')} investment · budgeted separately from the dzongkhag</div></li>)}</ul></> : null}
+    <h3>Gewogs ({gewogs.length})</h3>
+    <div className="scroll"><table><thead><tr><th>Gewog</th><th>Running costs</th><th>Investment</th><th>Total</th></tr></thead><tbody>
+      {gewogs.map(g => <tr key={g.gewog}><td>{g.gewog}</td><td className="num">{moneyFull(g.current, 'BTN')}</td><td className="num">{moneyFull(g.capital, 'BTN')}</td><td className="num">{moneyFull(g.total, 'BTN')}</td></tr>)}
+      <tr className="tot"><td>Total</td><td className="num">{moneyFull(gewogs.reduce((s, g) => s + g.current, 0), 'BTN')}</td><td className="num">{moneyFull(gewogs.reduce((s, g) => s + g.capital, 0), 'BTN')}</td><td className="num">{moneyFull(gTotal, 'BTN')}</td></tr></tbody></table></div>
+    {pop ? <p className="note">Dzongkhag, gewogs{thromde.length ? ' and thromde' : ''} together: {moneyFull(b.total + gTotal + thromde.reduce((s, t) => s + t.total, 0), 'BTN')} — about {moneyFull(Math.round((b.total + gTotal + thromde.reduce((s, t) => s + t.total, 0)) / pop), 'BTN')} per person against the 2017 census population. Central ministries also spend money here that is not in these figures.</p> : null}
+    <p><Link className="btn" href={`/${locale}/bhutan/budget`}>Compare all dzongkhags →</Link></p>
     {src}</div>);
 }

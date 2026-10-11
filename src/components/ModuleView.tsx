@@ -3,7 +3,7 @@ import { issueUrl, MODULES, type ModuleSlug } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
-import { Health, Leaders, Population, Schools } from './RefViews';
+import { Health, Leaders, MofBudget, Population, Schools } from './RefViews';
 
 type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: q.Filters };
 const scopeName = (s: q.Dz | null) => (s ? `${s.name} Dzongkhag` : 'Bhutan');
@@ -30,14 +30,15 @@ async function Overview({ scope, locale }: Props) {
   </>);
 }
 
-async function Budget({ scope }: Props) {
-  const [al, fr] = await Promise.all([q.getAllocations(scope?.id ?? null), q.freshness()]);
-  const lines = scope ? [] : await q.getBudgetLines();
+async function Budget({ scope, locale }: Props) {
+  // The Ministry of Finance budget ships with the code; curated rows come from the database when available.
+  const [al, fr] = await Promise.all([q.getAllocations(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ manual: null }))]);
+  const lines = scope ? [] : await q.getBudgetLines().catch(() => []);
   const years = [...new Set([...al.map(a => a.fiscal_year), ...lines.map(l => l.fiscal_year)])].sort().reverse();
-  return (<div className="card">
-    <div className="card-h"><h2>Budget & allocations — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
-    <p className="note">Figures are transcribed from published budget documents; every line links to its source. Nu. (government) and US$ (partners) are never added together.</p>
-    {!years.length ? <Empty>No budget documents have been added for {scopeName(scope)} yet. They enter through <code>data/manual/*.csv</code> with a mandatory citation per row — see <Link href="/en/contribute">Contribute</Link>.</Empty> : years.map(y => {
+  return (<><MofBudget scope={scope} locale={locale} /><div className="card">
+    <div className="card-h"><h2>Other published budget documents — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
+    <p className="note">Extra lines transcribed from other published documents (ministry reports, dzongkhag plans); every line links to its source. Nu. (government) and US$ (partners) are never added together.</p>
+    {!years.length ? <Empty>Nothing beyond the Ministry of Finance budget above has been added for {scopeName(scope)} yet. Extra rows enter through <code>data/manual/*.csv</code> with a mandatory citation each — see <Link href="/en/contribute">Contribute</Link>.</Empty> : years.map(y => {
       const a = al.filter(x => x.fiscal_year === y), l = lines.filter(x => x.fiscal_year === y);
       return (<section key={y}><h3>Fiscal year {y}</h3>
         {l.length ? <><Bars rows={Object.entries(l.reduce<Record<string, number>>((m, x) => (x.currency === 'BTN' ? (m[x.agency] = (m[x.agency] ?? 0) + x.amount) : m, m), {})).map(([k, v]) => ({ k, v }))} fmt={v => money(v, 'BTN')} />
@@ -47,7 +48,7 @@ async function Budget({ scope }: Props) {
           {a.map((x, i) => <tr key={i}>{!scope ? <td>{x.dzongkhag}</td> : null}<td>{[x.gewog, x.village].filter(Boolean).join(' / ') || '–'}</td><td>{x.sector ?? 'General'}</td><td>{x.funding_source}</td><td className="num">{moneyFull(x.amount, x.currency)}</td><td><Ext href={x.source_url}>{x.source_name}: {x.document}{x.page ? `, p.${x.page}` : ''}</Ext></td></tr>)}</tbody></table></div> : null}
       </section>);
     })}
-    <Cite what={`Budget – ${scopeName(scope)}`} /></div>);
+    <Cite what={`Budget – ${scopeName(scope)}`} /></div></>);
 }
 
 async function Projects({ scope, filters, locale }: Props) {

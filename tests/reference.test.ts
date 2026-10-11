@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { DZONGKHAGS, health, leaders, population, schools } from '@/lib/reference';
+import { budget, DZONGKHAGS, health, leaders, population, schools } from '@/lib/reference';
 
 const slugs = DZONGKHAGS.map(d => d.slug).sort();
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
@@ -78,5 +78,57 @@ describe('schools and leaders reference data', () => {
     expect(leaders.nationalCouncilEminent.length).toBe(5);
     expect(leaders.cabinet.some(m => m.role === 'Prime Minister')).toBe(true);
     for (const src of Object.values(leaders.sources)) expect(src.url).toMatch(/^https:\/\//);
+  });
+});
+
+describe('national budget reference data', () => {
+  const B = budget;
+  it('reconciles with the Ministry of Finance totals', () => {
+    const N = B.national;
+    expect(N.current + N.capital).toBe(N.totalExpenditure);
+    expect(N.domesticRevenue).toBe(N.tax + N.nonTax);
+    expect(N.externalResources).toBe(N.programGrants + N.projectTiedGrants);
+    expect(N.internalResources).toBeLessThan(N.totalResources);
+    // Sector table: parent and standalone rows add up to the appropriation; children sit inside a parent.
+    expect(sum(B.sectors.filter(s => s.level !== 'child').map(s => s.total))).toBe(N.totalAppropriation);
+    // Printed to 3 decimals of a million, so a row may be Nu 1,000 off its own printed total.
+    for (const s of B.sectors) expect(Math.abs(s.current + s.capital - s.total), s.name).toBeLessThanOrEqual(10_000);
+  });
+
+  it('local government: dzongkhag, gewog and thromde tables match their printed totals', () => {
+    const LG = B.localGovernment;
+    expect(Object.keys(B.dzongkhags).sort()).toEqual(slugs);
+    expect(B.gewogs.length).toBe(205);
+    expect(B.thromdes.length).toBe(4);
+    for (const d of Object.values(B.dzongkhags)) {
+      expect(d.current + d.capital).toBe(d.total);
+      expect(d.capitalBlock + d.capitalProjectExternal + d.capitalProjectRgob + d.capitalCentral).toBe(d.capital);
+    }
+    // Annexure 1 prints millions to 3 decimals, so its rows sum to Nu 1,000 over its own total.
+    expect(Math.abs(sum(Object.values(B.dzongkhags).map(d => d.total)) - LG.dzongkhags.total)).toBeLessThanOrEqual(10_000);
+    expect(sum(B.gewogs.map(g => g.total))).toBe(LG.gewogsTotal);
+    expect(sum(B.thromdes.map(t => t.total))).toBe(LG.thromdesTotal);
+    expect(LG.dzongkhags.total + LG.gewogsTotal + LG.thromdesTotal).toBe(LG.total);
+    for (const g of B.gewogs) expect(slugs).toContain(g.dz);
+    for (const t of B.thromdes) expect(slugs).toContain(t.dz);
+  });
+
+  it('only attaches a gewog to a map boundary when the name matches that dzongkhag', () => {
+    const geo = JSON.parse(readFileSync('public/geo/bhutan-gewogs.json', 'utf8'));
+    const byId: Record<string, string> = Object.fromEntries(DZONGKHAGS.map(d => [d.id, d.slug]));
+    const inDz = new Map<string, Set<string>>();
+    for (const f of geo.features) {
+      const slug = byId[f.properties.dz];
+      if (!inDz.has(slug)) inDz.set(slug, new Set());
+      inDz.get(slug)!.add(String(f.properties.name).toLowerCase());
+    }
+    const matched = B.gewogs.filter(g => g.mapName);
+    expect(matched.length).toBeGreaterThan(150);
+    for (const g of matched) expect(inDz.get(g.dz)?.has(g.mapName!.toLowerCase()), `${g.gewog} → ${g.mapName}`).toBe(true);
+    // one boundary may never carry two gewogs' money
+    for (const [slug] of inDz) {
+      const used = matched.filter(g => g.dz === slug).map(g => g.mapName!.toLowerCase());
+      expect(new Set(used).size).toBe(used.length);
+    }
   });
 });

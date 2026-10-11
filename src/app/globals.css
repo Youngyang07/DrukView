@@ -90,3 +90,5 @@ details summary{cursor:pointer;list-style:none}details summary::before{content:"
 .srcbox{margin-top:18px;padding:10px 14px;border-left:3px solid var(--maroon);background:var(--q0);border-radius:6px;font-size:.84rem}.srcbox p{margin:.3em 0}.srcbox ul{margin:.3em 0;padding-left:1.2em}
 .chip{display:inline-block;padding:4px 10px;border:1px solid var(--line);border-radius:999px;font-size:.85rem;background:var(--surface)}
 tr.tot td{font-weight:700;border-top:2px solid var(--line)}
+
+.padleft{padding-left:1.6em}

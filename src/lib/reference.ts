@@ -6,6 +6,7 @@ import healthJson from '../../data/reference/health-facilities.json';
 import popJson from '../../data/reference/population-2017.json';
 import schoolsJson from '../../data/reference/schools-2024.json';
 import leadersJson from '../../data/reference/leaders.json';
+import budgetJson from '../../data/reference/budget-2026-27.json';
 
 export type RefSource = { publisher: string; title: string; table?: string; url: string; checked: string };
 
@@ -26,7 +27,22 @@ export type Member = { name: string; role: string; constituency?: string | null 
 export type LeadersData = { sources: Record<'na' | 'nc', RefSource & { data: string }>; notes: string[]; cabinet: (Member & { dzongkhag: string })[];
   nationalCouncilEminent: Member[]; dzongkhags: Record<string, { nationalAssembly: Member[]; nationalCouncil: Member[] }> };
 
+export type BudgetSector = { name: string; current: number; capital: number; total: number; level: 'top' | 'parent' | 'child' };
+export type BudgetDz = { name: string; current: number; capitalBlock: number; capitalProjectExternal: number; capitalProjectRgob: number; capitalCentral: number; capital: number; total: number };
+export type BudgetGewog = { gewog: string; dz: string; current: number; capitalBlock: number; capitalProjectExternal: number; capitalCentral: number; capital: number; total: number; mapName?: string };
+export type BudgetData = { source: RefSource; fiscalYear: string; currency: string; notes: string[];
+  national: { totalAppropriation: number; totalExpenditure: number; current: number; capital: number; totalResources: number; internalResources: number;
+    domesticRevenue: number; tax: number; nonTax: number; externalResources: number; programGrants: number; projectTiedGrants: number; grantsGoI: number;
+    fiscalDeficit: number; gdp: number; deficitPctGdp: number; debtService: number };
+  sectors: BudgetSector[]; localGovernment: { total: number; dzongkhags: { current: number; capital: number; total: number }; thromdesTotal: number; gewogsTotal: number; previousYearTotal: number };
+  dzongkhags: Record<string, BudgetDz>; thromdes: { name: string; dz: string; current: number; capital: number; total: number }[]; gewogs: BudgetGewog[] };
+
 export const health = healthJson as unknown as HealthData;
+export const budget = budgetJson as unknown as BudgetData;
+/** Gewog budget totals keyed by the boundary-file name, for map shading. Gewogs whose name could not be
+ *  matched to a boundary with confidence are left out rather than attached to the wrong shape. */
+export const gewogBudgetByMapName = (slug: string): Record<string, number> =>
+  Object.fromEntries(budget.gewogs.filter(g => g.dz === slug && g.mapName).map(g => [g.mapName!.toLowerCase(), g.total]));
 export const schools = schoolsJson as unknown as SchoolsData;
 export const leaders = leadersJson as unknown as LeadersData;
 export const SCHOOL_LEVEL: Record<SchoolLevel, string> = { ECR: 'Extended classroom', PS: 'Primary school', LSS: 'Lower secondary', MSS: 'Middle secondary', HSS: 'Higher secondary', other: 'Special institute' };
@@ -46,6 +62,7 @@ export const per10k = (n: number, pop: number) => (pop > 0 ? (n / pop) * 10_000 
 export const pct = (a: number, b: number) => (b > 0 ? ((a - b) / b) * 100 : 0);
 
 export const REFERENCE_SOURCES: { what: string; source: RefSource; notes: string[] }[] = [
+  { what: `National budget FY ${budget.fiscalYear}`, source: budget.source, notes: budget.notes },
   { what: 'Population (census)', source: population.source, notes: population.notes },
   { what: 'Health facilities', source: health.source, notes: health.notes },
   { what: 'Schools', source: schools.source, notes: schools.notes },

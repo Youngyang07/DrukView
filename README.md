@@ -18,6 +18,7 @@ Next.js 15 (App Router, TypeScript) · PostgreSQL (`pg`, plain SQL migrations) �
 | World Bank Projects & Operations API | automated (`pipeline/worldbank.mjs`) | daily |
 | Asian Development Bank IATI file | automated (`pipeline/adb.mjs`; override with `ADB_IATI_URL`) | daily |
 | Open-Meteo weather | automated (`pipeline/weather.mjs`) | daily (Vercel Hobby allows at most one run/day per cron; on a Pro plan change `vercel.json` to e.g. `37 */6 * * *`) |
+| **Ministry of Finance, National Budget Report FY 2026-27** — national summary, sector allocation, and the allocation of every dzongkhag, thromde and all 205 gewogs | **reference file** `data/reference/budget-2026-27.json` | yearly (new budget each May) |
 | NSB 2017 Population & Housing Census (Table 2.1) | **reference file** `data/reference/population-2017.json` | per census |
 | Ministry of Health, Annual Health Bulletin 2025 (Table 6.1) — all hospitals, PHCs, sub-posts, HISCs with beds | **reference file** `data/reference/health-facilities.json` | yearly |
 | MoESD Annual Education Statistics 2024 (Annexure IV) — all 566 schools by name and level | **reference file** `data/reference/schools-2024.json` | yearly |
@@ -70,4 +71,5 @@ What is still unproven is the *runtime* on your host (network egress, timeouts, 
 - Health: Trongsa's totals row in the Bulletin reports 4 sub-posts but names only 3.
 - Schools: names come from PDF text extraction (a few spellings may be off); the middle- vs higher-secondary split per dzongkhag is approximate (combined figure is exact).
 - Dzongdags (district administrators) are not listed yet — no single official machine-readable source. MoICE (industry, commerce, employment) data is not added yet.
-- Gewog/village granularity depends on curated rows.
+- Village-level allocations depend on curated rows; the Ministry of Finance budget goes down to gewog level only.
+- 31 of the 205 gewog names in the budget could not be matched to a map boundary with confidence, so those gewogs are listed in the tables but left unshaded on the map rather than attached to the wrong shape.
