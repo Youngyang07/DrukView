@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { budget, DZONGKHAGS, health, leaders, population, schools } from '@/lib/reference';
+import { budget, dzongdags, DZONGKHAGS, economy, health, leaders, population, schools } from '@/lib/reference';
 
 const slugs = DZONGKHAGS.map(d => d.slug).sort();
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
@@ -130,5 +130,40 @@ describe('national budget reference data', () => {
       const used = matched.filter(g => g.dz === slug).map(g => g.mapName!.toLowerCase());
       expect(new Set(used).size).toBe(used.length);
     }
+  });
+});
+
+describe('MoICE industry/jobs and Dzongdag reference data', () => {
+  it('industry licences reconcile with the Annual Industry Report totals', () => {
+    const ind = economy.metrics.find(m => m.key === 'industry')!;
+    expect(Object.keys(ind.dzongkhags).sort()).toEqual(slugs);
+    for (const k of ['cottage', 'small', 'medium', 'large', 'total']) {
+      expect(sum(Object.values(ind.dzongkhags).map(d => d[k])), k).toBe(ind.national[k]);
+    }
+    for (const [slug, d] of Object.entries(ind.dzongkhags)) expect(d.cottage + d.small + d.medium + d.large, slug).toBe(d.total);
+    expect(ind.national.total).toBe(31_952);
+  });
+
+  it('job placements cover every dzongkhag and stay within the published total', () => {
+    const plc = economy.metrics.find(m => m.key === 'placements')!;
+    expect(Object.keys(plc.dzongkhags).sort()).toEqual(slugs);
+    const named = sum(Object.values(plc.dzongkhags).map(d => d.total));
+    // one record in the report has no dzongkhag, so the named rows are one short of the national total
+    expect(plc.national.total - named).toBe(1);
+  });
+
+  it('every Dzongdag entry carries a confidence level and a source', () => {
+    expect(Object.keys(dzongdags.dzongkhags).sort()).toEqual(slugs);
+    for (const [slug, e] of Object.entries(dzongdags.dzongkhags)) {
+      const d = e.dzongdag;
+      if (!d) continue;
+      expect(['confirmed', 'website', 'unconfirmed'], slug).toContain(d.confidence);
+      expect(d.sourceUrl, `${slug} needs a source link`).toMatch(/^https?:\/\//);
+      expect(d.name.length, slug).toBeGreaterThan(2);
+      // anything not confirmed by a dated notice must explain itself on the page
+      if (d.confidence !== 'confirmed') expect(d.note, `${slug} needs a caveat`).toBeTruthy();
+      if (d.confidence === 'confirmed') expect(d.note, slug).toBeTruthy();
+    }
+    expect(dzongdags.checked).toMatch(/^\d{4}-\d\d-\d\d$/);
   });
 });

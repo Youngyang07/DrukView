@@ -1,0 +1,259 @@
+{
+ "metrics": [
+  {
+   "key": "industry",
+   "label": "Active industry licences",
+   "unit": "licences",
+   "asOf": "2026-06-20",
+   "fiscalYear": "2025-26",
+   "source": {
+    "publisher": "Ministry of Industry, Commerce and Employment, Royal Government of Bhutan",
+    "title": "Annual Industry Report FY 2025-2026 (Department of Industry)",
+    "table": "Annexure 3: Distribution of Industries by Dzongkhag and Scale, p. 62",
+    "url": "https://www.moice.gov.bt/wp-content/uploads/2026/07/Annual-Industry-Report-FY-2025-2026.pdf",
+    "checked": "2026-10-11"
+   },
+   "national": {
+    "cottage": 11461,
+    "small": 19120,
+    "medium": 914,
+    "large": 457,
+    "total": 31952
+   },
+   "dzongkhags": {
+    "bumthang": {
+     "cottage": 246,
+     "small": 717,
+     "medium": 19,
+     "large": 4,
+     "total": 986
+    },
+    "chukha": {
+     "cottage": 923,
+     "small": 1927,
+     "medium": 115,
+     "large": 59,
+     "total": 3024
+    },
+    "dagana": {
+     "cottage": 245,
+     "small": 590,
+     "medium": 8,
+     "large": 3,
+     "total": 846
+    },
+    "gasa": {
+     "cottage": 26,
+     "small": 93,
+     "medium": 0,
+     "large": 0,
+     "total": 119
+    },
+    "haa": {
+     "cottage": 149,
+     "small": 254,
+     "medium": 13,
+     "large": 5,
+     "total": 421
+    },
+    "lhuntse": {
+     "cottage": 97,
+     "small": 240,
+     "medium": 6,
+     "large": 3,
+     "total": 346
+    },
+    "mongar": {
+     "cottage": 324,
+     "small": 796,
+     "medium": 25,
+     "large": 10,
+     "total": 1155
+    },
+    "paro": {
+     "cottage": 1054,
+     "small": 1350,
+     "medium": 111,
+     "large": 36,
+     "total": 2551
+    },
+    "pemagatshel": {
+     "cottage": 267,
+     "small": 456,
+     "medium": 8,
+     "large": 12,
+     "total": 743
+    },
+    "punakha": {
+     "cottage": 385,
+     "small": 644,
+     "medium": 36,
+     "large": 14,
+     "total": 1079
+    },
+    "samdrup-jongkhar": {
+     "cottage": 402,
+     "small": 844,
+     "medium": 27,
+     "large": 21,
+     "total": 1294
+    },
+    "samtse": {
+     "cottage": 563,
+     "small": 1411,
+     "medium": 117,
+     "large": 32,
+     "total": 2123
+    },
+    "sarpang": {
+     "cottage": 603,
+     "small": 1680,
+     "medium": 35,
+     "large": 34,
+     "total": 2352
+    },
+    "thimphu": {
+     "cottage": 4660,
+     "small": 4939,
+     "medium": 281,
+     "large": 188,
+     "total": 10068
+    },
+    "trashiyangtse": {
+     "cottage": 228,
+     "small": 335,
+     "medium": 16,
+     "large": 6,
+     "total": 585
+    },
+    "trashigang": {
+     "cottage": 324,
+     "small": 780,
+     "medium": 23,
+     "large": 10,
+     "total": 1137
+    },
+    "trongsa": {
+     "cottage": 132,
+     "small": 487,
+     "medium": 13,
+     "large": 4,
+     "total": 636
+    },
+    "tsirang": {
+     "cottage": 227,
+     "small": 432,
+     "medium": 7,
+     "large": 1,
+     "total": 667
+    },
+    "wangdue-phodrang": {
+     "cottage": 445,
+     "small": 741,
+     "medium": 43,
+     "large": 13,
+     "total": 1242
+    },
+    "zhemgang": {
+     "cottage": 161,
+     "small": 404,
+     "medium": 11,
+     "large": 2,
+     "total": 578
+    }
+   },
+   "notes": [
+    "These are licences in force on 20 June 2026, not businesses known to be trading: the report notes that some licensed industries are still under construction, and some renew a licence without operating.",
+    "142 of the 31,952 licences are foreign direct investment licences; the report does not say which dzongkhags they are in.",
+    "Thromde (city) businesses are counted inside their dzongkhag — Thimphu Thromde inside Thimphu, Phuentsholing inside Chukha, and so on.",
+    "Annexure 4 of the same report repeats these dzongkhag totals by sector but prints Sarpang as 2,342 and Thimphu as 10,078. Annexure 3 is used here because its rows and columns both add up to the published national total of 31,952."
+   ]
+  },
+  {
+   "key": "placements",
+   "label": "Jobs filled through the national labour system",
+   "unit": "placements",
+   "asOf": null,
+   "fiscalYear": "2024-25",
+   "source": {
+    "publisher": "Ministry of Industry, Commerce and Employment, Royal Government of Bhutan",
+    "title": "National Employment Report 2024-2025 (Department of Employment and Entrepreneurship)",
+    "table": "Table 16 (second table so numbered): Placement by dzongkhag and gender - section 4.3.2 Placement by Dzongkhags (pp. 28-29)",
+    "url": "https://www.moice.gov.bt/wp-content/uploads/2025/11/Final-NER-2024-25-2.pdf",
+    "checked": "2026-10-11"
+   },
+   "national": {
+    "total": 6940
+   },
+   "dzongkhags": {
+    "bumthang": {
+     "total": 56
+    },
+    "chukha": {
+     "total": 1204
+    },
+    "dagana": {
+     "total": 75
+    },
+    "gasa": {
+     "total": 1
+    },
+    "haa": {
+     "total": 32
+    },
+    "lhuntse": {
+     "total": 2
+    },
+    "mongar": {
+     "total": 51
+    },
+    "paro": {
+     "total": 684
+    },
+    "pemagatshel": {
+     "total": 119
+    },
+    "punakha": {
+     "total": 145
+    },
+    "samdrup-jongkhar": {
+     "total": 326
+    },
+    "samtse": {
+     "total": 733
+    },
+    "sarpang": {
+     "total": 430
+    },
+    "thimphu": {
+     "total": 2695
+    },
+    "trashigang": {
+     "total": 38
+    },
+    "trashiyangtse": {
+     "total": 69
+    },
+    "trongsa": {
+     "total": 20
+    },
+    "tsirang": {
+     "total": 62
+    },
+    "wangdue-phodrang": {
+     "total": 107
+    },
+    "zhemgang": {
+     "total": 90
+    }
+   },
+   "notes": [
+    "Appointments recorded in the Bhutan Labour Market Information System during the 2024-25 financial year, counted where the job is.",
+    "The 20 dzongkhags add up to 6,939; the published total of 6,940 includes one record with no dzongkhag recorded.",
+    "This is only part of employment in Bhutan. It leaves out the 1,334 people placed overseas, civil servants recruited through the Royal Civil Service Commission, the armed forces, and any work not registered in the system.",
+    "Someone who changed job during the year is counted twice; the report estimates 6,598 different people behind these 6,940 placements.",
+    "The ministry publishes no unemployment rate by dzongkhag. The labour-force figures in its report come from the National Statistics Bureau's Quarterly Labour Force Survey and are national only."
+   ]
+  }
+ ]
+}

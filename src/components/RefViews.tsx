@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { issueUrl } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
-import { budget, DZONGKHAGS, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type RefSource, type SchoolLevel } from '@/lib/reference';
+import { budget, CONFIDENCE_LABEL, dzongdags, DZONGKHAGS, economy, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type RefSource, type SchoolLevel } from '@/lib/reference';
 import FacilityList, { type FacilityRow } from './FacilityList';
 import { Bars, Ext, Stat } from './ui';
 
@@ -243,4 +243,86 @@ export function MofBudget({ scope, locale }: Props) {
     {pop ? <p className="note">Dzongkhag, gewogs{thromde.length ? ' and thromde' : ''} together: {moneyFull(b.total + gTotal + thromde.reduce((s, t) => s + t.total, 0), 'BTN')} — about {moneyFull(Math.round((b.total + gTotal + thromde.reduce((s, t) => s + t.total, 0)) / pop), 'BTN')} per person against the 2017 census population. Central ministries also spend money here that is not in these figures.</p> : null}
     <p><Link className="btn" href={`/${locale}/bhutan/budget`}>Compare all dzongkhags →</Link></p>
     {src}</div>);
+}
+
+export function Economy({ scope, locale }: Props) {
+  const ind = economy.metrics.find(m => m.key === 'industry')!;
+  const plc = economy.metrics.find(m => m.key === 'placements')!;
+  const SCALE: [string, string][] = [['cottage', 'Cottage'], ['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']];
+  if (!scope) {
+    const rows = DZONGKHAGS.map(d => ({ d, i: ind.dzongkhags[d.slug], p: plc.dzongkhags[d.slug]?.total ?? 0, pop: population.dzongkhags[d.slug]?.total ?? 0 })).filter(x => x.i);
+    return (<div className="card"><div className="card-h"><h2>Industry & jobs — Bhutan</h2><span className="fresh">Industry, Commerce & Employment</span></div>
+      <div className="kpis">
+        <Stat label="Active industry licences" value={num(ind.national.total)} sub={`on ${ind.asOf}`} />
+        <Stat label="Cottage & small" value={num(ind.national.cottage + ind.national.small)} sub={`${(((ind.national.cottage + ind.national.small) / ind.national.total) * 100).toFixed(1)}% of all licences`} />
+        <Stat label="Medium & large" value={num(ind.national.medium + ind.national.large)} sub={`${num(ind.national.large)} large`} />
+        <Stat label={plc.label} value={num(plc.national.total)} sub={`financial year ${plc.fiscalYear}`} />
+      </div>
+      <h3>Licences by dzongkhag</h3>
+      <Bars rows={[...rows].sort((a, b) => b.i.total - a.i.total).map(x => ({ k: x.d.name, v: x.i.total, href: `/${locale}/${x.d.slug}/economy` }))} fmt={num} />
+      <div className="scroll"><table><thead><tr><th>Dzongkhag</th>{SCALE.map(([, l]) => <th key={l}>{l}</th>)}<th>Total</th><th title="Different years: 2026 licences, 2017 census">Per 1,000 people*</th><th>Jobs filled {plc.fiscalYear}</th></tr></thead><tbody>
+        {[...rows].sort((a, b) => a.d.name.localeCompare(b.d.name)).map(({ d, i, p, pop }) => <tr key={d.slug}><td><Link href={`/${locale}/${d.slug}/economy`}>{d.name}</Link></td>
+          {SCALE.map(([k]) => <td className="num" key={k}>{num(i[k])}</td>)}<td className="num">{num(i.total)}</td>
+          <td className="num">{pop ? ((i.total / pop) * 1000).toFixed(0) : '–'}</td><td className="num">{num(p)}</td></tr>)}
+        <tr className="tot"><td>Bhutan</td>{SCALE.map(([k]) => <td className="num" key={k}>{num(ind.national[k])}</td>)}<td className="num">{num(ind.national.total)}</td>
+          <td className="num">{((ind.national.total / population.national.enumerated) * 1000).toFixed(0)}</td><td className="num">{num(plc.national.total)}</td></tr></tbody></table></div>
+      <p className="note">* Indicative only: licences in 2026 against the 2017 census population.</p>
+      <SourceNote source={ind.source} notes={ind.notes} what="Industry licences" />
+      <SourceNote source={plc.source} notes={plc.notes} what="Jobs filled" /></div>);
+  }
+  const i = ind.dzongkhags[scope.slug]; const p = plc.dzongkhags[scope.slug]?.total ?? 0;
+  if (!i) return <div className="card"><div className="empty">No industry figures recorded for {scope.name}.</div></div>;
+  const rank = Object.values(ind.dzongkhags).filter(x => x.total > i.total).length + 1;
+  const pop = population.dzongkhags[scope.slug]?.total ?? 0;
+  return (<div className="card"><div className="card-h"><h2>Industry & jobs — {scope.name}</h2><span className="fresh">Industry, Commerce & Employment</span></div>
+    <div className="kpis">
+      <Stat label="Active industry licences" value={num(i.total)} sub={`rank ${rank} of 20 · ${((i.total / ind.national.total) * 100).toFixed(1)}% of Bhutan`} />
+      <Stat label="Cottage & small" value={num(i.cottage + i.small)} sub={`${num(i.cottage)} cottage · ${num(i.small)} small`} />
+      <Stat label="Medium & large" value={num(i.medium + i.large)} sub={`${num(i.medium)} medium · ${num(i.large)} large`} />
+      <Stat label={`Jobs filled ${plc.fiscalYear}`} value={num(p)} sub="through the national labour system" />
+    </div>
+    <h3>Licences by size of business</h3>
+    <Bars rows={SCALE.map(([k, l]) => ({ k: l, v: i[k] })).filter(r => r.v > 0)} fmt={num} />
+    {pop ? <p className="note">That is about {((i.total / pop) * 1000).toFixed(0)} licences per 1,000 residents, against {((ind.national.total / population.national.enumerated) * 1000).toFixed(0)} nationally — indicative only, as the licence count is from 2026 and the population from the 2017 census.</p> : null}
+    <p><Link className="btn" href={`/${locale}/bhutan/economy`}>Compare all dzongkhags →</Link></p>
+    <SourceNote source={ind.source} notes={ind.notes} what={`Industry licences – ${scope.name}`} />
+    <SourceNote source={plc.source} notes={plc.notes} what={`Jobs filled – ${scope.name}`} /></div>);
+}
+
+export function Dzongdags({ scope }: Props) {
+  const D = dzongdags;
+  const one = (slug: string) => {
+    const e = D.dzongkhags[slug]; const d = e?.dzongdag; const o = e?.office;
+    return (<>
+      {d ? <ul className="plist"><li>
+        <div className="t">{d.name} <span className={`conf c-${d.confidence}`}>{d.confidence}</span></div>
+        <div className="m">Dzongdag (district administrator){d.asOf ? ` · took office ${d.asOf}` : ''} · {CONFIDENCE_LABEL[d.confidence]}
+          {d.sourceUrl ? <> · <Ext href={d.sourceUrl}>{d.sourceTitle ?? 'source'}</Ext></> : null}</div>
+        {d.note ? <p className="note">{d.note}</p> : null}
+      </li></ul> : <div className="empty">No Dzongdag recorded for this dzongkhag.</div>}
+      {o && (o.phone || o.email || o.address || o.website) ? <ul className="plist"><li>
+        <div className="t">{o.name ?? 'Dzongkhag Administration'}</div>
+        <div className="m">{[o.phone, o.email, o.address].filter(Boolean).join(' · ')}{o.website ? <> · <Ext href={o.website}>{o.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}</Ext></> : null}</div>
+      </li></ul> : null}
+    </>);
+  };
+  if (scope) return (<div className="card"><div className="card-h"><h2>Dzongkhag administration — {scope.name}</h2><span className="fresh">Checked {D.checked}</span></div>
+    {one(scope.slug)}
+    <div className="srcbox"><ul>{D.notes.map(n => <li key={n}>{n}</li>)}</ul>
+      <p>Wrong or out of date? <a href={issueUrl(`Dzongdag: correction – ${scope.name}`, 'Correct name:\nOfficial source (link):')} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p></div></div>);
+  const rows = DZONGKHAGS.map(d => ({ d, e: D.dzongkhags[d.slug] }));
+  const n = (c: string) => rows.filter(r => r.e?.dzongdag?.confidence === c).length;
+  return (<div className="card"><div className="card-h"><h2>Dzongdags (district administrators)</h2><span className="fresh">Checked {D.checked}</span></div>
+    <p className="note">{n('confirmed')} confirmed by a dated appointment notice, {n('website')} taken from an undated page on the dzongkhag&rsquo;s own website, {n('unconfirmed')} unconfirmed.</p>
+    <div className="scroll"><table><thead><tr><th>Dzongkhag</th><th>Dzongdag</th><th>How well confirmed</th><th>Office</th></tr></thead><tbody>
+      {rows.map(({ d, e }) => <tr key={d.slug}><td>{d.name}</td>
+        <td>{e?.dzongdag ? <>{e.dzongdag.name}{e.dzongdag.sourceUrl ? <> <Ext href={e.dzongdag.sourceUrl}>↗</Ext></> : null}</> : '–'}</td>
+        <td>{e?.dzongdag ? <span className={`conf c-${e.dzongdag.confidence}`}>{e.dzongdag.confidence}</span> : '–'}{e?.dzongdag?.asOf ? <small> since {e.dzongdag.asOf}</small> : null}</td>
+        <td>{[e?.office?.phone, e?.office?.email].filter(Boolean).join(' · ') || (e?.office?.website ? <Ext href={e.office.website}>website</Ext> : '–')}</td></tr>)}</tbody></table></div>
+    {rows.filter(r => r.e?.dzongdag?.note && r.e.dzongdag.confidence !== 'confirmed').length ? <>
+      <h3>Entries to treat with care</h3>
+      <ul className="plist">{rows.filter(r => r.e?.dzongdag?.note && r.e.dzongdag.confidence === 'unconfirmed').map(({ d, e }) =>
+        <li key={d.slug}><div className="t">{d.name}: {e!.dzongdag!.name}</div><div className="m">{e!.dzongdag!.note}</div></li>)}</ul></> : null}
+    <div className="srcbox"><ul>{D.notes.map(nt => <li key={nt}>{nt}</li>)}</ul>
+      <p>Wrong or out of date? <a href={issueUrl('Dzongdag: correction', 'Dzongkhag:\nCorrect name:\nOfficial source (link):')} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p></div></div>);
 }

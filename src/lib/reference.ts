@@ -7,6 +7,8 @@ import popJson from '../../data/reference/population-2017.json';
 import schoolsJson from '../../data/reference/schools-2024.json';
 import leadersJson from '../../data/reference/leaders.json';
 import budgetJson from '../../data/reference/budget-2026-27.json';
+import economyJson from '../../data/reference/economy.json';
+import dzongdagJson from '../../data/reference/dzongdags.json';
 
 export type RefSource = { publisher: string; title: string; table?: string; url: string; checked: string };
 
@@ -37,7 +39,22 @@ export type BudgetData = { source: RefSource; fiscalYear: string; currency: stri
   sectors: BudgetSector[]; localGovernment: { total: number; dzongkhags: { current: number; capital: number; total: number }; thromdesTotal: number; gewogsTotal: number; previousYearTotal: number };
   dzongkhags: Record<string, BudgetDz>; thromdes: { name: string; dz: string; current: number; capital: number; total: number }[]; gewogs: BudgetGewog[] };
 
+export type EconMetric = { key: string; label: string; unit: string; asOf: string | null; fiscalYear: string; source: RefSource;
+  national: Record<string, number>; dzongkhags: Record<string, Record<string, number>>; notes: string[] };
+export type EconomyData = { metrics: EconMetric[] };
+
+export type Dzongdag = { name: string; confidence: 'confirmed' | 'website' | 'unconfirmed'; asOf: string | null; note: string | null; sourceTitle: string | null; sourceUrl: string | null };
+export type DzOffice = { name?: string; phone?: string; email?: string; address?: string; website?: string; sourceUrl?: string };
+export type DzongdagData = { notes: string[]; checked: string; dzongkhags: Record<string, { dzongdag?: Dzongdag; office?: DzOffice }> };
+
 export const health = healthJson as unknown as HealthData;
+export const economy = economyJson as unknown as EconomyData;
+export const dzongdags = dzongdagJson as unknown as DzongdagData;
+export const CONFIDENCE_LABEL: Record<Dzongdag['confidence'], string> = {
+  confirmed: 'Confirmed by a dated appointment notice',
+  website: 'From the dzongkhag website — the page carries no date',
+  unconfirmed: 'Unconfirmed — sources disagree or look incomplete',
+};
 export const budget = budgetJson as unknown as BudgetData;
 /** Gewog budget totals keyed by the boundary-file name, for map shading. Gewogs whose name could not be
  *  matched to a boundary with confidence are left out rather than attached to the wrong shape. */
@@ -63,6 +80,7 @@ export const pct = (a: number, b: number) => (b > 0 ? ((a - b) / b) * 100 : 0);
 
 export const REFERENCE_SOURCES: { what: string; source: RefSource; notes: string[] }[] = [
   { what: `National budget FY ${budget.fiscalYear}`, source: budget.source, notes: budget.notes },
+  ...economy.metrics.map(m => ({ what: `${m.label} (MoICE)`, source: m.source, notes: m.notes })),
   { what: 'Population (census)', source: population.source, notes: population.notes },
   { what: 'Health facilities', source: health.source, notes: health.notes },
   { what: 'Schools', source: schools.source, notes: schools.notes },

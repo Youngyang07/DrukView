@@ -23,6 +23,8 @@ Next.js 15 (App Router, TypeScript) · PostgreSQL (`pg`, plain SQL migrations) �
 | Ministry of Health, Annual Health Bulletin 2025 (Table 6.1) — all hospitals, PHCs, sub-posts, HISCs with beds | **reference file** `data/reference/health-facilities.json` | yearly |
 | MoESD Annual Education Statistics 2024 (Annexure IV) — all 566 schools by name and level | **reference file** `data/reference/schools-2024.json` | yearly |
 | Parliament of Bhutan member records (National Assembly + National Council, 4th Parliament) | **reference file** `data/reference/leaders.json`, read from Parliament's public API `cms.parliament.gov.bt/api/{na,nc}-members` | on change |
+| MoICE Annual Industry Report FY 2025-26 (Annexure 3) and National Employment Report 2024-25 — industry licences and jobs filled per dzongkhag | **reference file** `data/reference/economy.json` | yearly |
+| Dzongkhag administration websites and dated appointment notices — Dzongdags and office contacts | **reference file** `data/reference/dzongdags.json`, each entry graded by how well it is confirmed | on change |
 | MoF / MoHCA / MoAL & other ministries' budgets, allocations, tenders, offices | **curated CSV** in `data/manual/` — these are PDFs/web pages with no API. Every row must cite its public document | on commit |
 
 Reference files ship with the code and work even without a database. `tests/reference.test.ts` checks each against the publication's own totals (census sums, the Health Bulletin's per-dzongkhag totals rows, MoESD Table A, 47 NA seats with the constitutional split), so a transcription slip fails CI.
@@ -70,6 +72,7 @@ What is still unproven is the *runtime* on your host (network egress, timeouts, 
 - Population is the 2017 census (the next census is due 2027); per-person ratios that divide newer counts by 2017 population are labelled indicative.
 - Health: Trongsa's totals row in the Bulletin reports 4 sub-posts but names only 3.
 - Schools: names come from PDF text extraction (a few spellings may be off); the middle- vs higher-secondary split per dzongkhag is approximate (combined figure is exact).
-- Dzongdags (district administrators) are not listed yet — no single official machine-readable source. MoICE (industry, commerce, employment) data is not added yet.
+- Dzongdags: there is no single official machine-readable list, so each name is read from the dzongkhag's own site or a dated appointment notice and is published with a confidence grade (4 confirmed by a dated notice, 14 from an undated website page, 2 unconfirmed). Re-check them against RCSC appointment notifications when they can be reached.
+- MoICE publishes no unemployment rate by dzongkhag; its labour-force figures come from the NSB Labour Force Survey and are national only. Industry figures are licences in force, not businesses known to be trading.
 - Village-level allocations depend on curated rows; the Ministry of Finance budget goes down to gewog level only.
 - 31 of the 205 gewog names in the budget could not be matched to a map boundary with confidence, so those gewogs are listed in the tables but left unshaded on the map rather than attached to the wrong shape.

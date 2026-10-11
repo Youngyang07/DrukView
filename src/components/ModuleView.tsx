@@ -3,7 +3,7 @@ import { issueUrl, MODULES, type ModuleSlug } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
-import { Health, Leaders, MofBudget, Population, Schools } from './RefViews';
+import { Dzongdags, Economy, Health, Leaders, MofBudget, Population, Schools } from './RefViews';
 import { budget, health, population, schools } from '@/lib/reference';
 
 type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: q.Filters };
@@ -134,9 +134,12 @@ async function Offices({ scope, locale }: Props) {
   // Elected leaders ship with the code; curated office contacts come from the database when it is available.
   const [o, fr] = await Promise.all([q.getOffices(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ manual: null }))]);
   const sec = (kind: string, title: string) => { const l = o.filter(x => x.kind === kind); return l.length ? <><h3>{title}</h3><ul className="plist">{l.map((x, i) => <li key={i}><div className="t">{x.name}</div><div className="m">{[x.role, x.dzongkhag ?? 'National', x.contact].filter(Boolean).join(' · ')} · <Ext href={x.source_url}>{x.source_name}</Ext>{x.retrieved_on ? ` (checked ${x.retrieved_on})` : ''}</div></li>)}</ul></> : null; };
-  return (<><Leaders scope={scope} locale={locale} /><div className="card"><div className="card-h"><h2>Offices & contacts — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
+  // The curated offices table only appears when rows have actually been added; the Dzongdag card above already
+  // carries each dzongkhag administration's own published contacts.
+  if (!o.length) return (<><Leaders scope={scope} locale={locale} /><Dzongdags scope={scope} locale={locale} /></>);
+  return (<><Leaders scope={scope} locale={locale} /><Dzongdags scope={scope} locale={locale} /><div className="card"><div className="card-h"><h2>Other offices & contacts — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
     <p className="note">Names and contacts come only from official publications; each entry cites its page and the date it was checked.</p>
-    {o.length ? <>{sec('leader', 'Officials')}{sec('office', 'Offices & contacts')}</> : <Empty>No office contacts (e.g. Dzongdag, Dzongkhag Administration) have been added for {scopeName(scope)} yet.</Empty>}
+    {sec('leader', 'Officials')}{sec('office', 'Offices & contacts')}
     <Cite what={`Offices – ${scopeName(scope)}`} /></div></>);
 }
 
@@ -152,5 +155,6 @@ export default async function ModuleView(p: Props) {
     case 'population': return <Population scope={p.scope} locale={p.locale} />;
     case 'health': return <Health scope={p.scope} locale={p.locale} />;
     case 'schools': return <Schools scope={p.scope} locale={p.locale} />;
+    case 'economy': return <Economy scope={p.scope} locale={p.locale} />;
   }
 }
