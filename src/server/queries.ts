@@ -109,10 +109,16 @@ export type Tender = { id: string; source: string; tender_id: string | null; ref
   category: string | null; proc_type: string | null; method: string | null; amendments: number; value: number | null; currency: string | null;
   published_on: string | null; closing_on: string | null; status: string | null; url: string; source_name: string };
 /** Open notices first (soonest closing date), then the ones that have closed. */
+/**
+ * How many notices a page will show. e-GP's live register held 203 on 2026-10-11, so the old cap of 200 was
+ * already cutting notices off — and silently, which is the part that mattered. One row beyond the cap is
+ * fetched so the caller can tell truncation from a complete list and say so on the page.
+ */
+export const TENDER_LIMIT = 500;
 export const getTenders = (scope: string | null) => query<Tender>(`select t.id,t.source,t.tender_id,t.reference,d.name dzongkhag,t.title,t.agency,t.category,t.proc_type,t.method,t.amendments,
     t.value::float8,t.currency,t.published_on::text,t.closing_on::text,t.status,t.url,t.source_name
   from tenders t left join dzongkhags d on d.id=t.dzongkhag_id ${scope ? 'where t.dzongkhag_id=$1' : ''}
-  order by (t.closing_on >= current_date) desc nulls last, case when t.closing_on >= current_date then t.closing_on end asc, t.published_on desc nulls last limit 200`, scope ? [scope] : []);
+  order by (t.closing_on >= current_date) desc nulls last, case when t.closing_on >= current_date then t.closing_on end asc, t.published_on desc nulls last limit ${TENDER_LIMIT + 1}`, scope ? [scope] : []);
 
 export type Office = { kind: string; dzongkhag: string | null; name: string; role: string | null; contact: string | null; source_name: string; source_url: string; retrieved_on: string | null };
 export const getOffices = (scope: string | null) => query<Office>(`select o.kind,d.name dzongkhag,o.name,o.role,o.contact,o.source_name,o.source_url,o.retrieved_on::text
