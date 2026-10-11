@@ -3,6 +3,8 @@ import { issueUrl, MODULES, type ModuleSlug } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
+import { Dzongdags, Economy, Health, Leaders, MofBudget, Population, Schools } from './RefViews';
+import { budget, health, population, schools } from '@/lib/reference';
 
 type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: q.Filters };
 const scopeName = (s: q.Dz | null) => (s ? `${s.name} Dzongkhag` : 'Bhutan');
@@ -13,10 +15,22 @@ function Cite({ what }: { what: string }) {
 
 async function Overview({ scope, locale }: Props) {
   const [st, funders, top, fr] = await Promise.all([q.projectStats(scope?.id ?? null), q.byFunder(scope?.id ?? null), q.listProjects(scope?.id ?? null, {}, 5), q.freshness()]);
+  const b = scope ? budget.dzongkhags[scope.slug] : null;
+  const hs = scope ? health.dzongkhags[scope.slug] : null;
+  const sc = scope ? schools.dzongkhags[scope.slug] : null;
+  const pop = scope ? population.dzongkhags[scope.slug]?.total : population.national.total;
   return (<>
     <div className="kpis">
+      <Stat label={`Budget FY ${budget.fiscalYear}`} value={money(b ? b.total : budget.national.totalAppropriation, 'BTN')}
+        sub={b ? 'dzongkhag administration' : 'total national appropriation'} />
       <Stat label="Projects" value={num(st.total)} sub={`${num(st.active)} active · ${num(st.completed)} completed`} />
       <Stat label="Partner commitments" value={st.total ? money(st.usd, 'USD') : 'n/a'} sub="US$, development partners" />
+      <Stat label="People" value={pop ? num(pop) : 'n/a'} sub="2017 census" />
+    </div>
+    <div className="kpis">
+      <Stat label="Hospitals" value={num(hs ? hs.totals.hospitals : health.grandTotal.hospitals)} sub={`${num(hs ? hs.totals.beds : health.grandTotal.beds)} official beds`} />
+      <Stat label="Health centres" value={num(hs ? hs.totals.phc : health.grandTotal.phc)} sub={`${num(hs ? hs.totals.subpost : health.grandTotal.subpost)} sub-posts`} />
+      <Stat label="Schools" value={num(sc ? sc.total : schools.national.total)} sub={`${num(sc ? sc.byLevel.PS : schools.national.PS)} primary`} />
       <Stat label="Funders" value={num(st.funders)} sub="in this view" />
     </div>
     <div className="card"><div className="card-h"><h2>Largest projects</h2><Fresh at={fr.projects} /></div>
@@ -29,14 +43,15 @@ async function Overview({ scope, locale }: Props) {
   </>);
 }
 
-async function Budget({ scope }: Props) {
-  const [al, fr] = await Promise.all([q.getAllocations(scope?.id ?? null), q.freshness()]);
-  const lines = scope ? [] : await q.getBudgetLines();
+async function Budget({ scope, locale }: Props) {
+  // The Ministry of Finance budget ships with the code; curated rows come from the database when available.
+  const [al, fr] = await Promise.all([q.getAllocations(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ manual: null }))]);
+  const lines = scope ? [] : await q.getBudgetLines().catch(() => []);
   const years = [...new Set([...al.map(a => a.fiscal_year), ...lines.map(l => l.fiscal_year)])].sort().reverse();
-  return (<div className="card">
-    <div className="card-h"><h2>Budget & allocations — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
-    <p className="note">Figures are transcribed from published budget documents; every line links to its source. Nu. (government) and US$ (partners) are never added together.</p>
-    {!years.length ? <Empty>No budget documents have been added for {scopeName(scope)} yet. They enter through <code>data/manual/*.csv</code> with a mandatory citation per row — see <Link href="/en/contribute">Contribute</Link>.</Empty> : years.map(y => {
+  return (<><MofBudget scope={scope} locale={locale} /><div className="card">
+    <div className="card-h"><h2>Other published budget documents — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
+    <p className="note">Extra lines transcribed from other published documents (ministry reports, dzongkhag plans); every line links to its source. Nu. (government) and US$ (partners) are never added together.</p>
+    {!years.length ? <Empty>Nothing beyond the Ministry of Finance budget above has been added for {scopeName(scope)} yet. Extra rows enter through <code>data/manual/*.csv</code> with a mandatory citation each — see <Link href="/en/contribute">Contribute</Link>.</Empty> : years.map(y => {
       const a = al.filter(x => x.fiscal_year === y), l = lines.filter(x => x.fiscal_year === y);
       return (<section key={y}><h3>Fiscal year {y}</h3>
         {l.length ? <><Bars rows={Object.entries(l.reduce<Record<string, number>>((m, x) => (x.currency === 'BTN' ? (m[x.agency] = (m[x.agency] ?? 0) + x.amount) : m, m), {})).map(([k, v]) => ({ k, v }))} fmt={v => money(v, 'BTN')} />
@@ -46,7 +61,7 @@ async function Budget({ scope }: Props) {
           {a.map((x, i) => <tr key={i}>{!scope ? <td>{x.dzongkhag}</td> : null}<td>{[x.gewog, x.village].filter(Boolean).join(' / ') || '–'}</td><td>{x.sector ?? 'General'}</td><td>{x.funding_source}</td><td className="num">{moneyFull(x.amount, x.currency)}</td><td><Ext href={x.source_url}>{x.source_name}: {x.document}{x.page ? `, p.${x.page}` : ''}</Ext></td></tr>)}</tbody></table></div> : null}
       </section>);
     })}
-    <Cite what={`Budget – ${scopeName(scope)}`} /></div>);
+    <Cite what={`Budget – ${scopeName(scope)}`} /></div></>);
 }
 
 async function Projects({ scope, filters, locale }: Props) {
@@ -115,13 +130,17 @@ async function Tenders({ scope }: Props) {
     <Cite what={`Tenders – ${scopeName(scope)}`} /></div>);
 }
 
-async function Offices({ scope }: Props) {
-  const o = await q.getOffices(scope?.id ?? null); const fr = await q.freshness();
+async function Offices({ scope, locale }: Props) {
+  // Elected leaders ship with the code; curated office contacts come from the database when it is available.
+  const [o, fr] = await Promise.all([q.getOffices(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ manual: null }))]);
   const sec = (kind: string, title: string) => { const l = o.filter(x => x.kind === kind); return l.length ? <><h3>{title}</h3><ul className="plist">{l.map((x, i) => <li key={i}><div className="t">{x.name}</div><div className="m">{[x.role, x.dzongkhag ?? 'National', x.contact].filter(Boolean).join(' · ')} · <Ext href={x.source_url}>{x.source_name}</Ext>{x.retrieved_on ? ` (checked ${x.retrieved_on})` : ''}</div></li>)}</ul></> : null; };
-  return (<div className="card"><div className="card-h"><h2>Leadership & offices — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
+  // The curated offices table only appears when rows have actually been added; the Dzongdag card above already
+  // carries each dzongkhag administration's own published contacts.
+  if (!o.length) return (<><Leaders scope={scope} locale={locale} /><Dzongdags scope={scope} locale={locale} /></>);
+  return (<><Leaders scope={scope} locale={locale} /><Dzongdags scope={scope} locale={locale} /><div className="card"><div className="card-h"><h2>Other offices & contacts — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
     <p className="note">Names and contacts come only from official publications; each entry cites its page and the date it was checked.</p>
-    {o.length ? <>{sec('leader', 'Leadership')}{sec('office', 'Offices & contacts')}</> : <Empty>No leadership or office entries have been added for {scopeName(scope)} yet.</Empty>}
-    <Cite what={`Leadership & offices – ${scopeName(scope)}`} /></div>);
+    {sec('leader', 'Officials')}{sec('office', 'Offices & contacts')}
+    <Cite what={`Offices – ${scopeName(scope)}`} /></div></>);
 }
 
 export default async function ModuleView(p: Props) {
@@ -133,5 +152,9 @@ export default async function ModuleView(p: Props) {
     case 'weather': return <Weather {...p} />;
     case 'tenders': return <Tenders {...p} />;
     case 'offices': return <Offices {...p} />;
+    case 'population': return <Population scope={p.scope} locale={p.locale} />;
+    case 'health': return <Health scope={p.scope} locale={p.locale} />;
+    case 'schools': return <Schools scope={p.scope} locale={p.locale} />;
+    case 'economy': return <Economy scope={p.scope} locale={p.locale} />;
   }
 }

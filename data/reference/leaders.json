@@ -1,0 +1,538 @@
+{
+ "sources": {
+  "na": {
+   "publisher": "National Assembly of Bhutan",
+   "title": "Current members (4th Parliament, 2023–2028)",
+   "url": "https://nab.parliament.gov.bt/current-members",
+   "data": "https://cms.parliament.gov.bt/api/na-members?filters[parliament][$eq]=parliament-4",
+   "checked": "2026-10-11"
+  },
+  "nc": {
+   "publisher": "National Council of Bhutan",
+   "title": "Members (4th Parliament)",
+   "url": "https://ncb.parliament.gov.bt/",
+   "data": "https://cms.parliament.gov.bt/api/nc-members?filters[parliament][$eq]=parliament-4",
+   "checked": "2026-10-11"
+  }
+ },
+ "notes": [
+  "Names, titles and constituencies are as published by Parliament (constituency spellings follow Parliament’s records).",
+  "Each dzongkhag elects one National Council member; five eminent members are appointed by His Majesty the King and represent no dzongkhag.",
+  "Dzongdags (district administrators) are listed separately below; they are appointed by His Majesty the King, not elected."
+ ],
+ "dzongkhags": {
+  "gasa": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Pema Drukpa",
+     "role": "Member of Parliament",
+     "constituency": "Khamaed-Lunana"
+    },
+    {
+     "name": "Hon. Lhaba Lhaba",
+     "role": "Member of Parliament",
+     "constituency": "Khatoed-Laya"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Tshering",
+     "role": "Member"
+    }
+   ]
+  },
+  "bumthang": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Kuenzang Thinley",
+     "role": "Member of Parliament",
+     "constituency": "Choekhor-Tang"
+    },
+    {
+     "name": "Hon. Sonam Rinchen",
+     "role": "Member of Parliament",
+     "constituency": "Chumig-Ura"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Kencho Tshering",
+     "role": "Member"
+    }
+   ]
+  },
+  "lhuntse": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Loday Tsheten",
+     "role": "Member of Parliament",
+     "constituency": "Gangzur-Minjey"
+    },
+    {
+     "name": "Hon. Tempa Dorji",
+     "role": "Speaker",
+     "constituency": "Menbi-Tsenkhar"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Kelzang Lhundup",
+     "role": "Member"
+    }
+   ]
+  },
+  "trashiyangtse": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Wangdi",
+     "role": "Member of Parliament",
+     "constituency": "Boomdeling-Jamkhar"
+    },
+    {
+     "name": "Hon. Namgay Dorji",
+     "role": "Member of Parliament",
+     "constituency": "Khamdang-Ramjar"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Sonam Tenzin",
+     "role": "Member"
+    }
+   ]
+  },
+  "haa": {
+   "nationalAssembly": [
+    {
+     "name": "Lyonchhen Dasho Tshering Tobgay",
+     "role": "Prime Minister",
+     "constituency": "Sangbaykha"
+    },
+    {
+     "name": "Hon. Lhendup Wangdi",
+     "role": "Member of Parliament",
+     "constituency": "Bji-Kar-tshog-Uesu"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Dago Tshering La",
+     "role": "Deputy Chairperson"
+    }
+   ]
+  },
+  "paro": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Sonam Tashi",
+     "role": "Member of Parliament",
+     "constituency": "Lamgong-Wangcha"
+    },
+    {
+     "name": "Hon. Gem Tshering",
+     "role": "Member of Parliament",
+     "constituency": "Dokar-Shaba"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Ugyen Tshering",
+     "role": "Member"
+    }
+   ]
+  },
+  "thimphu": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Tshewang Rinzin",
+     "role": "Member of Parliament",
+     "constituency": "South Thimphu"
+    },
+    {
+     "name": "Hon. Tshering",
+     "role": "Member of Parliament",
+     "constituency": "North Thimphu"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Leki Tshering",
+     "role": "Member"
+    }
+   ]
+  },
+  "punakha": {
+   "nationalAssembly": [
+    {
+     "name": "H.E. Namgay Dorji",
+     "role": "Minister",
+     "constituency": "Kabisa-Talog"
+    },
+    {
+     "name": "Hon. Namgay Wanchuk",
+     "role": "Member of Parliament",
+     "constituency": "Lingmukha-Toedwang"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Namgay Dorji",
+     "role": "Member"
+    }
+   ]
+  },
+  "wangdue-phodrang": {
+   "nationalAssembly": [
+    {
+     "name": "H.E. Tandin Wangchuk",
+     "role": "Minister",
+     "constituency": "Athang-Thedtsho"
+    },
+    {
+     "name": "Hon. Kuenga",
+     "role": "Member of Parliament",
+     "constituency": "Nyisho-Saephu"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Phub Dorji",
+     "role": "Member"
+    }
+   ]
+  },
+  "trongsa": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Namgay Dorji",
+     "role": "Member of Parliament",
+     "constituency": "Draagteng-Langthil"
+    },
+    {
+     "name": "Hon. Phuntsho Dendup",
+     "role": "Member of Parliament",
+     "constituency": "Nubi-Tangsibji"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Rinzin Namgyal",
+     "role": "Member"
+    }
+   ]
+  },
+  "mongar": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Naiten Wangchuk",
+     "role": "Member of Parliament",
+     "constituency": "Monggar"
+    },
+    {
+     "name": "Hon. Dorji Wangmo",
+     "role": "Member of Parliament",
+     "constituency": "Khengkhar-Weringla"
+    },
+    {
+     "name": "Hon. Kinzang Wangchuk",
+     "role": "Member of Parliament",
+     "constituency": "Dramedtse-Ngatshang"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Tshering Wangchen",
+     "role": "Member"
+    }
+   ]
+  },
+  "trashigang": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Rinchen Wangdi",
+     "role": "Member of Parliament",
+     "constituency": "Bartsam-Shongphu"
+    },
+    {
+     "name": "Hon. Lam Dorji",
+     "role": "Member of Parliament",
+     "constituency": "Wamrong"
+    },
+    {
+     "name": "Hon. Damchoe Tenzin",
+     "role": "Member of Parliament",
+     "constituency": "Thrimshing"
+    },
+    {
+     "name": "Hon. Tashi Tenzin",
+     "role": "Member of Parliament",
+     "constituency": "Radhi-Sakteng"
+    },
+    {
+     "name": "H.E. Dasho Pema Chewang",
+     "role": "Leader of the Opposition",
+     "constituency": "Kanglung-Samkhar-Udzorong"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Sonam Tobgyal",
+     "role": "Member"
+    }
+   ]
+  },
+  "chukha": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Pempa",
+     "role": "Member of Parliament",
+     "constituency": "Bongo-Chapchha"
+    },
+    {
+     "name": "Hon. Rinzin Dorji",
+     "role": "Member of Parliament",
+     "constituency": "Phuentsholing"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "H.E Sangay Dorji",
+     "role": "Chairperson"
+    }
+   ]
+  },
+  "dagana": {
+   "nationalAssembly": [
+    {
+     "name": "H.E. Chandra Bdr. Gurung",
+     "role": "Minister",
+     "constituency": "Lhamoi-Zingkha"
+    },
+    {
+     "name": "Hon. Sonam Dorji",
+     "role": "Member of Parliament",
+     "constituency": "Drukjeygang-Tseza"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Birendra Chimoria",
+     "role": "Member"
+    }
+   ]
+  },
+  "tsirang": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Kamal Bdr Gurung",
+     "role": "Member of Parliament",
+     "constituency": "Kilkhorthang-Mendrelgang"
+    },
+    {
+     "name": "Hon. Lhakpa Tshering Tamang",
+     "role": "Member of Parliament",
+     "constituency": "Sergithang-Tsirang-Toed"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Nima Wangdi",
+     "role": "Member"
+    }
+   ]
+  },
+  "zhemgang": {
+   "nationalAssembly": [
+    {
+     "name": "H.E. Lekey Dorji",
+     "role": "Minister",
+     "constituency": "Bardo-Trong"
+    },
+    {
+     "name": "H.E. Lungten Dorji",
+     "role": "Minister",
+     "constituency": "Panbang"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Tshering Tshomo",
+     "role": "Member"
+    }
+   ]
+  },
+  "pemagatshel": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Sangay Thinley",
+     "role": "Member of Parliament",
+     "constituency": "Khar-Yurung"
+    },
+    {
+     "name": "Hon. Yeshey Jamtsho",
+     "role": "Member of Parliament",
+     "constituency": "Nanong-Shumar"
+    },
+    {
+     "name": "Hon. Lamdra Wangdi",
+     "role": "Member of Parliament",
+     "constituency": "Nganglam"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Dr. Jamyang Namgyal",
+     "role": "Member"
+    }
+   ]
+  },
+  "samtse": {
+   "nationalAssembly": [
+    {
+     "name": "H.E. Dinanath Dhungyel",
+     "role": "Minister",
+     "constituency": "Phuentshogpelri-Samtse"
+    },
+    {
+     "name": "H.E. Yeezang De Thapa",
+     "role": "Minister",
+     "constituency": "Ugyentse-Yoeseltse"
+    },
+    {
+     "name": "Hon. Sangay Khandu",
+     "role": "Deputy Speaker",
+     "constituency": "Tashichoeling"
+    },
+    {
+     "name": "Hon. Ugyen Lama",
+     "role": "Member of Parliament",
+     "constituency": "Dophuchen-Tading"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Tashi Dendup",
+     "role": "Member"
+    }
+   ]
+  },
+  "sarpang": {
+   "nationalAssembly": [
+    {
+     "name": "Hon. Harka Singh Tamang",
+     "role": "Member of Parliament",
+     "constituency": "Gelephu"
+    },
+    {
+     "name": "Hon. Dr. Tek Bdr Rai",
+     "role": "Member of Parliament",
+     "constituency": "Shompangkha"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Pema Tashi",
+     "role": "Member"
+    }
+   ]
+  },
+  "samdrup-jongkhar": {
+   "nationalAssembly": [
+    {
+     "name": "H.E. Younten Phuntsho",
+     "role": "Minister",
+     "constituency": "Jomotshangkha-Martshala"
+    },
+    {
+     "name": "Hon. Tshering Penjor",
+     "role": "Member of Parliament",
+     "constituency": "Dewathang-Gomdar"
+    }
+   ],
+   "nationalCouncil": [
+    {
+     "name": "Hon. Tshewang Rinchen",
+     "role": "Member"
+    }
+   ]
+  }
+ },
+ "nationalCouncilEminent": [
+  {
+   "name": "Dasho Tashi Wangyal",
+   "role": "Eminent Member (appointed by His Majesty)"
+  },
+  {
+   "name": "Hon. Kezang Chuki Dorjee",
+   "role": "Eminent Member (appointed by His Majesty)"
+  },
+  {
+   "name": "Hon. Phuntsho Rapten",
+   "role": "Eminent Member (appointed by His Majesty)"
+  },
+  {
+   "name": "Hon. Tashi Chhozom",
+   "role": "Eminent Member (appointed by His Majesty)"
+  },
+  {
+   "name": "Hon. Ugyen Tshering",
+   "role": "Eminent Member (appointed by His Majesty)"
+  }
+ ],
+ "cabinet": [
+  {
+   "name": "Lyonchhen Dasho Tshering Tobgay",
+   "role": "Prime Minister",
+   "dzongkhag": "haa",
+   "constituency": "Sangbaykha"
+  },
+  {
+   "name": "H.E. Tandin Wangchuk",
+   "role": "Minister",
+   "dzongkhag": "wangdue-phodrang",
+   "constituency": "Athang-Thedtsho"
+  },
+  {
+   "name": "H.E. Dinanath Dhungyel",
+   "role": "Minister",
+   "dzongkhag": "samtse",
+   "constituency": "Phuentshogpelri-Samtse"
+  },
+  {
+   "name": "H.E. Lekey Dorji",
+   "role": "Minister",
+   "dzongkhag": "zhemgang",
+   "constituency": "Bardo-Trong"
+  },
+  {
+   "name": "H.E. Chandra Bdr. Gurung",
+   "role": "Minister",
+   "dzongkhag": "dagana",
+   "constituency": "Lhamoi-Zingkha"
+  },
+  {
+   "name": "H.E. Younten Phuntsho",
+   "role": "Minister",
+   "dzongkhag": "samdrup-jongkhar",
+   "constituency": "Jomotshangkha-Martshala"
+  },
+  {
+   "name": "H.E. Yeezang De Thapa",
+   "role": "Minister",
+   "dzongkhag": "samtse",
+   "constituency": "Ugyentse-Yoeseltse"
+  },
+  {
+   "name": "H.E. Namgay Dorji",
+   "role": "Minister",
+   "dzongkhag": "punakha",
+   "constituency": "Kabisa-Talog"
+  },
+  {
+   "name": "H.E. Lungten Dorji",
+   "role": "Minister",
+   "dzongkhag": "zhemgang",
+   "constituency": "Panbang"
+  }
+ ]
+}

@@ -1,0 +1,166 @@
+{
+ "source": {
+  "publisher": "National Statistics Bureau, Royal Government of Bhutan",
+  "title": "2017 Population & Housing Census of Bhutan — National Report",
+  "table": "Table 2.1 (2017, by sex) and Figure 2.1 (2005 comparison)",
+  "url": "https://dataspace.princeton.edu/bitstream/88435/dsp011g05ff395/1",
+  "checked": "2026-10-10"
+ },
+ "notes": [
+  "The census is run by the National Statistics Bureau (NSB). Population on 30 May 2017 was 735,553; dzongkhag figures cover 727,145 people, excluding 8,408 tourists and non-Bhutanese found in hotels on census night.",
+  "The Ministry of Home Affairs keeps the civil registry; it does not publish the census."
+ ],
+ "national": {
+  "total": 735553,
+  "enumerated": 727145,
+  "male": 380453,
+  "female": 346692,
+  "total2005": 634982
+ },
+ "dzongkhags": {
+  "bumthang": {
+   "male": 9396,
+   "female": 8424,
+   "total": 17820,
+   "total2005": 16116
+  },
+  "chukha": {
+   "male": 36041,
+   "female": 32925,
+   "total": 68966,
+   "total2005": 74387,
+   "thromde": {
+    "name": "Phuentsholing Thromde",
+    "male": 15052,
+    "female": 12606,
+    "total": 27658
+   }
+  },
+  "dagana": {
+   "male": 12956,
+   "female": 12009,
+   "total": 24965,
+   "total2005": 18222
+  },
+  "gasa": {
+   "male": 2104,
+   "female": 1848,
+   "total": 3952,
+   "total2005": 3116
+  },
+  "haa": {
+   "male": 7435,
+   "female": 6220,
+   "total": 13655,
+   "total2005": 11648
+  },
+  "lhuntse": {
+   "male": 7407,
+   "female": 7030,
+   "total": 14437,
+   "total2005": 15395
+  },
+  "mongar": {
+   "male": 18247,
+   "female": 18903,
+   "total": 37150,
+   "total2005": 37069
+  },
+  "paro": {
+   "male": 23941,
+   "female": 22375,
+   "total": 46316,
+   "total2005": 36433
+  },
+  "pemagatshel": {
+   "male": 11922,
+   "female": 11710,
+   "total": 23632,
+   "total2005": 13864
+  },
+  "punakha": {
+   "male": 15079,
+   "female": 13661,
+   "total": 28740,
+   "total2005": 17715
+  },
+  "samdrup-jongkhar": {
+   "male": 18329,
+   "female": 16750,
+   "total": 35079,
+   "total2005": 39961,
+   "thromde": {
+    "name": "Samdrup Jongkhar Thromde",
+    "male": 5016,
+    "female": 4309,
+    "total": 9325
+   }
+  },
+  "samtse": {
+   "male": 32022,
+   "female": 30568,
+   "total": 62590,
+   "total2005": 60100
+  },
+  "sarpang": {
+   "male": 24018,
+   "female": 21986,
+   "total": 46004,
+   "total2005": 41549,
+   "thromde": {
+    "name": "Gelephu Thromde",
+    "male": 5146,
+    "female": 4712,
+    "total": 9858
+   }
+  },
+  "thimphu": {
+   "male": 72522,
+   "female": 66214,
+   "total": 138736,
+   "total2005": 98676,
+   "thromde": {
+    "name": "Thimphu Thromde",
+    "male": 58996,
+    "female": 55555,
+    "total": 114551
+   }
+  },
+  "trashigang": {
+   "male": 23414,
+   "female": 22104,
+   "total": 45518,
+   "total2005": 51134
+  },
+  "trashiyangtse": {
+   "male": 8719,
+   "female": 8581,
+   "total": 17300,
+   "total2005": 17740
+  },
+  "trongsa": {
+   "male": 11878,
+   "female": 8082,
+   "total": 19960,
+   "total2005": 13419
+  },
+  "tsirang": {
+   "male": 11526,
+   "female": 10850,
+   "total": 22376,
+   "total2005": 18667
+  },
+  "wangdue-phodrang": {
+   "male": 24302,
+   "female": 17884,
+   "total": 42186,
+   "total2005": 31135
+  },
+  "zhemgang": {
+   "male": 9195,
+   "female": 8568,
+   "total": 17763,
+   "total2005": 18636
+  }
+ }
+}

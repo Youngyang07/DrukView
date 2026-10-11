@@ -1,0 +1,337 @@
+{
+ "notes": [
+  "Dzongdags are appointed by His Majesty the King and are not published in one official machine-readable list, so each name here was read from that dzongkhag's own website or a dated appointment notice.",
+  "Every entry shows how well it is confirmed and when the page was checked. “Confirmed” means a dated appointment or welcome notice; “from the dzongkhag website” means a signed page that carries no date, so it could be out of date; “unconfirmed” means the sources disagree or look incomplete.",
+  "If you know an entry is wrong, please report it — the link to do so is below each list."
+ ],
+ "checked": "2026-10-11",
+ "dzongkhags": {
+  "gasa": {
+   "dzongdag": {
+    "name": "Jigme Namgyal",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Jigme Namgyal, Dzongdag' under 'Message From the Dzongdag'. Page carries no date; site otherwise updated (news items to April 2026). Not corroborated by a dated appointment notice.",
+    "sourceTitle": "Gasa Dzongkhag Administration – Gasa Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://gasa.gov.bt/"
+   },
+   "office": {
+    "name": "Gasa Dzongkhag Administration",
+    "website": "https://gasa.gov.bt/",
+    "sourceUrl": "https://gasa.gov.bt/"
+   }
+  },
+  "bumthang": {
+   "dzongdag": {
+    "name": "Ratna Bdr Gurung",
+    "confidence": "website",
+    "asOf": null,
+    "note": "From 'Message From the Dzongdag' on the homepage. Undated page; no dated appointment notice found.",
+    "sourceTitle": "Bumthang Dzongkhag Administration – Bumthang Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://bumthang.gov.bt/"
+   },
+   "office": {
+    "name": "Bumthang Dzongkhag Administration",
+    "website": "https://bumthang.gov.bt/",
+    "sourceUrl": "https://bumthang.gov.bt/"
+   }
+  },
+  "lhuntse": {
+   "dzongdag": {
+    "name": "Dasho Minjur Dorji",
+    "confidence": "confirmed",
+    "asOf": "2026-01-02",
+    "note": "Homepage 'Message From the Dzongdag' signed Minjur Dorji; homepage news item states 'The Lhuentse Dzongkhag warmly welcomes Dasho Minjur Dorji as the new Dasho Dzongdag on 2nd January 2026.'",
+    "sourceTitle": "Dzongkhag Administration, Lhuentse – Lhuentse Dzongkhag (homepage, incl. news 'Welcoming the New Dasho Dzongdag')",
+    "sourceUrl": "https://lhuentse.gov.bt/"
+   },
+   "office": {
+    "name": "Lhuentse Dzongkhag Administration",
+    "website": "https://lhuentse.gov.bt/",
+    "sourceUrl": "https://lhuentse.gov.bt/"
+   }
+  },
+  "trashiyangtse": {
+   "dzongdag": {
+    "name": "Karma Thinlay",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Karma Thinlay, Dzongdag' under 'Message From the Dzongdag'. Undated; latest site news is December 2025, so the page may predate any 2026 reshuffle.",
+    "sourceTitle": "Dzongkhag Administration, Trashiyangtse – Trashiyangtse Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://trashiyangtse.gov.bt/"
+   },
+   "office": {
+    "name": "Trashiyangtse Dzongkhag Administration",
+    "website": "https://trashiyangtse.gov.bt/",
+    "sourceUrl": "https://trashiyangtse.gov.bt/"
+   }
+  },
+  "haa": {
+   "dzongdag": {
+    "name": "Dasho Sonam Tobgye",
+    "confidence": "confirmed",
+    "asOf": "2025-12-13",
+    "note": "Haa Dzongkhag news page: 'Haa Dzongkhag warmly welcomes Dasho Sonam Tobgye as the new Dasho Dzongdag. His Majesty the King granted dhar to Dasho on 13th December 2025.' Corroborated by the PMO page (pmo-haa) and the Haa homepage Dzongdag message (haa-site).",
+    "sourceTitle": "Arrival of New Dasho Dzongdag. - Dzongkhag Administration, Haa",
+    "sourceUrl": "https://haa.gov.bt/arrival-of-new-dasho-dzongdag/"
+   },
+   "office": {
+    "name": "Haa Dzongkhag Administration",
+    "website": "https://haa.gov.bt/",
+    "sourceUrl": "https://haa.gov.bt/"
+   }
+  },
+  "paro": {
+   "dzongdag": {
+    "name": "Norbu Wangchuk",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Norbu Wangchuk, Dzongdag' under 'Message From the Dzongdag'. Undated page; no dated appointment notice found.",
+    "sourceTitle": "Paro Dzongkhag Administration – Paro Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://paro.gov.bt/"
+   },
+   "office": {
+    "name": "Paro Dzongkhag Administration",
+    "website": "https://paro.gov.bt/",
+    "sourceUrl": "https://paro.gov.bt/"
+   }
+  },
+  "thimphu": {
+   "dzongdag": {
+    "name": "Dasho Phub Dorji",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Listed as 'Dasho Phub Dorji – Dzongda' in the officials table on the Contact Us page (email dzongda@thimphu.gov.bt). Undated table. A stale search-engine snippet of the same page showed a different name ('Chime Tenzin, Dzongda'), so the table has been edited recently; the live page value is used. Thimphu also had a 'newly appointed Dasho Dzongdag' referenced in mid-2026 social posts, consistent with a recent change.",
+    "sourceTitle": "Contact Us – Dzongkhag Administration, Thimphu (officials table)",
+    "sourceUrl": "https://thimphu.gov.bt/contact-us/"
+   },
+   "office": {
+    "name": "Thimphu Dzongkhag Administration",
+    "phone": "02334997",
+    "email": "helpdesk@thimphu.gov.bt",
+    "address": "Dzongkhag Administration Thimphu, Bhutan; Dzong Post Box No: 168",
+    "website": "https://thimphu.gov.bt/",
+    "sourceUrl": "https://thimphu.gov.bt/contact-us/"
+   }
+  },
+  "punakha": {
+   "dzongdag": {
+    "name": "Thuji Tshering",
+    "confidence": "unconfirmed",
+    "asOf": null,
+    "note": "Taken from the “Message From the Dzongdag” on the Punakha Dzongkhag homepage. The page carries no date and no second page or appointment notice confirms it, so it may be out of date.",
+    "sourceTitle": "Dzongkhag Administration, Punakha – Punakha Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://punakha.gov.bt/"
+   },
+   "office": {
+    "name": "Punakha Dzongkhag Administration",
+    "website": "https://punakha.gov.bt/",
+    "sourceUrl": "https://punakha.gov.bt/"
+   }
+  },
+  "wangdue-phodrang": {
+   "dzongdag": {
+    "name": "Dasho Tashi Dawa",
+    "confidence": "confirmed",
+    "asOf": null,
+    "note": "Dzongkhag news page: 'The Dzongkhag Administration of Wangdue Phodrang proudly extends its sincerest welcome to Dasho Tashi Dawa, who officially assumes the leadership role as Dzongdag.' Corroborated by the homepage Dzongdag message signed 'Tashi Dawa, Dzongdag' (wangdue-site). The welcome post itself shows no date.",
+    "sourceTitle": "Warm Welcome to Our New Dzongdag - Wangdue Phodrang",
+    "sourceUrl": "https://wangduephodrang.gov.bt/warm-welcome-to-our-new-dzongdag/"
+   },
+   "office": {
+    "name": "Wangdue Phodrang Dzongkhag Administration",
+    "website": "https://wangduephodrang.gov.bt/",
+    "sourceUrl": "https://wangduephodrang.gov.bt/"
+   }
+  },
+  "trongsa": {
+   "dzongdag": {
+    "name": "Dasho Wangdi Gyeltshen",
+    "confidence": "website",
+    "asOf": null,
+    "note": "The Trongsa Dzongkhag page announcing his arrival names Dasho Wangdi Gyeltshen as Dzongdag, and the homepage message is signed by him. The same website's “Who is Who” page still lists Dorji Rinchen against Dzongdag. Neither page is dated, so the Who is Who page is most likely out of date.",
+    "sourceTitle": "Dzongkhag Administration, Trongsa – Trongsa Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://trongsa.gov.bt/"
+   },
+   "office": {
+    "name": "Trongsa Dzongkhag Administration",
+    "phone": "+975 03 521148",
+    "email": "dzongkhag@trongsa.gov.bt",
+    "address": "Trongsa Dzongkhag Administration, Bhutan; Dzong Post Box No: 1056",
+    "website": "https://trongsa.gov.bt/",
+    "sourceUrl": "https://trongsa.gov.bt/town-gallery/"
+   }
+  },
+  "mongar": {
+   "dzongdag": {
+    "name": "Dasho Lungten Jamtsho",
+    "confidence": "website",
+    "asOf": null,
+    "note": "'Who is Who' lists Dasho Lungten Jamtsho (ljamtsho@mongar.gov.bt) as Dzongdag; he is also the first (most recent) entry in the Dzongda's Chronology page (mongar-chronology). The Mongar homepage Dzongdag message is unsigned, so no cross-check from there. Pages undated.",
+    "sourceTitle": "Who is Who – Dzongkhag Administration, Mongar",
+    "sourceUrl": "https://mongar.gov.bt/about-us/who-is-who/"
+   },
+   "office": {
+    "name": "Mongar Dzongkhag Administration",
+    "phone": "04-641185",
+    "email": "ictcluster@mongar.gov.bt",
+    "address": "Dzongkhag Administration Mongar, Bhutan; Post Box No: 43001",
+    "website": "https://mongar.gov.bt/",
+    "sourceUrl": "https://mongar.gov.bt/about-us/institutions/"
+   }
+  },
+  "trashigang": {
+   "dzongdag": {
+    "name": "Ugyen Dorji",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Ugyen Dorji, Dzongdag' under 'Message From the Dzongdag'. Undated page; no dated appointment notice found.",
+    "sourceTitle": "Trashigang Dzongkhag Administration – Trashigang Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://trashigang.gov.bt/"
+   },
+   "office": {
+    "name": "Trashigang Dzongkhag Administration",
+    "website": "https://trashigang.gov.bt/",
+    "sourceUrl": "https://trashigang.gov.bt/"
+   }
+  },
+  "chukha": {
+   "dzongdag": {
+    "name": "Tenzin Chophel",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Dedicated Dzongdag profile page: 'Tenzin Chophel, Dzongdag (District Governor), Chhukha Dzongkhag Administration', with biography and office phone 08-478251. Page is undated.",
+    "sourceTitle": "Dzongdag – Dzongkhag Administration, Chhukha (Dzongdag profile page)",
+    "sourceUrl": "https://chhukha.gov.bt/sector/civil/dzongdag/"
+   },
+   "office": {
+    "name": "Chhukha Dzongkhag Administration",
+    "phone": "08-478251 (Dzongdag's office)",
+    "website": "https://chhukha.gov.bt/",
+    "sourceUrl": "https://chhukha.gov.bt/sector/civil/dzongdag/"
+   }
+  },
+  "dagana": {
+   "dzongdag": {
+    "name": "Tashi Tobgay",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Tashi Tobgay, Dzongdag' under 'Message From the Dzongdag'. Consistent with the Who is Who page, which shows the Dzongdag's contact as 06-481248 / ttobgye@dagana.gov.bt (dagana-whoiswho) though that row's name did not render in the scrape. Pages undated.",
+    "sourceTitle": "Dagana Dzongkhag: Dzongkhag Administration, Dagana (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://dagana.gov.bt/"
+   },
+   "office": {
+    "name": "Dagana Dzongkhag Administration",
+    "phone": "06-481248 (Dzongdag)",
+    "email": "ttobgye@dagana.gov.bt (Dzongdag)",
+    "website": "https://dagana.gov.bt/",
+    "sourceUrl": "https://dagana.gov.bt/who-is-who/"
+   }
+  },
+  "tsirang": {
+   "dzongdag": {
+    "name": "Sonam",
+    "confidence": "unconfirmed",
+    "asOf": null,
+    "note": "The Tsirang Dzongkhag website gives the Dzongdag's name as a single name, “Sonam”, on both its homepage message and its “Who is Who” page (sonam@tsirang.gov.bt). Neither page is dated, and a public notice published in October 2026 referred to a different Dzongdag for Tsirang, so this entry may be out of date.",
+    "sourceTitle": "Dzongkhag Administration, tsirang – tsirangDzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://tsirang.gov.bt/"
+   },
+   "office": {
+    "name": "Tsirang Dzongkhag Administration",
+    "phone": "+975-6-474119",
+    "email": "tsirangict@gmail.com",
+    "address": "Dzongkhag Administration Tsirang, Bhutan; Post Box No: 114",
+    "website": "https://tsirang.gov.bt/",
+    "sourceUrl": "https://tsirang.gov.bt/contactus/"
+   }
+  },
+  "zhemgang": {
+   "dzongdag": {
+    "name": "Kesang Jigme",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Kesang Jigme, Dzongdag' under 'Message From the Dzongdag'. Undated; the site's news items are stale (June 2025 placeholders) though the Dzongdag photo and map were updated in 2026.",
+    "sourceTitle": "Dzongkhag Administration, Zhemgang – Zhemgang Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://zhemgang.gov.bt/"
+   },
+   "office": {
+    "name": "Zhemgang Dzongkhag Administration",
+    "phone": "+975 3 741105 (service desk)",
+    "email": "szangmo@zhemgang.gov.bt",
+    "address": "Dzongkhag Administration Zhemgang, Bhutan; Dzongdag Post Box No: 206",
+    "website": "https://zhemgang.gov.bt/",
+    "sourceUrl": "https://zhemgang.gov.bt/administration/"
+   }
+  },
+  "pemagatshel": {
+   "dzongdag": {
+    "name": "Dasho Singay Dorji",
+    "confidence": "confirmed",
+    "asOf": "2026-01-14",
+    "note": "Homepage 'Message From the Dzongdag' signed 'Singay Dorji, Dzongdag'. The Dzongkhag's own 'New Dzongdag's Joining Tendrel' post (pemagatshel-joining) and the Dzongkhag's Instagram post of 14 January 2026 state 'Dasho Singay Dorji officially joined as the Dzongdag of Pemagatshel Dzongkhag Administration'.",
+    "sourceTitle": "Pemagatshel Dzongkhag: Dzongkhag Administration, Pemagatshel (homepage, 'Message From the Dzongdag' + footer contact)",
+    "sourceUrl": "https://pemagatshel.gov.bt/"
+   },
+   "office": {
+    "name": "Pemagatshel Dzongkhag Administration",
+    "phone": "07 471 100 / 07 471 142; +975-07-471154 (Dasho Dzongdag)",
+    "email": "support@pemagatshel.gov.bt",
+    "address": "Dzongkhag Administration Pemagatshel, Eastern Bhutan; Dzongdag Post Box No: 44001",
+    "website": "https://pemagatshel.gov.bt/",
+    "sourceUrl": "https://pemagatshel.gov.bt/about-us/who-is-who/"
+   }
+  },
+  "samtse": {
+   "dzongdag": {
+    "name": "Melam Zangpo",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Melam Zangpo, Dzongdag' under 'Message From the Dzongdag'. Undated page; no dated appointment notice found.",
+    "sourceTitle": "Samtse Dzongkhag Administration – Samtse (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://samtse.gov.bt/"
+   },
+   "office": {
+    "name": "Samtse Dzongkhag Administration",
+    "phone": "05 365601 (ICT)",
+    "email": "samtseinfo@samtse.gov.bt",
+    "address": "Samtse Dzongkhag Administration, Post-Box # 321",
+    "website": "https://samtse.gov.bt/",
+    "sourceUrl": "https://samtse.gov.bt/pages/report-issue/"
+   }
+  },
+  "sarpang": {
+   "dzongdag": {
+    "name": "Lobzang Dorji",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Lobzang Dorji., Dzongdag' under 'Message From the Dzongdag'. Undated; the accompanying image was uploaded June 2025, so the message may date from then.",
+    "sourceTitle": "Dzongkhag Administration, Sarpang – Sarpang (homepage, 'Message From the Dzongdag' + footer contact)",
+    "sourceUrl": "https://www.sarpang.gov.bt/"
+   },
+   "office": {
+    "name": "Sarpang Dzongkhag Administration",
+    "phone": "06365173 / 06365340",
+    "email": "Demosarpang@gov.bt",
+    "address": "Dzongkhag Administration Sarpang, Bhutan; Dzong Post Box No: 104",
+    "website": "https://www.sarpang.gov.bt/",
+    "sourceUrl": "https://www.sarpang.gov.bt/"
+   }
+  },
+  "samdrup-jongkhar": {
+   "dzongdag": {
+    "name": "Dorji Gyeltshen P",
+    "confidence": "website",
+    "asOf": null,
+    "note": "Signed 'Dorji Gyeltshen P, Dzongdag' under 'Message From the Dzongdag' (the trailing 'P' is as printed). Undated; the site has a 'Tendrel Ceremony for the newly appointed Dzongdag' news item dated 12 January 2026 which I did not open, so a January 2026 change is plausible and consistent.",
+    "sourceTitle": "Dzongkhag Administration, Samdrup Jongkhar – Samdrup Jongkhar Dzongkhag (homepage, 'Message From the Dzongdag')",
+    "sourceUrl": "https://samdrupjongkhar.gov.bt/"
+   },
+   "office": {
+    "name": "Samdrup Jongkhar Dzongkhag Administration",
+    "website": "https://samdrupjongkhar.gov.bt/",
+    "sourceUrl": "https://samdrupjongkhar.gov.bt/"
+   }
+  }
+ }
+}

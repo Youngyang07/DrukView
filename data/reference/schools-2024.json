@@ -1,0 +1,2625 @@
+{
+ "source": {
+  "publisher": "Ministry of Education and Skills Development, Royal Government of Bhutan",
+  "title": "Annual Education Statistics 2024",
+  "table": "Annexure IV: School enrollment by Dzongkhag, Level and Type (school list); Table A (national totals)",
+  "url": "https://education.gov.bt/download/annual-education-statistics-2024/",
+  "checked": "2026-10-11"
+ },
+ "notes": [
+  "566 schools in 2024 (Table A): 47 extended classrooms, 331 primary, 33 lower secondary, 65 middle secondary, 88 higher secondary and 2 special institutes. Every dzongkhag’s count here matches the Sub-Total printed in Annexure IV, and they add up to 566.",
+  "Thromde (city) schools are counted in their dzongkhag: Thimphu Thromde in Thimphu, Phuentsholing Thromde in Chukha, Gelephu Thromde in Sarpang, Samdrup Jongkhar Thromde in Samdrup Jongkhar.",
+  "The Annexure labels about six higher secondary schools as middle secondary, so the split between those two levels within a dzongkhag is approximate; their combined number is exact.",
+  "School names are short names as listed in the Annexure (without “Primary School” etc.) and were read from the PDF by text extraction, so some spellings may differ from the printed page. Clearly garbled names were corrected and the extracted form is shown in brackets."
+ ],
+ "national": {
+  "total": 566,
+  "ECR": 47,
+  "PS": 331,
+  "LSS": 33,
+  "MSS": 65,
+  "HSS": 88,
+  "special": 2
+ },
+ "dzongkhags": {
+  "gasa": {
+   "total": 7,
+   "byLevel": {
+    "ECR": 3,
+    "PS": 2,
+    "LSS": 0,
+    "MSS": 1,
+    "HSS": 1,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Mendrelhang",
+     "level": "ECR"
+    },
+    {
+     "name": "Lungo",
+     "level": "ECR"
+    },
+    {
+     "name": "Thurasa",
+     "level": "ECR"
+    },
+    {
+     "name": "Gaza",
+     "level": "PS"
+    },
+    {
+     "name": "Lunana",
+     "level": "PS"
+    },
+    {
+     "name": "Laya",
+     "level": "MSS"
+    },
+    {
+     "name": "Bjishong",
+     "level": "HSS",
+     "nameInSource": "Bjήshong"
+    }
+   ]
+  },
+  "bumthang": {
+   "total": 19,
+   "byLevel": {
+    "ECR": 3,
+    "PS": 11,
+    "LSS": 1,
+    "MSS": 1,
+    "HSS": 3,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Bebur",
+     "level": "ECR"
+    },
+    {
+     "name": "Chungphel",
+     "level": "ECR"
+    },
+    {
+     "name": "Tendigang",
+     "level": "ECR"
+    },
+    {
+     "name": "Chhoekhor Toe",
+     "level": "PS"
+    },
+    {
+     "name": "Dur",
+     "level": "PS"
+    },
+    {
+     "name": "Gangrithang",
+     "level": "PS"
+    },
+    {
+     "name": "Gytesa",
+     "level": "PS"
+    },
+    {
+     "name": "Jigmeling",
+     "level": "PS"
+    },
+    {
+     "name": "Khangrab",
+     "level": "PS"
+    },
+    {
+     "name": "Kharsat",
+     "level": "PS"
+    },
+    {
+     "name": "Shingnyer",
+     "level": "PS"
+    },
+    {
+     "name": "Tangsibi",
+     "level": "PS"
+    },
+    {
+     "name": "Zangtherpo",
+     "level": "PS"
+    },
+    {
+     "name": "Zungnye",
+     "level": "PS"
+    },
+    {
+     "name": "Wangdicholing",
+     "level": "LSS"
+    },
+    {
+     "name": "Tang",
+     "level": "MSS"
+    },
+    {
+     "name": "Chhurney",
+     "level": "HSS"
+    },
+    {
+     "name": "Jakar",
+     "level": "HSS"
+    },
+    {
+     "name": "Ura",
+     "level": "HSS"
+    }
+   ]
+  },
+  "lhuntse": {
+   "total": 18,
+   "byLevel": {
+    "ECR": 2,
+    "PS": 12,
+    "LSS": 0,
+    "MSS": 2,
+    "HSS": 2,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Chakzam",
+     "level": "ECR"
+    },
+    {
+     "name": "Ongar",
+     "level": "ECR"
+    },
+    {
+     "name": "Domkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Dungkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Ganglakhema",
+     "level": "PS"
+    },
+    {
+     "name": "Gorthom",
+     "level": "PS"
+    },
+    {
+     "name": "Khoma",
+     "level": "PS"
+    },
+    {
+     "name": "Ladrong",
+     "level": "PS"
+    },
+    {
+     "name": "Lhuentse",
+     "level": "PS"
+    },
+    {
+     "name": "New",
+     "level": "PS"
+    },
+    {
+     "name": "Thimyl",
+     "level": "PS"
+    },
+    {
+     "name": "Tshochen",
+     "level": "PS"
+    },
+    {
+     "name": "Wambur",
+     "level": "PS"
+    },
+    {
+     "name": "Zangkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Autsho",
+     "level": "MSS"
+    },
+    {
+     "name": "Minjy",
+     "level": "MSS"
+    },
+    {
+     "name": "Luentise",
+     "level": "HSS"
+    },
+    {
+     "name": "Tangmachu",
+     "level": "HSS"
+    }
+   ]
+  },
+  "trashiyangtse": {
+   "total": 27,
+   "byLevel": {
+    "ECR": 0,
+    "PS": 21,
+    "LSS": 2,
+    "MSS": 1,
+    "HSS": 3,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Bumdeling",
+     "level": "PS"
+    },
+    {
+     "name": "Chakdemci",
+     "level": "PS"
+    },
+    {
+     "name": "Doksum",
+     "level": "PS"
+    },
+    {
+     "name": "Dukti",
+     "level": "PS"
+    },
+    {
+     "name": "Jamkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Jangshutse",
+     "level": "PS"
+    },
+    {
+     "name": "Langmadung",
+     "level": "PS"
+    },
+    {
+     "name": "Lichen",
+     "level": "PS"
+    },
+    {
+     "name": "Melongkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Pangtoksha",
+     "level": "PS"
+    },
+    {
+     "name": "Rabtery",
+     "level": "PS"
+    },
+    {
+     "name": "Shali",
+     "level": "PS"
+    },
+    {
+     "name": "Shingkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Targhel",
+     "level": "PS"
+    },
+    {
+     "name": "Thragom",
+     "level": "PS"
+    },
+    {
+     "name": "Tokaphu",
+     "level": "PS"
+    },
+    {
+     "name": "Tongmijangsa",
+     "level": "PS"
+    },
+    {
+     "name": "Trashiyangse",
+     "level": "PS"
+    },
+    {
+     "name": "Tsangshuchen",
+     "level": "PS"
+    },
+    {
+     "name": "Tshaling",
+     "level": "PS"
+    },
+    {
+     "name": "Womanang",
+     "level": "PS"
+    },
+    {
+     "name": "Khamdhang",
+     "level": "LSS"
+    },
+    {
+     "name": "Kheni",
+     "level": "LSS"
+    },
+    {
+     "name": "Ramjar",
+     "level": "MSS"
+    },
+    {
+     "name": "Bayling",
+     "level": "HSS"
+    },
+    {
+     "name": "Kunzangling",
+     "level": "HSS"
+    },
+    {
+     "name": "Tsenkharla",
+     "level": "HSS"
+    }
+   ]
+  },
+  "haa": {
+   "total": 10,
+   "byLevel": {
+    "ECR": 0,
+    "PS": 6,
+    "LSS": 1,
+    "MSS": 1,
+    "HSS": 2,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Bebji",
+     "level": "PS"
+    },
+    {
+     "name": "Damthang",
+     "level": "PS"
+    },
+    {
+     "name": "Jyinkhana",
+     "level": "PS"
+    },
+    {
+     "name": "Rangbe",
+     "level": "PS"
+    },
+    {
+     "name": "Sertena",
+     "level": "PS"
+    },
+    {
+     "name": "Sombiekha",
+     "level": "PS"
+    },
+    {
+     "name": "Katsho",
+     "level": "LSS"
+    },
+    {
+     "name": "Tshaphel",
+     "level": "MSS"
+    },
+    {
+     "name": "Chundu Armed Forces",
+     "level": "HSS"
+    },
+    {
+     "name": "Gongzim Ugyen Dorji",
+     "level": "HSS",
+     "nameInSource": "Gongdim U�gen Dorji"
+    }
+   ]
+  },
+  "paro": {
+   "total": 27,
+   "byLevel": {
+    "ECR": 0,
+    "PS": 11,
+    "LSS": 5,
+    "MSS": 3,
+    "HSS": 7,
+    "other": 1
+   },
+   "schools": [
+    {
+     "name": "Drukyeel",
+     "level": "PS"
+    },
+    {
+     "name": "Gonyetsawa",
+     "level": "PS"
+    },
+    {
+     "name": "Isuna",
+     "level": "PS"
+    },
+    {
+     "name": "Olarhang",
+     "level": "PS"
+    },
+    {
+     "name": "Paro Elementary School",
+     "level": "PS"
+    },
+    {
+     "name": "Ramchetekha",
+     "level": "PS"
+    },
+    {
+     "name": "Rashigang",
+     "level": "PS"
+    },
+    {
+     "name": "Shaba",
+     "level": "PS"
+    },
+    {
+     "name": "Taju",
+     "level": "PS"
+    },
+    {
+     "name": "Tashenden",
+     "level": "PS"
+    },
+    {
+     "name": "Yoezerling",
+     "level": "PS"
+    },
+    {
+     "name": "Dawakha",
+     "level": "LSS"
+    },
+    {
+     "name": "Doteng",
+     "level": "LSS"
+    },
+    {
+     "name": "Gaupey",
+     "level": "LSS"
+    },
+    {
+     "name": "Utpal",
+     "level": "LSS"
+    },
+    {
+     "name": "Woochhu",
+     "level": "LSS"
+    },
+    {
+     "name": "Betilha",
+     "level": "MSS"
+    },
+    {
+     "name": "Kamma Lechleyling",
+     "level": "MSS"
+    },
+    {
+     "name": "Khangshu",
+     "level": "MSS"
+    },
+    {
+     "name": "Drukqyel",
+     "level": "HSS"
+    },
+    {
+     "name": "Kamma Academy",
+     "level": "HSS"
+    },
+    {
+     "name": "Langong",
+     "level": "HSS"
+    },
+    {
+     "name": "Shaba",
+     "level": "HSS"
+    },
+    {
+     "name": "Shari",
+     "level": "HSS"
+    },
+    {
+     "name": "The Royal Academy",
+     "level": "HSS"
+    },
+    {
+     "name": "Wankha",
+     "level": "HSS"
+    },
+    {
+     "name": "Wangsel",
+     "level": "other"
+    }
+   ]
+  },
+  "thimphu": {
+   "total": 48,
+   "byLevel": {
+    "ECR": 0,
+    "PS": 22,
+    "LSS": 4,
+    "MSS": 10,
+    "HSS": 12,
+    "other": 0
+   },
+   "thromde": [
+    {
+     "name": "Thimphu Thromde",
+     "total": 34
+    }
+   ],
+   "schools": [
+    {
+     "name": "Barishong",
+     "level": "PS"
+    },
+    {
+     "name": "Bijminia",
+     "level": "PS"
+    },
+    {
+     "name": "Genekha",
+     "level": "PS"
+    },
+    {
+     "name": "Hontsho",
+     "level": "PS"
+    },
+    {
+     "name": "Stina",
+     "level": "PS"
+    },
+    {
+     "name": "Soe",
+     "level": "PS"
+    },
+    {
+     "name": "Tshaluna",
+     "level": "PS"
+    },
+    {
+     "name": "Yum Thinley Chicken Charity",
+     "level": "PS"
+    },
+    {
+     "name": "Lingshi",
+     "level": "LSS"
+    },
+    {
+     "name": "Khasadrapchu",
+     "level": "MSS"
+    },
+    {
+     "name": "Kushguchen",
+     "level": "MSS"
+    },
+    {
+     "name": "Desi",
+     "level": "HSS"
+    },
+    {
+     "name": "Wangbama",
+     "level": "HSS"
+    },
+    {
+     "name": "Yangchen Gathel",
+     "level": "HSS"
+    },
+    {
+     "name": "Babesia",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Chang Riggshel",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Delhi",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Ethio Metho",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Jigme Losel",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Junghina",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Kuen-sel phodring",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Little Dragon",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Nashoen Peiri",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Rinchen Koenphen",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Sersang",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Sheralgatshel",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Sunshine",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Thimphu",
+     "level": "PS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Jigme Namgyel",
+     "level": "LSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Taba",
+     "level": "LSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Zilion Namgyeling",
+     "level": "LSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Changgangha",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Changzamtog",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Dr. Tolagel",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "BLC",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Loselling",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Lungtenphu",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Lungtenzampa",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Zilukha",
+     "level": "MSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Babesa",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Bff Academy",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Dechencholing",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Druk",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Kefki",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Motshang",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Pvibbil",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Rinchen",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    },
+    {
+     "name": "Yangdenphug",
+     "level": "HSS",
+     "thromde": "Thimphu Thromde"
+    }
+   ]
+  },
+  "punakha": {
+   "total": 25,
+   "byLevel": {
+    "ECR": 4,
+    "PS": 10,
+    "LSS": 4,
+    "MSS": 2,
+    "HSS": 5,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Mendrelgang",
+     "level": "ECR"
+    },
+    {
+     "name": "Tseyha",
+     "level": "ECR"
+    },
+    {
+     "name": "Wokuna",
+     "level": "ECR"
+    },
+    {
+     "name": "Yebesa",
+     "level": "ECR"
+    },
+    {
+     "name": "Goenshari",
+     "level": "PS"
+    },
+    {
+     "name": "Lakhu",
+     "level": "PS"
+    },
+    {
+     "name": "Lapsakha",
+     "level": "PS"
+    },
+    {
+     "name": "Logodama",
+     "level": "PS"
+    },
+    {
+     "name": "Mendhagang",
+     "level": "PS"
+    },
+    {
+     "name": "Nawakha",
+     "level": "PS"
+    },
+    {
+     "name": "Phulingsum",
+     "level": "PS"
+    },
+    {
+     "name": "Tahogang",
+     "level": "PS"
+    },
+    {
+     "name": "Tshochasa",
+     "level": "PS"
+    },
+    {
+     "name": "Walathang",
+     "level": "PS"
+    },
+    {
+     "name": "Bjjbjokha",
+     "level": "LSS"
+    },
+    {
+     "name": "Lobesa",
+     "level": "LSS"
+    },
+    {
+     "name": "Shengana",
+     "level": "LSS"
+    },
+    {
+     "name": "Thinerygang",
+     "level": "LSS"
+    },
+    {
+     "name": "Kabesa",
+     "level": "MSS"
+    },
+    {
+     "name": "Khuruthang",
+     "level": "MSS"
+    },
+    {
+     "name": "Dashiding",
+     "level": "HSS"
+    },
+    {
+     "name": "Dechentesmo",
+     "level": "HSS"
+    },
+    {
+     "name": "Punakha",
+     "level": "HSS"
+    },
+    {
+     "name": "Tashidingsha",
+     "level": "HSS"
+    },
+    {
+     "name": "Ugenacademy",
+     "level": "HSS"
+    }
+   ]
+  },
+  "wangdue-phodrang": {
+   "total": 34,
+   "byLevel": {
+    "ECR": 6,
+    "PS": 23,
+    "LSS": 0,
+    "MSS": 1,
+    "HSS": 4,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Domchoechang",
+     "level": "ECR"
+    },
+    {
+     "name": "Dianphal",
+     "level": "ECR"
+    },
+    {
+     "name": "Gangshel",
+     "level": "ECR"
+    },
+    {
+     "name": "Gogona",
+     "level": "ECR"
+    },
+    {
+     "name": "Mataungchu",
+     "level": "ECR"
+    },
+    {
+     "name": "Ridha",
+     "level": "ECR"
+    },
+    {
+     "name": "Bayta",
+     "level": "PS"
+    },
+    {
+     "name": "Bjena",
+     "level": "PS"
+    },
+    {
+     "name": "Bj… (not legible in the extracted text)",
+     "level": "PS",
+     "nameInSource": "Bj其二"
+    },
+    {
+     "name": "Dangchu",
+     "level": "PS"
+    },
+    {
+     "name": "Gaselo",
+     "level": "PS"
+    },
+    {
+     "name": "Hebesa",
+     "level": "PS"
+    },
+    {
+     "name": "Jala",
+     "level": "PS"
+    },
+    {
+     "name": "Kashi",
+     "level": "PS"
+    },
+    {
+     "name": "Khotokha",
+     "level": "PS"
+    },
+    {
+     "name": "Nahi",
+     "level": "PS"
+    },
+    {
+     "name": "Phaytekha",
+     "level": "PS"
+    },
+    {
+     "name": "Phuersum Delhi",
+     "level": "PS"
+    },
+    {
+     "name": "Rameychen",
+     "level": "PS"
+    },
+    {
+     "name": "Rinchengang",
+     "level": "PS"
+    },
+    {
+     "name": "Rubesa",
+     "level": "PS"
+    },
+    {
+     "name": "Rukubji",
+     "level": "PS"
+    },
+    {
+     "name": "Samtenggang",
+     "level": "PS"
+    },
+    {
+     "name": "Sephu",
+     "level": "PS"
+    },
+    {
+     "name": "Sha Tasha",
+     "level": "PS"
+    },
+    {
+     "name": "Singye Namgyul",
+     "level": "PS"
+    },
+    {
+     "name": "Tencholing",
+     "level": "PS"
+    },
+    {
+     "name": "Uma",
+     "level": "PS"
+    },
+    {
+     "name": "Wangblue",
+     "level": "PS"
+    },
+    {
+     "name": "Nobiding",
+     "level": "MSS"
+    },
+    {
+     "name": "Bajo",
+     "level": "HSS"
+    },
+    {
+     "name": "Gaseko",
+     "level": "HSS"
+    },
+    {
+     "name": "Phobijika",
+     "level": "HSS"
+    },
+    {
+     "name": "Samtengang",
+     "level": "HSS"
+    }
+   ]
+  },
+  "trongsa": {
+   "total": 19,
+   "byLevel": {
+    "ECR": 3,
+    "PS": 11,
+    "LSS": 1,
+    "MSS": 1,
+    "HSS": 3,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Bjeezam",
+     "level": "ECR"
+    },
+    {
+     "name": "Kola",
+     "level": "ECR"
+    },
+    {
+     "name": "Tongtongshey",
+     "level": "ECR"
+    },
+    {
+     "name": "Bemji",
+     "level": "PS"
+    },
+    {
+     "name": "Chendebji",
+     "level": "PS"
+    },
+    {
+     "name": "Jangbi",
+     "level": "PS"
+    },
+    {
+     "name": "Kuengarabten",
+     "level": "PS"
+    },
+    {
+     "name": "Nabji",
+     "level": "PS"
+    },
+    {
+     "name": "Nimshong",
+     "level": "PS"
+    },
+    {
+     "name": "Samcholing",
+     "level": "PS"
+    },
+    {
+     "name": "Trashidingkha",
+     "level": "PS"
+    },
+    {
+     "name": "Trongsa",
+     "level": "PS"
+    },
+    {
+     "name": "Yudrungcholing",
+     "level": "PS"
+    },
+    {
+     "name": "Langthel",
+     "level": "LSS"
+    },
+    {
+     "name": "Samcholing",
+     "level": "MSS"
+    },
+    {
+     "name": "Sherubling",
+     "level": "HSS"
+    },
+    {
+     "name": "Takse",
+     "level": "HSS"
+    },
+    {
+     "name": "Tshangkha",
+     "level": "HSS"
+    },
+    {
+     "name": "Baling",
+     "level": "PS"
+    }
+   ]
+  },
+  "mongar": {
+   "total": 39,
+   "byLevel": {
+    "ECR": 6,
+    "PS": 23,
+    "LSS": 0,
+    "MSS": 5,
+    "HSS": 5,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Chaskhar Pam",
+     "level": "ECR"
+    },
+    {
+     "name": "Jaibab",
+     "level": "ECR"
+    },
+    {
+     "name": "Lingkhar",
+     "level": "ECR"
+    },
+    {
+     "name": "Muhung",
+     "level": "ECR"
+    },
+    {
+     "name": "Sailing",
+     "level": "ECR"
+    },
+    {
+     "name": "Wachur",
+     "level": "ECR"
+    },
+    {
+     "name": "Bagging",
+     "level": "PS"
+    },
+    {
+     "name": "Balam",
+     "level": "PS"
+    },
+    {
+     "name": "Bumpazor",
+     "level": "PS"
+    },
+    {
+     "name": "Chali",
+     "level": "PS"
+    },
+    {
+     "name": "Dhulsa",
+     "level": "PS"
+    },
+    {
+     "name": "Jumey",
+     "level": "PS"
+    },
+    {
+     "name": "Kalapang",
+     "level": "PS"
+    },
+    {
+     "name": "Konbar",
+     "level": "PS"
+    },
+    {
+     "name": "Narang",
+     "level": "PS"
+    },
+    {
+     "name": "Ngathhang",
+     "level": "PS"
+    },
+    {
+     "name": "Panghang",
+     "level": "PS"
+    },
+    {
+     "name": "Ridaea",
+     "level": "PS"
+    },
+    {
+     "name": "Sengor",
+     "level": "PS"
+    },
+    {
+     "name": "Serzhong",
+     "level": "PS"
+    },
+    {
+     "name": "Silambi",
+     "level": "PS"
+    },
+    {
+     "name": "Soenakhar",
+     "level": "PS"
+    },
+    {
+     "name": "Thanprong",
+     "level": "PS"
+    },
+    {
+     "name": "Thrindangbi",
+     "level": "PS"
+    },
+    {
+     "name": "Tsakaling",
+     "level": "PS"
+    },
+    {
+     "name": "Tsamang",
+     "level": "PS"
+    },
+    {
+     "name": "Udaric",
+     "level": "PS"
+    },
+    {
+     "name": "Yangbari",
+     "level": "PS"
+    },
+    {
+     "name": "Zunglen",
+     "level": "PS"
+    },
+    {
+     "name": "Chakkar",
+     "level": "MSS"
+    },
+    {
+     "name": "Kengkhar",
+     "level": "MSS"
+    },
+    {
+     "name": "Lingmethang",
+     "level": "MSS"
+    },
+    {
+     "name": "Mongar",
+     "level": "MSS"
+    },
+    {
+     "name": "Nagor",
+     "level": "MSS"
+    },
+    {
+     "name": "Drametse",
+     "level": "HSS"
+    },
+    {
+     "name": "Gyelposhing School",
+     "level": "HSS"
+    },
+    {
+     "name": "Kisheykhar",
+     "level": "HSS"
+    },
+    {
+     "name": "Mongar",
+     "level": "HSS"
+    },
+    {
+     "name": "Yadi",
+     "level": "HSS"
+    }
+   ]
+  },
+  "trashigang": {
+   "total": 55,
+   "byLevel": {
+    "ECR": 2,
+    "PS": 36,
+    "LSS": 5,
+    "MSS": 5,
+    "HSS": 6,
+    "other": 1
+   },
+   "schools": [
+    {
+     "name": "Rangshikhar",
+     "level": "ECR"
+    },
+    {
+     "name": "Thrakthrik",
+     "level": "ECR"
+    },
+    {
+     "name": "Barshong",
+     "level": "PS"
+    },
+    {
+     "name": "Barsham",
+     "level": "PS"
+    },
+    {
+     "name": "Benshingmo",
+     "level": "PS"
+    },
+    {
+     "name": "Brekha",
+     "level": "PS"
+    },
+    {
+     "name": "Chaling",
+     "level": "PS"
+    },
+    {
+     "name": "Changmey",
+     "level": "PS"
+    },
+    {
+     "name": "Chiya",
+     "level": "PS"
+    },
+    {
+     "name": "Dailshangma",
+     "level": "PS"
+    },
+    {
+     "name": "Dungmanba",
+     "level": "PS"
+    },
+    {
+     "name": "Galing",
+     "level": "PS"
+    },
+    {
+     "name": "Jerelemi",
+     "level": "PS"
+    },
+    {
+     "name": "Jomtshang",
+     "level": "PS"
+    },
+    {
+     "name": "Jonkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Kanglung",
+     "level": "PS"
+    },
+    {
+     "name": "Kurichko",
+     "level": "PS"
+    },
+    {
+     "name": "Lumang",
+     "level": "PS"
+    },
+    {
+     "name": "Merak",
+     "level": "PS"
+    },
+    {
+     "name": "Moshi",
+     "level": "PS"
+    },
+    {
+     "name": "Pakaling",
+     "level": "PS"
+    },
+    {
+     "name": "Pam",
+     "level": "PS"
+    },
+    {
+     "name": "Pheggari",
+     "level": "PS"
+    },
+    {
+     "name": "Phongmey",
+     "level": "PS"
+    },
+    {
+     "name": "Ranglong",
+     "level": "PS"
+    },
+    {
+     "name": "Ritshangdung",
+     "level": "PS"
+    },
+    {
+     "name": "Ronghung",
+     "level": "PS"
+    },
+    {
+     "name": "Saling",
+     "level": "PS"
+    },
+    {
+     "name": "Thongrong",
+     "level": "PS"
+    },
+    {
+     "name": "Thungkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Tokshingmang",
+     "level": "PS"
+    },
+    {
+     "name": "Tsangpo",
+     "level": "PS"
+    },
+    {
+     "name": "Tshogorpa",
+     "level": "PS"
+    },
+    {
+     "name": "Wamrong",
+     "level": "PS"
+    },
+    {
+     "name": "Yabrang",
+     "level": "PS"
+    },
+    {
+     "name": "Yangnyeer",
+     "level": "PS"
+    },
+    {
+     "name": "Yonphula",
+     "level": "PS"
+    },
+    {
+     "name": "Zordung",
+     "level": "PS"
+    },
+    {
+     "name": "Bidung",
+     "level": "LSS"
+    },
+    {
+     "name": "Bikhar",
+     "level": "LSS"
+    },
+    {
+     "name": "Kangsar",
+     "level": "LSS"
+    },
+    {
+     "name": "Khaling",
+     "level": "LSS"
+    },
+    {
+     "name": "Sakteng",
+     "level": "LSS"
+    },
+    {
+     "name": "Dungse",
+     "level": "MSS"
+    },
+    {
+     "name": "Gongthung",
+     "level": "MSS"
+    },
+    {
+     "name": "Radi",
+     "level": "MSS"
+    },
+    {
+     "name": "Trashipang",
+     "level": "MSS"
+    },
+    {
+     "name": "Uxorong",
+     "level": "MSS"
+    },
+    {
+     "name": "Bartsham",
+     "level": "HSS"
+    },
+    {
+     "name": "Jampeling",
+     "level": "HSS"
+    },
+    {
+     "name": "Jigme Shadming",
+     "level": "HSS"
+    },
+    {
+     "name": "Rangjang",
+     "level": "HSS"
+    },
+    {
+     "name": "Tashikse",
+     "level": "HSS"
+    },
+    {
+     "name": "Thrimshing",
+     "level": "HSS"
+    },
+    {
+     "name": "Muenselling Institute",
+     "level": "other"
+    }
+   ]
+  },
+  "chukha": {
+   "total": 45,
+   "byLevel": {
+    "ECR": 1,
+    "PS": 29,
+    "LSS": 0,
+    "MSS": 10,
+    "HSS": 5,
+    "other": 0
+   },
+   "thromde": [
+    {
+     "name": "Phuentsholing Thromde",
+     "total": 6
+    }
+   ],
+   "schools": [
+    {
+     "name": "Chilasney",
+     "level": "ECR"
+    },
+    {
+     "name": "Alaykha",
+     "level": "PS"
+    },
+    {
+     "name": "Arekhna",
+     "level": "PS"
+    },
+    {
+     "name": "Balkunza",
+     "level": "PS"
+    },
+    {
+     "name": "Bongo",
+     "level": "PS"
+    },
+    {
+     "name": "Chapcha",
+     "level": "PS"
+    },
+    {
+     "name": "Chimuna",
+     "level": "PS"
+    },
+    {
+     "name": "Chongaykha",
+     "level": "PS"
+    },
+    {
+     "name": "Chungkha",
+     "level": "PS"
+    },
+    {
+     "name": "Getena",
+     "level": "PS"
+    },
+    {
+     "name": "Ketokha",
+     "level": "PS"
+    },
+    {
+     "name": "Khatoeykha",
+     "level": "PS"
+    },
+    {
+     "name": "Lingden",
+     "level": "PS"
+    },
+    {
+     "name": "Lobeksha",
+     "level": "PS"
+    },
+    {
+     "name": "Meretemo",
+     "level": "PS"
+    },
+    {
+     "name": "Metakha",
+     "level": "PS"
+    },
+    {
+     "name": "Pachu",
+     "level": "PS"
+    },
+    {
+     "name": "Paga",
+     "level": "PS"
+    },
+    {
+     "name": "Pakchina",
+     "level": "PS"
+    },
+    {
+     "name": "Rangaytong",
+     "level": "PS"
+    },
+    {
+     "name": "Rinchenling",
+     "level": "PS"
+    },
+    {
+     "name": "Shemagangkha",
+     "level": "PS"
+    },
+    {
+     "name": "Sinchula",
+     "level": "PS"
+    },
+    {
+     "name": "Tashilakha",
+     "level": "PS"
+    },
+    {
+     "name": "Trashi Gatshel",
+     "level": "PS"
+    },
+    {
+     "name": "Tsimakha",
+     "level": "PS"
+    },
+    {
+     "name": "Wangdigatshel",
+     "level": "PS"
+    },
+    {
+     "name": "Arekha",
+     "level": "MSS"
+    },
+    {
+     "name": "Chapcha",
+     "level": "MSS"
+    },
+    {
+     "name": "Chumigthang",
+     "level": "MSS"
+    },
+    {
+     "name": "Dungna",
+     "level": "MSS"
+    },
+    {
+     "name": "Kamji",
+     "level": "MSS"
+    },
+    {
+     "name": "Logchina",
+     "level": "MSS"
+    },
+    {
+     "name": "Tsimakha",
+     "level": "MSS"
+    },
+    {
+     "name": "Wangchu",
+     "level": "MSS"
+    },
+    {
+     "name": "Chukha",
+     "level": "HSS"
+    },
+    {
+     "name": "Darla",
+     "level": "HSS"
+    },
+    {
+     "name": "Gedu",
+     "level": "MSS"
+    },
+    {
+     "name": "Palshika",
+     "level": "MSS"
+    },
+    {
+     "name": "Phuentsholing",
+     "level": "PS",
+     "thromde": "Phuentsholing Thromde"
+    },
+    {
+     "name": "Sonangang",
+     "level": "PS",
+     "thromde": "Phuentsholing Thromde"
+    },
+    {
+     "name": "Yonten Kuenyung Academy",
+     "level": "PS",
+     "thromde": "Phuentsholing Thromde"
+    },
+    {
+     "name": "Norbu Academy",
+     "level": "HSS",
+     "thromde": "Phuentsholing Thromde"
+    },
+    {
+     "name": "Phuentsholing",
+     "level": "HSS",
+     "thromde": "Phuentsholing Thromde"
+    },
+    {
+     "name": "Phuentsholing Ripgar",
+     "level": "HSS",
+     "thromde": "Phuentsholing Thromde"
+    }
+   ]
+  },
+  "dagana": {
+   "total": 26,
+   "byLevel": {
+    "ECR": 5,
+    "PS": 13,
+    "LSS": 2,
+    "MSS": 2,
+    "HSS": 4,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Devitar",
+     "level": "ECR"
+    },
+    {
+     "name": "Gumla",
+     "level": "ECR"
+    },
+    {
+     "name": "Lungtengang",
+     "level": "ECR"
+    },
+    {
+     "name": "Namohigang",
+     "level": "ECR"
+    },
+    {
+     "name": "Pangerpo",
+     "level": "ECR"
+    },
+    {
+     "name": "Ballengang",
+     "level": "PS"
+    },
+    {
+     "name": "Daga",
+     "level": "PS"
+    },
+    {
+     "name": "Gangpor",
+     "level": "PS"
+    },
+    {
+     "name": "Kammaling",
+     "level": "PS"
+    },
+    {
+     "name": "Lhaling",
+     "level": "PS"
+    },
+    {
+     "name": "Namchalla",
+     "level": "PS"
+    },
+    {
+     "name": "Nichula",
+     "level": "PS"
+    },
+    {
+     "name": "Nimtola",
+     "level": "PS"
+    },
+    {
+     "name": "Pangra",
+     "level": "PS"
+    },
+    {
+     "name": "Phekoma",
+     "level": "PS"
+    },
+    {
+     "name": "Phuensumgang",
+     "level": "PS"
+    },
+    {
+     "name": "Samey",
+     "level": "PS"
+    },
+    {
+     "name": "Zincheila",
+     "level": "PS"
+    },
+    {
+     "name": "Daleythang",
+     "level": "LSS"
+    },
+    {
+     "name": "Tashiding",
+     "level": "LSS"
+    },
+    {
+     "name": "Dagapela",
+     "level": "MSS"
+    },
+    {
+     "name": "Tsangsha",
+     "level": "MSS"
+    },
+    {
+     "name": "Daga",
+     "level": "HSS"
+    },
+    {
+     "name": "Drukjegang",
+     "level": "HSS"
+    },
+    {
+     "name": "Gesarling",
+     "level": "HSS"
+    },
+    {
+     "name": "Lhamolingkha",
+     "level": "HSS"
+    }
+   ]
+  },
+  "tsirang": {
+   "total": 16,
+   "byLevel": {
+    "ECR": 0,
+    "PS": 12,
+    "LSS": 0,
+    "MSS": 2,
+    "HSS": 2,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Barshong",
+     "level": "PS"
+    },
+    {
+     "name": "Doonglagang",
+     "level": "PS"
+    },
+    {
+     "name": "Gosaling",
+     "level": "PS"
+    },
+    {
+     "name": "Kilkhorthang",
+     "level": "PS"
+    },
+    {
+     "name": "Mendrelgang",
+     "level": "PS"
+    },
+    {
+     "name": "Pathshaling",
+     "level": "PS"
+    },
+    {
+     "name": "Permathang",
+     "level": "PS"
+    },
+    {
+     "name": "Phuentenchua",
+     "level": "PS"
+    },
+    {
+     "name": "Ranghaling",
+     "level": "PS"
+    },
+    {
+     "name": "Semjong",
+     "level": "PS"
+    },
+    {
+     "name": "Senghhang",
+     "level": "PS"
+    },
+    {
+     "name": "Tsholingkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Damphu",
+     "level": "MSS"
+    },
+    {
+     "name": "Tsirangtoe",
+     "level": "MSS"
+    },
+    {
+     "name": "Damphu",
+     "level": "HSS"
+    },
+    {
+     "name": "Mendrelgang",
+     "level": "HSS"
+    }
+   ]
+  },
+  "zhemgang": {
+   "total": 29,
+   "byLevel": {
+    "ECR": 0,
+    "PS": 25,
+    "LSS": 0,
+    "MSS": 2,
+    "HSS": 2,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Bardo",
+     "level": "PS"
+    },
+    {
+     "name": "Barpong",
+     "level": "PS"
+    },
+    {
+     "name": "Bplsha",
+     "level": "PS"
+    },
+    {
+     "name": "Budashi",
+     "level": "PS"
+    },
+    {
+     "name": "Digala",
+     "level": "PS"
+    },
+    {
+     "name": "Dunnang",
+     "level": "PS"
+    },
+    {
+     "name": "Goling",
+     "level": "PS"
+    },
+    {
+     "name": "Gomphu",
+     "level": "PS"
+    },
+    {
+     "name": "Goshing",
+     "level": "PS"
+    },
+    {
+     "name": "Kaitong",
+     "level": "PS"
+    },
+    {
+     "name": "Khorsher",
+     "level": "PS"
+    },
+    {
+     "name": "Kilbar",
+     "level": "PS"
+    },
+    {
+     "name": "Langdurbi",
+     "level": "PS"
+    },
+    {
+     "name": "Nimshong",
+     "level": "PS"
+    },
+    {
+     "name": "Panbang",
+     "level": "PS"
+    },
+    {
+     "name": "Pantang",
+     "level": "PS"
+    },
+    {
+     "name": "Repati",
+     "level": "PS"
+    },
+    {
+     "name": "Shingkhar",
+     "level": "PS"
+    },
+    {
+     "name": "Tashiki",
+     "level": "PS"
+    },
+    {
+     "name": "Thissa",
+     "level": "PS"
+    },
+    {
+     "name": "Tingtibi",
+     "level": "PS"
+    },
+    {
+     "name": "Tradijong",
+     "level": "PS"
+    },
+    {
+     "name": "Tshaidang",
+     "level": "PS"
+    },
+    {
+     "name": "Tshanglajong",
+     "level": "PS"
+    },
+    {
+     "name": "Zhemgang",
+     "level": "PS"
+    },
+    {
+     "name": "Buli",
+     "level": "MSS"
+    },
+    {
+     "name": "Yebilaptsa",
+     "level": "MSS"
+    },
+    {
+     "name": "Sonamthang",
+     "level": "HSS"
+    },
+    {
+     "name": "Zhemgang",
+     "level": "HSS"
+    }
+   ]
+  },
+  "pemagatshel": {
+   "total": 25,
+   "byLevel": {
+    "ECR": 2,
+    "PS": 14,
+    "LSS": 2,
+    "MSS": 4,
+    "HSS": 3,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Chockhoring",
+     "level": "ECR"
+    },
+    {
+     "name": "Chimong",
+     "level": "PS"
+    },
+    {
+     "name": "Dungmin",
+     "level": "PS"
+    },
+    {
+     "name": "Gashari",
+     "level": "PS"
+    },
+    {
+     "name": "Khangma",
+     "level": "PS"
+    },
+    {
+     "name": "Khenzone",
+     "level": "PS"
+    },
+    {
+     "name": "Milkori",
+     "level": "PS"
+    },
+    {
+     "name": "Norbugang",
+     "level": "PS"
+    },
+    {
+     "name": "Shali",
+     "level": "PS"
+    },
+    {
+     "name": "Shumar",
+     "level": "PS"
+    },
+    {
+     "name": "Thongsa",
+     "level": "PS"
+    },
+    {
+     "name": "Tsebar",
+     "level": "PS"
+    },
+    {
+     "name": "Tshabae",
+     "level": "PS"
+    },
+    {
+     "name": "Woongshloo",
+     "level": "PS"
+    },
+    {
+     "name": "Yalang",
+     "level": "PS"
+    },
+    {
+     "name": "Dechheling",
+     "level": "LSS"
+    },
+    {
+     "name": "Gonpasigna",
+     "level": "LSS"
+    },
+    {
+     "name": "Khar",
+     "level": "MSS"
+    },
+    {
+     "name": "Nganglam",
+     "level": "MSS"
+    },
+    {
+     "name": "Pemagatshel",
+     "level": "MSS",
+     "nameInSource": "Permaçatsiel"
+    },
+    {
+     "name": "Yurung",
+     "level": "MSS"
+    },
+    {
+     "name": "Nangkor",
+     "level": "HSS"
+    },
+    {
+     "name": "Nganglam",
+     "level": "HSS"
+    },
+    {
+     "name": "Yekchen",
+     "level": "HSS"
+    },
+    {
+     "name": "Khenadang",
+     "level": "ECR"
+    }
+   ]
+  },
+  "samtse": {
+   "total": 42,
+   "byLevel": {
+    "ECR": 6,
+    "PS": 22,
+    "LSS": 4,
+    "MSS": 3,
+    "HSS": 7,
+    "other": 0
+   },
+   "schools": [
+    {
+     "name": "Birutar",
+     "level": "ECR"
+    },
+    {
+     "name": "Kachin",
+     "level": "ECR"
+    },
+    {
+     "name": "Lamitar",
+     "level": "ECR"
+    },
+    {
+     "name": "Nigurey",
+     "level": "ECR"
+    },
+    {
+     "name": "Sombek",
+     "level": "ECR"
+    },
+    {
+     "name": "Thika",
+     "level": "ECR"
+    },
+    {
+     "name": "Buiklay",
+     "level": "PS"
+    },
+    {
+     "name": "Chongshu",
+     "level": "PS"
+    },
+    {
+     "name": "Dipheling",
+     "level": "PS"
+    },
+    {
+     "name": "Dipojora",
+     "level": "PS"
+    },
+    {
+     "name": "Dzongsar",
+     "level": "PS"
+    },
+    {
+     "name": "Gangthok",
+     "level": "PS"
+    },
+    {
+     "name": "Gawaling",
+     "level": "PS"
+    },
+    {
+     "name": "Gayshing Goan",
+     "level": "PS"
+    },
+    {
+     "name": "Jaringay",
+     "level": "PS"
+    },
+    {
+     "name": "Khanduthang",
+     "level": "PS"
+    },
+    {
+     "name": "Kydisa",
+     "level": "PS"
+    },
+    {
+     "name": "Mindruling",
+     "level": "PS"
+    },
+    {
+     "name": "Namgaycholing",
+     "level": "PS"
+    },
+    {
+     "name": "Nangiadang",
+     "level": "PS"
+    },
+    {
+     "name": "Norbugang",
+     "level": "PS"
+    },
+    {
+     "name": "Phensum",
+     "level": "PS"
+    },
+    {
+     "name": "Phuntishopeiri",
+     "level": "PS"
+    },
+    {
+     "name": "Soeitapsa",
+     "level": "PS"
+    },
+    {
+     "name": "Tabadrantoe",
+     "level": "PS"
+    },
+    {
+     "name": "Tashicholing",
+     "level": "PS"
+    },
+    {
+     "name": "Tashihhang",
+     "level": "PS"
+    },
+    {
+     "name": "Ugentse",
+     "level": "PS"
+    },
+    {
+     "name": "Denchulha",
+     "level": "LSS"
+    },
+    {
+     "name": "Dorokha",
+     "level": "LSS"
+    },
+    {
+     "name": "Samtse",
+     "level": "LSS"
+    },
+    {
+     "name": "Sang-Alqar Chooling",
+     "level": "LSS"
+    },
+    {
+     "name": "Sengdhyen",
+     "level": "MSS"
+    },
+    {
+     "name": "Sherugatshel",
+     "level": "MSS"
+    },
+    {
+     "name": "Tashihhang",
+     "level": "MSS"
+    },
+    {
+     "name": "Dorokha",
+     "level": "HSS"
+    },
+    {
+     "name": "Gomtu",
+     "level": "HSS"
+    },
+    {
+     "name": "Norbagang",
+     "level": "HSS"
+    },
+    {
+     "name": "Peljoring",
+     "level": "HSS"
+    },
+    {
+     "name": "Sambe",
+     "level": "HSS"
+    },
+    {
+     "name": "Tenduk",
+     "level": "HSS"
+    },
+    {
+     "name": "Yosekose",
+     "level": "HSS"
+    }
+   ]
+  },
+  "sarpang": {
+   "total": 26,
+   "byLevel": {
+    "ECR": 1,
+    "PS": 12,
+    "LSS": 1,
+    "MSS": 7,
+    "HSS": 5,
+    "other": 0
+   },
+   "thromde": [
+    {
+     "name": "Gelephu Thromde",
+     "total": 4
+    }
+   ],
+   "schools": [
+    {
+     "name": "Samikhara",
+     "level": "ECR"
+    },
+    {
+     "name": "Dechenperli",
+     "level": "PS"
+    },
+    {
+     "name": "Gakiling",
+     "level": "PS"
+    },
+    {
+     "name": "Jigmeling",
+     "level": "PS"
+    },
+    {
+     "name": "Lharing",
+     "level": "PS"
+    },
+    {
+     "name": "Lhayul",
+     "level": "PS"
+    },
+    {
+     "name": "Retey",
+     "level": "PS"
+    },
+    {
+     "name": "Samtenling",
+     "level": "PS"
+    },
+    {
+     "name": "Sershong",
+     "level": "PS"
+    },
+    {
+     "name": "Singye",
+     "level": "PS"
+    },
+    {
+     "name": "Tareyhang",
+     "level": "PS"
+    },
+    {
+     "name": "Chokhoring",
+     "level": "MSS"
+    },
+    {
+     "name": "Dekiling",
+     "level": "MSS"
+    },
+    {
+     "name": "Jangchubling",
+     "level": "MSS"
+    },
+    {
+     "name": "Jigmechoing",
+     "level": "MSS"
+    },
+    {
+     "name": "Sarpang",
+     "level": "MSS"
+    },
+    {
+     "name": "Umling",
+     "level": "MSS"
+    },
+    {
+     "name": "Losel Gyatsho Academy",
+     "level": "HSS"
+    },
+    {
+     "name": "Norbuling",
+     "level": "HSS"
+    },
+    {
+     "name": "Pelirthang",
+     "level": "HSS"
+    },
+    {
+     "name": "Sarpang",
+     "level": "HSS"
+    },
+    {
+     "name": "Chuzagang",
+     "level": "PS"
+    },
+    {
+     "name": "Kuendrup",
+     "level": "PS",
+     "thromde": "Gelephu Thromde"
+    },
+    {
+     "name": "Gelekphu",
+     "level": "LSS",
+     "thromde": "Gelephu Thromde"
+    },
+    {
+     "name": "Gekpehu",
+     "level": "MSS",
+     "thromde": "Gelephu Thromde"
+    },
+    {
+     "name": "Gekpehu",
+     "level": "HSS",
+     "thromde": "Gelephu Thromde"
+    }
+   ]
+  },
+  "samdrup-jongkhar": {
+   "total": 29,
+   "byLevel": {
+    "ECR": 3,
+    "PS": 16,
+    "LSS": 1,
+    "MSS": 8,
+    "HSS": 1,
+    "other": 0
+   },
+   "thromde": [
+    {
+     "name": "Samdrup Jongkhar Thromde",
+     "total": 3
+    }
+   ],
+   "schools": [
+    {
+     "name": "Dungklaring",
+     "level": "ECR"
+    },
+    {
+     "name": "Khameryhang",
+     "level": "ECR"
+    },
+    {
+     "name": "Samrang",
+     "level": "ECR"
+    },
+    {
+     "name": "Barzon",
+     "level": "PS"
+    },
+    {
+     "name": "Dungmanna",
+     "level": "PS"
+    },
+    {
+     "name": "Jangsa",
+     "level": "PS"
+    },
+    {
+     "name": "Khoyer",
+     "level": "PS"
+    },
+    {
+     "name": "Lauri",
+     "level": "PS"
+    },
+    {
+     "name": "Martshala",
+     "level": "PS"
+    },
+    {
+     "name": "Monmola",
+     "level": "PS"
+    },
+    {
+     "name": "Orong",
+     "level": "PS"
+    },
+    {
+     "name": "Rikhey",
+     "level": "PS"
+    },
+    {
+     "name": "Sarjung",
+     "level": "PS"
+    },
+    {
+     "name": "Wangshu",
+     "level": "PS"
+    },
+    {
+     "name": "Wooling",
+     "level": "PS"
+    },
+    {
+     "name": "Yarphu",
+     "level": "PS"
+    },
+    {
+     "name": "Zanghi",
+     "level": "PS"
+    },
+    {
+     "name": "Pemathang",
+     "level": "LSS"
+    },
+    {
+     "name": "Garpawoong",
+     "level": "MSS"
+    },
+    {
+     "name": "Jomotangkha",
+     "level": "MSS"
+    },
+    {
+     "name": "Martshala",
+     "level": "MSS"
+    },
+    {
+     "name": "Phuntshothang",
+     "level": "MSS"
+    },
+    {
+     "name": "Gondar",
+     "level": "MSS"
+    },
+    {
+     "name": "Karmaling",
+     "level": "HSS"
+    },
+    {
+     "name": "Minjiwoong",
+     "level": "MSS"
+    },
+    {
+     "name": "Orong",
+     "level": "MSS"
+    },
+    {
+     "name": "Decothang",
+     "level": "PS",
+     "thromde": "Samdrup Jongkhar Thromde"
+    },
+    {
+     "name": "Samdrup Jongkhar",
+     "level": "PS",
+     "thromde": "Samdrup Jongkhar Thromde"
+    },
+    {
+     "name": "Samdrup Jongkhar",
+     "level": "MSS",
+     "thromde": "Samdrup Jongkhar Thromde"
+    }
+   ]
+  }
+ }
+}
