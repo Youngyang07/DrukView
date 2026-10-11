@@ -14,7 +14,11 @@
   Rows added by hand live in a separate file marked synthetic so they can never read as real data.
 - **An empty state must distinguish "nothing to report" from "we could not read it."** Saying the first when
   the second is true is a false claim about the subject, and the all-or-nothing loader does not protect
-  against it. Read the source's own health and say which.
+  against it. There is one helper for this — `<EmptyOr>` in `components/ui` — which takes the health of every
+  source behind the section and otherwise names the gap; a module fed by two collectors cannot claim an
+  absence until both have run. A new module that can render empty uses it rather than writing its own wording.
+  A filtered list is a third case: "no match for these filters" says nothing about the data and must not
+  borrow either message.
 - `validate…()` returns a list of problems, never a boolean — the problems are shown to the reader verbatim.
 - No dependency for parsing HTML/XML/CSV. Smaller dependency surface beats prettier code on a site that
   publishes government data.

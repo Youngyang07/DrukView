@@ -12,12 +12,14 @@ export const getDzongkhags = () => query<Dz>('select id,slug,name,lat,lon,grid_c
 export const getDzBySlug = async (slug: string) => (await query<Dz>('select id,slug,name,lat,lon,grid_col,grid_row from dzongkhags where slug=$1', [slug]))[0] ?? null;
 
 export const getSources = () => query<Source>(`select id,name,url,kind,status,last_attempt::text,last_success::text,records,error,notes from sources order by id`);
-/** One source's health, so a page can tell "nothing to show" apart from "we could not read it". */
-export type SourceHealth = { status: string; last_success: string | null; error: string | null };
-export const sourceHealth = async (id: string): Promise<SourceHealth | null> => {
-  const [r] = await query<SourceHealth>('select status, last_success::text, error from sources where id=$1', [id]);
-  return r ?? null;
-};
+/**
+ * Source health, so a page can tell "there is nothing to show" apart from "we could not read it". Those are
+ * different claims, and only the first is about Bhutan — see `<EmptyOr>` in components/ui.
+ */
+export type SourceHealth = { id: string; status: string; last_success: string | null; error: string | null };
+/** Health of the sources behind a section; a module fed by two collectors needs both before it can claim a gap. */
+export const healthOf = (ids: readonly string[]) =>
+  query<SourceHealth>('select id, status, last_success::text, error from sources where id = any($1)', [[...ids]]);
 export const getUpdateLog = (limit = 40) => query<{ at: string; job: string; status: string; records: number; message: string | null }>('select at::text,job,status,records,message from update_log order by id desc limit $1', [limit]);
 
 /** Latest successful refresh time per data domain (used for the per-module "last refreshed" stamp). */
