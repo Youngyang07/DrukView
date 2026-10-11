@@ -4,6 +4,7 @@ import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
 import { Health, Leaders, MofBudget, Population, Schools } from './RefViews';
+import { budget, health, population, schools } from '@/lib/reference';
 
 type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: q.Filters };
 const scopeName = (s: q.Dz | null) => (s ? `${s.name} Dzongkhag` : 'Bhutan');
@@ -14,10 +15,22 @@ function Cite({ what }: { what: string }) {
 
 async function Overview({ scope, locale }: Props) {
   const [st, funders, top, fr] = await Promise.all([q.projectStats(scope?.id ?? null), q.byFunder(scope?.id ?? null), q.listProjects(scope?.id ?? null, {}, 5), q.freshness()]);
+  const b = scope ? budget.dzongkhags[scope.slug] : null;
+  const hs = scope ? health.dzongkhags[scope.slug] : null;
+  const sc = scope ? schools.dzongkhags[scope.slug] : null;
+  const pop = scope ? population.dzongkhags[scope.slug]?.total : population.national.total;
   return (<>
     <div className="kpis">
+      <Stat label={`Budget FY ${budget.fiscalYear}`} value={money(b ? b.total : budget.national.totalAppropriation, 'BTN')}
+        sub={b ? 'dzongkhag administration' : 'total national appropriation'} />
       <Stat label="Projects" value={num(st.total)} sub={`${num(st.active)} active · ${num(st.completed)} completed`} />
       <Stat label="Partner commitments" value={st.total ? money(st.usd, 'USD') : 'n/a'} sub="US$, development partners" />
+      <Stat label="People" value={pop ? num(pop) : 'n/a'} sub="2017 census" />
+    </div>
+    <div className="kpis">
+      <Stat label="Hospitals" value={num(hs ? hs.totals.hospitals : health.grandTotal.hospitals)} sub={`${num(hs ? hs.totals.beds : health.grandTotal.beds)} official beds`} />
+      <Stat label="Health centres" value={num(hs ? hs.totals.phc : health.grandTotal.phc)} sub={`${num(hs ? hs.totals.subpost : health.grandTotal.subpost)} sub-posts`} />
+      <Stat label="Schools" value={num(sc ? sc.total : schools.national.total)} sub={`${num(sc ? sc.byLevel.PS : schools.national.PS)} primary`} />
       <Stat label="Funders" value={num(st.funders)} sub="in this view" />
     </div>
     <div className="card"><div className="card-h"><h2>Largest projects</h2><Fresh at={fr.projects} /></div>
