@@ -127,8 +127,12 @@ async function Tenders({ scope }: Props) {
     q.freshness().catch(() => ({ tenders: null })),
     q.sourceHealth(EGP.id).catch(() => null),
   ]);
+  // getTenders fetches one row past the cap so a cut-off list can be named as one instead of passing for
+  // the whole register.
+  const truncated = t.length > q.TENDER_LIMIT;
+  const rows = truncated ? t.slice(0, q.TENDER_LIMIT) : t;
   const today = new Date().toISOString().slice(0, 10);
-  const open = t.filter(x => !x.closing_on || x.closing_on >= today).length;
+  const open = rows.filter(x => !x.closing_on || x.closing_on >= today).length;
   // Never say "there are no tenders" when what we mean is "we could not read them". An empty table means
   // something different depending on whether the collector has ever succeeded.
   const collected = Boolean(health?.last_success);
@@ -136,10 +140,12 @@ async function Tenders({ scope }: Props) {
   return (<div className="card"><div className="card-h"><h2>Tenders — {scopeName(scope)}</h2><Fresh at={fr.tenders} label="e-GP" /></div>
     <p className="note">Tenders currently out to bid, from the live register of <Ext href={EGP.url}>e-GP</Ext>, the Royal Government of Bhutan&apos;s Electronic Government Procurement system
       (Procurement Management and Development Division, Ministry of Finance), refreshed daily, plus any notices added as cited CSV rows.
-      {t.length ? <> {num(open)} of {num(t.length)} shown here {open === 1 ? 'is' : 'are'} still open.</> : null}</p>
-    {t.length ? <>
+      {rows.length ? <> {num(open)} of {num(rows.length)} shown here {open === 1 ? 'is' : 'are'} still open.</> : null}</p>
+    {truncated ? <p className="note"><b>This list is cut off.</b> More than {num(q.TENDER_LIMIT)} notices match, and only the first {num(q.TENDER_LIMIT)} are shown — soonest to close first.
+      Search the <Ext href={EGP.url}>e-GP register</Ext> for the rest.</p> : null}
+    {rows.length ? <>
       <div className="scroll"><table><thead><tr><th>Notice</th><th>Procuring agency</th><th>Where</th><th>Category</th><th>Value</th><th>Published</th><th>Closes</th></tr></thead><tbody>
-        {t.map(x => <tr key={x.id}>
+        {rows.map(x => <tr key={x.id}>
           <td><Ext href={x.url}>{x.title}</Ext><br /><small>{x.tender_id ? `e-GP tender ${x.tender_id}` : x.source_name}{x.reference ? ` · ${x.reference}` : ''}{x.amendments > 0 ? ` · ${x.amendments} amendment${x.amendments === 1 ? '' : 's'} issued` : ''}{x.status ? ` · ${x.status}` : ''}</small></td>
           <td>{x.agency ?? '–'}</td>
           <td>{x.dzongkhag ?? 'National'}</td>

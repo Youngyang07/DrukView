@@ -23,6 +23,25 @@ d('database layer', () => {
   });
   afterAll(async () => { await db.pool().end(); });
 
+  test('tender list is capped, and a cut-off list is detectable rather than silent', async () => {
+    await db.query(`insert into sources(id,name,kind) values ('egp','e-GP','scrape') on conflict (id) do nothing`);
+    const n = q.TENDER_LIMIT + 5;
+    for (let i = 0; i < n; i++) {
+      await db.query(`insert into tenders(id,source,tender_id,title,url,source_name,published_on,closing_on)
+        values ($1,'egp',$2,$3,$4,'e-GP', current_date - 1, current_date + ($5)::int)`,
+        [`egp-t${i}`, String(i), `Notice ${i}`, `https://www.egp.gov.bt/resources/common/ViewNotice.jsp?id=${i}&h=t`, i]);
+    }
+    const rows = await q.getTenders(null);
+    // one past the cap, so a caller can tell "cut off" from "that is all of them"
+    expect(rows).toHaveLength(q.TENDER_LIMIT + 1);
+    expect(rows.length > q.TENDER_LIMIT).toBe(true);
+    // and the cap is above e-GP's live register (203 notices on 2026-10-11), which the old 200 was not
+    expect(q.TENDER_LIMIT).toBeGreaterThan(203);
+    // soonest to close comes first
+    expect(rows[0].closing_on! < rows[1].closing_on!).toBe(true);
+    await db.query(`delete from tenders where source='egp'`);
+  });
+
   test('seed: 20 dzongkhags with slugs', async () => {
     const dz = await q.getDzongkhags(); expect(dz).toHaveLength(20); expect((await q.getDzBySlug('thimphu'))?.id).toBe('BT-15'); expect(await q.getDzBySlug('narnia')).toBeNull();
   });
