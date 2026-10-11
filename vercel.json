@@ -1,7 +1,20 @@
 {
   "crons": [
-    { "path": "/api/cron/worldbank",  "schedule": "17 2 * * *" },
-    { "path": "/api/cron/adb",        "schedule": "27 2 * * *" },
-    { "path": "/api/cron/weather",    "schedule": "37 3 * * *" }
+    {
+      "path": "/api/cron/worldbank",
+      "schedule": "17 2 * * *"
+    },
+    {
+      "path": "/api/cron/adb",
+      "schedule": "27 2 * * *"
+    },
+    {
+      "path": "/api/cron/weather",
+      "schedule": "37 3 * * *"
+    },
+    {
+      "path": "/api/cron/leaders",
+      "schedule": "47 3 * * *"
+    }
   ]
 }

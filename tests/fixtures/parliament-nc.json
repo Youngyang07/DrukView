@@ -1,0 +1,272 @@
+{
+ "data": [
+  {
+   "id": 107,
+   "documentId": "ncold",
+   "name": "Dasho Tashi Dorji",
+   "dzongkhag": "Wangdue Phodrang",
+   "designation": "member",
+   "parliament": "parliament-2",
+   "start": "2013",
+   "end": "2018"
+  },
+  {
+   "id": 700,
+   "documentId": "ncfix0000",
+   "name": "H.E Sangay Dorji",
+   "dzongkhag": "Chhukha",
+   "designation": "chairperson",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 701,
+   "documentId": "ncfix0001",
+   "name": "Hon. Dago Tshering La",
+   "dzongkhag": "Haa",
+   "designation": "deputy-chairperson",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 702,
+   "documentId": "ncfix0002",
+   "name": "Hon. Dr. Jamyang Namgyal",
+   "dzongkhag": "Pema Gatshel",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 703,
+   "documentId": "ncfix0003",
+   "name": "Hon. Kelzang Lhundup",
+   "dzongkhag": "Lhuentse",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 704,
+   "documentId": "ncfix0004",
+   "name": "Hon. Kencho Tshering",
+   "dzongkhag": "Bumthang",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 705,
+   "documentId": "ncfix0005",
+   "name": "Hon. Leki Tshering",
+   "dzongkhag": "Thimphu",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 706,
+   "documentId": "ncfix0006",
+   "name": "Hon. Namgay Dorji",
+   "dzongkhag": "Punakha",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 707,
+   "documentId": "ncfix0007",
+   "name": "Hon. Nima Wangdi",
+   "dzongkhag": "Tsirang",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 708,
+   "documentId": "ncfix0008",
+   "name": "Hon. Pema Tashi",
+   "dzongkhag": "Sarpang",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 709,
+   "documentId": "ncfix0009",
+   "name": "Hon. Sonam Tobgyal",
+   "dzongkhag": "Trashigang",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 710,
+   "documentId": "ncfix0010",
+   "name": "Hon. Tashi Dendup",
+   "dzongkhag": "Samtse",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 711,
+   "documentId": "ncfix0011",
+   "name": "Hon. Tshering",
+   "dzongkhag": "Gasa",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 712,
+   "documentId": "ncfix0012",
+   "name": "Hon. Tshering Tshomo",
+   "dzongkhag": "Zhemgang",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 713,
+   "documentId": "ncfix0013",
+   "name": "Hon. Tshewang Rinchen",
+   "dzongkhag": "Samdrup Jongkhar",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 714,
+   "documentId": "ncfix0014",
+   "name": "Hon. Ugyen Tshering",
+   "dzongkhag": "Paro",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 715,
+   "documentId": "ncfix0015",
+   "name": "Hon. Birendra Chimoria",
+   "dzongkhag": "Dagana",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 716,
+   "documentId": "ncfix0016",
+   "name": "Hon. Phub Dorji",
+   "dzongkhag": "Wangdue Phodrang",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 717,
+   "documentId": "ncfix0017",
+   "name": "Hon. Rinzin Namgyal",
+   "dzongkhag": "Trongsa",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 718,
+   "documentId": "ncfix0018",
+   "name": "Hon. Sonam Tenzin",
+   "dzongkhag": "Tashi Yangtse",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 719,
+   "documentId": "ncfix0019",
+   "name": "Hon. Tshering Wangchen",
+   "dzongkhag": "Mongar",
+   "designation": "member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 720,
+   "documentId": "ncfix0020",
+   "name": "Dasho Tashi Wangyal",
+   "dzongkhag": null,
+   "designation": "eminent-member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 721,
+   "documentId": "ncfix0021",
+   "name": "Hon. Kezang Chuki Dorjee",
+   "dzongkhag": null,
+   "designation": "eminent-member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 722,
+   "documentId": "ncfix0022",
+   "name": "Hon. Phuntsho Rapten",
+   "dzongkhag": null,
+   "designation": "eminent-member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 723,
+   "documentId": "ncfix0023",
+   "name": "Hon. Tashi Chhozom",
+   "dzongkhag": null,
+   "designation": "eminent-member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  },
+  {
+   "id": 724,
+   "documentId": "ncfix0024",
+   "name": "Hon. Ugyen Tshering",
+   "dzongkhag": null,
+   "designation": "eminent-member",
+   "parliament": "parliament-4",
+   "start": "2023",
+   "end": "2028"
+  }
+ ],
+ "meta": {
+  "pagination": {
+   "page": 1,
+   "pageSize": 100,
+   "pageCount": 1,
+   "total": 26
+  }
+ }
+}

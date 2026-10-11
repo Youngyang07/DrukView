@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { issueUrl } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
-import { budget, CONFIDENCE_LABEL, dzongdags, DZONGKHAGS, economy, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type RefSource, type SchoolLevel } from '@/lib/reference';
+import { budget, CONFIDENCE_LABEL, dzongdags, DZONGKHAGS, economy, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type Member, type RefSource, type SchoolLevel } from '@/lib/reference';
 import FacilityList, { type FacilityRow } from './FacilityList';
-import { Bars, Ext, Stat } from './ui';
+import { Bars, Ext, Fresh, Stat } from './ui';
 
 type Props = { scope: DzRef | null; locale: string };
 const TYPES: FacilityType[] = ['hospital', 'phc', 'subpost', 'hisc'];
@@ -146,13 +146,50 @@ function MemberList({ items }: { items: { name: string; role: string; constituen
   return <ul className="plist">{items.map((m, i) => <li key={i}><div className="t">{m.name}</div><div className="m">{[m.role, m.constituency && `${m.constituency} constituency`, m.dz].filter(Boolean).join(' · ')}</div></li>)}</ul>;
 }
 
-export function Leaders({ scope, locale }: Props) {
-  const L = leaders; const dzName = (s: string) => DZONGKHAGS.find(d => d.slug === s)?.name ?? s;
-  const src = <div className="srcbox"><p><b>Sources:</b> <Ext href={L.sources.na.url}>{L.sources.na.publisher} — {L.sources.na.title}</Ext>; <Ext href={L.sources.nc.url}>{L.sources.nc.publisher} — {L.sources.nc.title}</Ext>. Read from Parliament’s public member records on {L.sources.na.checked}.</p>
+export type LiveLeaders = { rows: { house: string; name: string; role: string; constituency: string | null; slug: string | null; eminent: boolean; parliament: string }[]; fetchedAt: string | null };
+export type LiveFlag = { slug: string; dzongkhag: string; title: string; url: string | null; published: string | null; source_name: string };
+
+/** Live Parliament rows, in the same shape the bundled file uses, so one renderer serves both. */
+function shapeLive(live: LiveLeaders) {
+  const dz: Record<string, { nationalAssembly: Member[]; nationalCouncil: Member[] }> = {};
+  for (const d of DZONGKHAGS) dz[d.slug] = { nationalAssembly: [], nationalCouncil: [] };
+  const eminent: Member[] = []; const cabinet: (Member & { dzongkhag: string })[] = [];
+  for (const r of live.rows) {
+    const m: Member = { name: r.name, role: r.role, constituency: r.constituency };
+    if (r.eminent || !r.slug) { if (r.house === 'nc') eminent.push(m); continue; }
+    if (r.house === 'na') {
+      dz[r.slug]?.nationalAssembly.push(m);
+      if (r.role === 'Prime Minister' || r.role === 'Minister') cabinet.push({ ...m, dzongkhag: r.slug });
+    } else dz[r.slug]?.nationalCouncil.push(m);
+  }
+  return { dzongkhags: dz, nationalCouncilEminent: eminent, cabinet };
+}
+
+/** "parliament-4" → "4th Parliament" */
+export function parliamentLabel(code: string | undefined) {
+  const n = Number(String(code ?? '').match(/\d+/)?.[0]);
+  if (!Number.isFinite(n)) return 'Parliament of Bhutan';
+  const suffix = n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th';
+  return `${n}${suffix} Parliament`;
+}
+
+export function Leaders({ scope, locale, live, flags = [] }: Props & { live?: LiveLeaders | null; flags?: LiveFlag[] }) {
+  const base = leaders;
+  const shaped = live && live.rows.length ? shapeLive(live) : null;
+  const L = shaped ? { ...base, ...shaped } : base;
+  const term = shaped ? parliamentLabel(live!.rows[0]?.parliament) : '4th Parliament, 2023–2028';
+  const freshness = shaped
+    ? <>Refreshed automatically from Parliament&rsquo;s member records <Fresh at={live!.fetchedAt} label="" /></>
+    : <>Read from Parliament&rsquo;s member records on {base.sources.na.checked}; the automatic daily refresh has not run here yet</>; const dzName = (s: string) => DZONGKHAGS.find(d => d.slug === s)?.name ?? s;
+  const src = <div className="srcbox"><p><b>Sources:</b> <Ext href={L.sources.na.url}>{L.sources.na.publisher} — {L.sources.na.title}</Ext>; <Ext href={L.sources.nc.url}>{L.sources.nc.publisher} — {L.sources.nc.title}</Ext>. {freshness}.</p>
     <ul>{L.notes.map(n => <li key={n}>{n}</li>)}</ul>
     <p>Out of date or wrong? <a href={issueUrl(`Leaders: correction${scope ? ' – ' + scope.name : ''}`, 'What changed:\nOfficial source (link):')} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p></div>;
+  const news = flags.length ? (<section><h3>Recent news that may affect these entries</h3>
+    <p className="note">Headlines from Kuensel and The Bhutanese that look like a change of office-holder. They are prompts to re-check an entry against the official source — no name on DrukView is ever taken from a newspaper.</p>
+    <ul className="plist">{flags.slice(0, 12).map((f, i) => <li key={i}><div className="t">{f.url ? <Ext href={f.url}>{f.title}</Ext> : f.title}</div>
+      <div className="m">{f.dzongkhag} · {f.source_name}{f.published ? ` · ${f.published.slice(0, 10)}` : ''}</div></li>)}</ul></section>) : null;
   if (!scope) {
-    return (<div className="card"><div className="card-h"><h2>Elected leaders — Bhutan</h2><span className="fresh">4th Parliament, 2023–2028</span></div>
+    return (<div className="card"><div className="card-h"><h2>Elected leaders — Bhutan</h2><span className="fresh">{term}</span></div>
       <div className="kpis">
         <Stat label="National Assembly" value="47" sub="members, one per constituency" />
         <Stat label="National Council" value="25" sub="20 elected (one per dzongkhag) + 5 eminent" />
@@ -167,12 +204,14 @@ export function Leaders({ scope, locale }: Props) {
           <td>{x.nationalCouncil.map(m => m.name + (m.role !== 'Member' ? ` (${m.role})` : '')).join(', ')}</td></tr>; })}</tbody></table></div>
       <h3>Eminent members of the National Council</h3>
       <MemberList items={L.nationalCouncilEminent} />
+      {news}
       {src}</div>);
   }
   const x = L.dzongkhags[scope.slug];
-  return (<div className="card"><div className="card-h"><h2>Elected leaders — {scope.name}</h2><span className="fresh">4th Parliament, 2023–2028</span></div>
+  return (<div className="card"><div className="card-h"><h2>Elected leaders — {scope.name}</h2><span className="fresh">{term}</span></div>
     <h3>National Assembly ({x.nationalAssembly.length})</h3><MemberList items={x.nationalAssembly} />
     <h3>National Council</h3><MemberList items={x.nationalCouncil} />
+    {news}
     {src}</div>);
 }
 
