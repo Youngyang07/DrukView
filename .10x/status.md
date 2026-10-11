@@ -22,11 +22,16 @@ Rewritten against the request captured live through a Vercel Sandbox: 203 notice
 The Tenders page's empty state, which had been explaining our own failure as "e-GP lists only live tenders",
 now distinguishes a failed read from a genuinely empty register. Written up in docs/adr/0002 (Correction).
 
+**Empty-state audit done (2026-10-11):** every module that can render empty now distinguishes "there is none"
+from "we could not read it", through one shared `<EmptyOr>` rather than per-module wording. Projects, Funders,
+Overview and Weather were all making the Tenders page's mistake in milder form; the Projects list also showed
+a blank box when filters matched nothing, and the Weather copy promised a refresh "every 6 hours" when the
+cron is daily. Pinned by tests/empty-states.test.ts.
+
 **Open, with owners' decisions recorded**
 1. Nothing alerts when a source has been stale for days (devops/publish-readiness — needs a destination).
 2. Read e-GP's Notification-of-Contract-Award list (ADR-0002, action 5).
 3. A "source last changed" signal, so stale can distinguish "we failed" from "nothing new" (ADR-0001).
 4. `CRON_SECRET` must be rotated before/at publish — the historical value is exposed.
-5. Audit the other modules' empty states for the same false-explanation problem the Tenders page had.
-6. 31 of 205 gewog names unmatched to map boundaries; Dzongkha translation; e-GP archive — all in README
+5. 31 of 205 gewog names unmatched to map boundaries; Dzongkha translation; e-GP archive — all in README
    "Known gaps".

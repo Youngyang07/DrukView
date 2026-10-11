@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { ago, safeUrl, STATUS_LABEL } from '@/lib/format';
 import { dbStatus } from '@/server/db';
@@ -9,6 +10,26 @@ export function Ext({ href, children }: { href: string | null | undefined; child
 }
 export const Badge = ({ status }: { status: string }) => <span className={`badge b-${status}`}>{STATUS_LABEL[status] ?? status}</span>;
 export const Empty = ({ children }: { children: ReactNode }) => <div className="empty">{children}</div>;
+
+/**
+ * An empty section has to say which kind of empty it is. "There is none here" is a statement about Bhutan;
+ * "we could not read the source" is a statement about DrukView, and passing the second off as the first is
+ * the worst thing a transparency site can do with a blank space — it did happen once, on the Tenders page
+ * (docs/adr/0002). So: if every source behind this section has refreshed successfully, show the caller's
+ * own copy for a genuine absence. Otherwise say so, name the source, and point at the Data sources page.
+ */
+export function EmptyOr({ health, ids, what, children }: { health: { id: string; status: string; last_success: string | null }[]; ids: readonly string[]; what: string; children: ReactNode }) {
+  const never = ids.filter(id => !health.find(h => h.id === id)?.last_success);
+  const broken = health.filter(h => h.last_success && (h.status === 'error' || h.status === 'stale')).map(h => h.id);
+  if (!never.length && !broken.length) return <Empty>{children}</Empty>;
+  const problem = never.length
+    ? `${what} ${never.length === ids.length ? 'has not been collected yet' : 'has not been fully collected yet'}`
+    : `the last refresh of ${what} failed`;
+  return (<Empty>
+    <b>This is a gap in DrukView, not a statement about Bhutan.</b> Nothing can be shown here because {problem},
+    so there may well be data that is simply missing from this page. See <Link href="/en/data-sources">Data sources</Link> for the status of every source.
+  </Empty>);
+}
 export const Stat = ({ label, value, sub }: { label: string; value: ReactNode; sub?: ReactNode }) => (
   <div className="kpi"><small>{label}</small><b>{value}</b>{sub ? <span>{sub}</span> : null}</div>
 );
