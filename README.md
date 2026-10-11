@@ -1,11 +1,10 @@
 # DrukView — Every Ngultrum Accounted For
 
-**Your dzongkhag. Your data. Your right.** An open-source civic-transparency platform for Bhutan: where public money goes — development projects, budgets and allocations by dzongkhag (and gewog/village where documents go that deep) — with the **funding source and a link to the original document on every figure**.
+**Your dzongkhag. Your data. Your right.** An open-source civic-transparency platform for Bhutan: where public money goes-development projects, budgets and allocations by dzongkhag (and gewog/village, where documents go that deep)-with the **funding source and a link to the original document on every figure**.
 
-Modelled on the district-dashboard approach of [ForThePeople.in](https://github.com/jayanthmb14/forthepeople) (MIT), reimplemented for Bhutan.
 
 ## What you get
-- **Home:** dzongkhag search + an interactive map of Bhutan (real boundaries, bundled with the app so it always renders): zoom (+ / −, Ctrl + scroll, pinch), drag when zoomed, hover names. Click a dzongkhag → it zooms in, shows its **205-gewog drill-down** (click a gewog to filter its budget lines) and opens the budget explorer (fiscal-year selector, clickable funding-source / sector / gewog bars, expandable projects).
+- **Home:** dzongkhag search + an interactive map of Bhutan (real boundaries, bundled with the app so it always renders): zoom (+ / −, Ctrl + scroll, pinch), drag when zoomed, hover names. Click a dzongkhag → it zooms in, shows its **205-gewog drill-down** (click a gewog to filter its budget lines) and opens the budget explorer (fiscal-year selector, clickable funding-source / sector/gewog bars, expandable projects).
 - **Per-dzongkhag dashboard** (`/en/thimphu`) with a module sidebar, and a **national** one (`/en/bhutan`): Overview · Budget & allocations · Projects · Funding sources · Weather & rainfall · Tenders · Leadership & offices.
 - **Compare** dzongkhags, **Data sources** (live status per source), **Update log**, CSV export, "Report a problem" links, a "last refreshed" stamp on every module.
 
