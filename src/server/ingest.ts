@@ -11,6 +11,7 @@ import { fetchAdb, SOURCE as ADB } from '../../pipeline/adb.mjs';
 import { fetchWeather, SOURCE as WX } from '../../pipeline/weather.mjs';
 import { fetchLeaders, validateLeaders, SOURCE as PARL } from '../../pipeline/leaders.mjs';
 import { fetchNewsFlags, FEEDS, SOURCE as NEWS } from '../../pipeline/news.mjs';
+import { fetchEgpTenders, validateTenders, SOURCE as EGP } from '../../pipeline/egp.mjs';
 import { validateProjects } from '../../pipeline/validate.mjs';
 import { parseCsv, buildBudget, buildAllocations, buildTenders, buildOffices } from '../../pipeline/ingest-manual.mjs';
 
@@ -20,7 +21,7 @@ export const MANUAL: SourceDef = {
   url: 'https://www.mof.gov.bt/publications/', kind: 'manual',
   notes: 'National budget reports, tender notices and office directories are published as PDFs/web pages without an API. Rows are transcribed into data/manual/*.csv and every row must cite its public document.',
 };
-export const JOBS = ['worldbank', 'adb', 'weather', 'leaders', 'manual'] as const;
+export const JOBS = ['worldbank', 'adb', 'weather', 'leaders', 'tenders', 'manual'] as const;
 export type JobName = (typeof JOBS)[number];
 
 type Dz = { id: string; slug: string; name: string; aliases: string[]; lat: number; lon: number };
@@ -75,13 +76,13 @@ export async function saveManual(files: ManualFiles, matcher: any) {
     ...t.errs.map((e: string) => `tenders.csv ${e}`), ...o.errs.map((e: string) => `offices.csv ${e}`)];
   if (errs.length) throw new Error('Manual data rejected:\n  ' + errs.join('\n  ')); // all-or-nothing: bad files never half-load
   await withTx(async c => {
-    await c.query('delete from budget_lines'); await c.query('delete from allocations'); await c.query('delete from tenders'); await c.query('delete from offices');
+    await c.query('delete from budget_lines'); await c.query('delete from allocations'); await c.query('delete from tenders where source=$1', [MANUAL.id]); await c.query('delete from offices');
     for (const r of b.out) await c.query('insert into budget_lines(fiscal_year,agency,budget_type,amount,currency,funding_source,source_name,source_url,document,page,retrieved_on) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
       [r.fiscal_year, r.agency, r.budget_type, r.amount, r.currency, r.funding_source, r.source_name, r.source_url, r.document, r.page, r.retrieved_on]);
     for (const r of a.out) await c.query('insert into allocations(fiscal_year,dzongkhag_id,gewog,village,sector,funding_source,amount,currency,source_name,source_url,document,page,retrieved_on) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
       [r.fiscal_year, r.dzongkhag, r.gewog, r.village, r.sector, r.funding_source, r.amount, r.currency, r.source_name, r.source_url, r.document, r.page, r.retrieved_on]);
-    for (const r of t.out) await c.query('insert into tenders(id,dzongkhag_id,title,agency,category,value,currency,published_on,closing_on,status,url,source_name,retrieved_on) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) on conflict (id) do nothing',
-      [r.id, r.dzongkhag, r.title, r.agency, r.category, r.value, r.currency, r.published_on, r.closing_on, r.status, r.url, r.source_name, r.retrieved_on]);
+    for (const r of t.out) await c.query('insert into tenders(id,source,dzongkhag_id,title,agency,category,value,currency,published_on,closing_on,status,url,source_name,retrieved_on) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) on conflict (id) do nothing',
+      [r.id, MANUAL.id, r.dzongkhag, r.title, r.agency, r.category, r.value, r.currency, r.published_on, r.closing_on, r.status, r.url, r.source_name, r.retrieved_on]);
     for (const r of o.out) await c.query('insert into offices(dzongkhag_id,kind,name,role,contact,source_name,source_url,retrieved_on) values ($1,$2,$3,$4,$5,$6,$7,$8)',
       [r.dzongkhag, r.kind, r.name, r.role, r.contact, r.source_name, r.source_url, r.retrieved_on]);
   });
@@ -123,6 +124,28 @@ export async function saveLeaders(dz: Dz[]): Promise<number> {
   return rows.length;
 }
 
+/**
+ * Replace the e-GP tender notices. The portal publishes no API, so a run that cannot read its tender table
+ * is a failure, not an empty list: the previous notices stay published and the source is marked stale.
+ * Only e-GP's own rows are touched, so curated CSV notices are left alone.
+ */
+export async function saveEgpTenders(matcher: any): Promise<number> {
+  const { rows } = await fetchEgpTenders(matcher);
+  const errs = validateTenders(rows);
+  if (errs.length) throw new Error(`e-GP tender list rejected (${errs.length} problems), previous notices kept. First: ${errs[0]}`);
+  await withTx(async c => {
+    await c.query('delete from tenders where source=$1', [EGP.id]);
+    for (const r of rows) {
+      await c.query(`insert into tenders(id,source,tender_id,reference,dzongkhag_id,title,agency,hierarchy,category,proc_type,method,amendments,value,currency,published_on,closing_on,status,url,source_name,retrieved_on)
+        values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+        on conflict (id) do update set tender_id=$3,reference=$4,dzongkhag_id=$5,title=$6,agency=$7,hierarchy=$8,category=$9,proc_type=$10,method=$11,amendments=$12,published_on=$15,closing_on=$16,status=$17,url=$18,source_name=$19,retrieved_on=$20`,
+        [r.id, EGP.id, r.tender_id, r.reference, r.dzongkhag, r.title, r.agency, r.hierarchy, r.category, r.type, r.method, r.amendments,
+          r.value, r.currency, r.published_on, r.closing_on, r.status, r.url, r.source_name, r.retrieved_on]);
+    }
+  });
+  return rows.length;
+}
+
 export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; records: number; message: string | null; retry_after_s?: number };
 
 /**
@@ -130,7 +153,7 @@ export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; reco
  * secret) — but at most once per interval, so they cannot be used to hammer the sources or the database.
  * A valid CRON_SECRET bypasses the interval. After a failed run a retry is allowed after 5 minutes.
  */
-export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, manual: 10 };
+export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, tenders: 180, manual: 10 };
 const RETRY_AFTER_ERROR_MIN = 5;
 
 /** Atomically claim the right to run a job now. Returns null when claimed, or the seconds to wait. */
@@ -157,7 +180,7 @@ function withDeadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
 }
 
 export async function runJob(job: JobName, { force = false }: { force?: boolean } = {}): Promise<JobResult> {
-  const def = { worldbank: WB, adb: ADB, weather: WX, leaders: PARL, manual: MANUAL }[job] as SourceDef;
+  const def = { worldbank: WB, adb: ADB, weather: WX, leaders: PARL, tenders: EGP, manual: MANUAL }[job] as SourceDef;
   const wait = await claimRun(job, def, force);
   if (wait !== null) return { job, status: 'skipped', records: 0, message: `Refreshed recently; next refresh allowed in about ${Math.ceil(wait / 60)} min.`, retry_after_s: wait };
   try {
@@ -179,5 +202,6 @@ async function fetchAndSave(job: JobName): Promise<number> {
   if (job === 'adb') return replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
   if (job === 'weather') return saveWeather(await fetchWeather(await loadDz()));
   if (job === 'leaders') return saveLeaders(await loadDz());
+  if (job === 'tenders') return saveEgpTenders(await matcherOf());
   return saveManual(await readManualFiles(), await matcherOf());
 }

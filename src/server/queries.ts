@@ -19,7 +19,7 @@ export async function freshness(): Promise<Record<string, string | null>> {
   const rows = await query<{ id: string; last_success: string | null }>('select id, last_success::text from sources');
   const m = Object.fromEntries(rows.map(r => [r.id, r.last_success]));
   const newest = (...ids: string[]) => ids.map(i => m[i]).filter(Boolean).sort().pop() ?? null;
-  return { projects: newest('worldbank', 'adb'), weather: m.weather ?? null, manual: m['rgob-manual'] ?? null };
+  return { projects: newest('worldbank', 'adb'), weather: m.weather ?? null, manual: m['rgob-manual'] ?? null, tenders: newest('egp', 'rgob-manual'), egp: m.egp ?? null };
 }
 
 const WHERE = (f: Filters, scope: string | null, params: unknown[]) => {
@@ -99,9 +99,14 @@ export const getWeatherSummary = () => query<{ id: string; name: string; slug: s
     (select tmin_c from weather_daily x where x.dzongkhag_id=d.id and not x.is_forecast order by date desc limit 1) tmin
   from dzongkhags d left join weather_daily w on w.dzongkhag_id=d.id group by d.id,d.name,d.slug order by d.name`);
 
-export type Tender = { id: string; dzongkhag: string | null; title: string; agency: string | null; category: string | null; value: number | null; currency: string | null; published_on: string | null; closing_on: string | null; status: string | null; url: string; source_name: string };
-export const getTenders = (scope: string | null) => query<Tender>(`select t.id,d.name dzongkhag,t.title,t.agency,t.category,t.value::float8,t.currency,t.published_on::text,t.closing_on::text,t.status,t.url,t.source_name
-  from tenders t left join dzongkhags d on d.id=t.dzongkhag_id ${scope ? 'where t.dzongkhag_id=$1' : ''} order by t.published_on desc nulls last limit 200`, scope ? [scope] : []);
+export type Tender = { id: string; source: string; tender_id: string | null; reference: string | null; dzongkhag: string | null; title: string; agency: string | null;
+  category: string | null; proc_type: string | null; method: string | null; amendments: number; value: number | null; currency: string | null;
+  published_on: string | null; closing_on: string | null; status: string | null; url: string; source_name: string };
+/** Open notices first (soonest closing date), then the ones that have closed. */
+export const getTenders = (scope: string | null) => query<Tender>(`select t.id,t.source,t.tender_id,t.reference,d.name dzongkhag,t.title,t.agency,t.category,t.proc_type,t.method,t.amendments,
+    t.value::float8,t.currency,t.published_on::text,t.closing_on::text,t.status,t.url,t.source_name
+  from tenders t left join dzongkhags d on d.id=t.dzongkhag_id ${scope ? 'where t.dzongkhag_id=$1' : ''}
+  order by (t.closing_on >= current_date) desc nulls last, case when t.closing_on >= current_date then t.closing_on end asc, t.published_on desc nulls last limit 200`, scope ? [scope] : []);
 
 export type Office = { kind: string; dzongkhag: string | null; name: string; role: string | null; contact: string | null; source_name: string; source_url: string; retrieved_on: string | null };
 export const getOffices = (scope: string | null) => query<Office>(`select o.kind,d.name dzongkhag,o.name,o.role,o.contact,o.source_name,o.source_url,o.retrieved_on::text

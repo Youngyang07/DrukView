@@ -1,0 +1,33 @@
+name: Bug
+description: Something on the site is broken, missing or misbehaving
+title: "Bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens, and what you expected instead
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open /en/bhutan/tenders
+        2. …
+    validations: { required: true }
+  - type: input
+    id: where
+    attributes:
+      label: Browser / device, or "deployment"
+  - type: textarea
+    id: extra
+    attributes:
+      label: Console output, error digest or screenshot
+  - type: checkboxes
+    id: notdata
+    attributes:
+      label: Before you file
+      options:
+        - label: This is not a wrong number (those go under **Data correction**)
+          required: true

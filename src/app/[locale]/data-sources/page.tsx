@@ -28,7 +28,11 @@ export default async function DataSources() {
       <li>US$ development-partner financing and Nu. government budgets are different things and are never added together.</li>
       <li>Weather is modelled for each dzongkhag’s headquarters town, not measured at a station.</li>
     </ul>
+    <h2>Tenders and the e-GP portal</h2>
+    <p>The Royal Government&apos;s <Ext href="https://www.egp.gov.bt/resources/common/TenderListing.jsp?h=t">e-GP portal</Ext> publishes no API, feed or export: its tender list is a page whose results are filled in by posting its own search form.
+      DrukView therefore reads that page the way a browser does, once a day, and shows the notices it finds. Because that page&apos;s layout is the whole agreement, the run is all-or-nothing — if the table cannot be read,
+      the previous notices stay published and the source is marked stale, so a redesign at e-GP shows up here as a stale source rather than as missing or invented notices. e-GP lists live tenders only, and prints no estimated value, so DrukView shows none.</p>
     <h2>Not yet automated</h2>
-    <p>Ministry of Finance, Home & Cultural Affairs, Agriculture & Livestock and other national budget reports are published as PDFs without an API. Tenders and office directories are likewise curated. Each such row cites its document and is validated before it can load.</p>
+    <p>Ministry of Finance, Home &amp; Cultural Affairs, Agriculture &amp; Livestock and other national budget reports are published as PDFs without an API. Office directories are likewise curated. Each such row cites its document and is validated before it can load.</p>
   </div>);
 }
