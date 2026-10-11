@@ -9,6 +9,8 @@ import { makeGeoMatcher } from '../../pipeline/lib.mjs';
 import { fetchWorldBank, SOURCE as WB } from '../../pipeline/worldbank.mjs';
 import { fetchAdb, SOURCE as ADB } from '../../pipeline/adb.mjs';
 import { fetchWeather, SOURCE as WX } from '../../pipeline/weather.mjs';
+import { fetchLeaders, validateLeaders, SOURCE as PARL } from '../../pipeline/leaders.mjs';
+import { fetchNewsFlags, FEEDS, SOURCE as NEWS } from '../../pipeline/news.mjs';
 import { validateProjects } from '../../pipeline/validate.mjs';
 import { parseCsv, buildBudget, buildAllocations, buildTenders, buildOffices } from '../../pipeline/ingest-manual.mjs';
 
@@ -18,11 +20,11 @@ export const MANUAL: SourceDef = {
   url: 'https://www.mof.gov.bt/publications/', kind: 'manual',
   notes: 'National budget reports, tender notices and office directories are published as PDFs/web pages without an API. Rows are transcribed into data/manual/*.csv and every row must cite its public document.',
 };
-export const JOBS = ['worldbank', 'adb', 'weather', 'manual'] as const;
+export const JOBS = ['worldbank', 'adb', 'weather', 'leaders', 'manual'] as const;
 export type JobName = (typeof JOBS)[number];
 
-type Dz = { id: string; name: string; aliases: string[]; lat: number; lon: number };
-const loadDz = () => query<Dz>('select id, name, aliases, lat, lon from dzongkhags order by id');
+type Dz = { id: string; slug: string; name: string; aliases: string[]; lat: number; lon: number };
+const loadDz = () => query<Dz>('select id, slug, name, aliases, lat, lon from dzongkhags order by id');
 export const matcherOf = async () => makeGeoMatcher((await loadDz()).map(d => ({ id: d.id, name: d.name, aliases: d.aliases })));
 
 async function withTx<T>(fn: (c: PoolClient) => Promise<T>): Promise<T> {
@@ -86,6 +88,41 @@ export async function saveManual(files: ManualFiles, matcher: any) {
   return b.out.length + a.out.length + t.out.length + o.out.length;
 }
 
+/**
+ * Replace the elected-member list, but only with a complete Parliament: a short or malformed response
+ * leaves the previous list untouched and marks the source stale. The news watch runs in the same job and
+ * is never allowed to fail it — its flags are a convenience, the member list is the data.
+ */
+export async function saveLeaders(dz: Dz[]): Promise<number> {
+  const { rows } = await fetchLeaders(dz);
+  const errs = validateLeaders(rows);
+  if (errs.length) throw new Error(`Parliament returned an incomplete list (${errs.length} problems), previous members kept. First: ${errs[0]}`);
+
+  let news: { flags: any[]; failed: string[] } = { flags: [], failed: [] };
+  try { news = await fetchNewsFlags(dz); } catch { /* the member list must not depend on a newspaper */ }
+
+  await withTx(async c => {
+    await c.query('delete from leaders');
+    for (const r of rows) {
+      await c.query(`insert into leaders(house,name,role,constituency,dzongkhag_id,eminent,parliament,term_start,term_end,source_name,source_url,fetched_at)
+        values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+        [r.house, r.name, r.role, r.constituency, r.dzongkhag, r.eminent, r.parliament, r.term_start, r.term_end, r.source_name, r.source_url, r.fetched_at]);
+    }
+    if (news.flags.length) {
+      await c.query(`delete from news_flags where published is null or published < now() - interval '120 days'`);
+      for (const f of news.flags) {
+        await c.query(`insert into news_flags(dzongkhag_id,title,url,published,source_name,source_url,fetched_at) values ($1,$2,$3,$4,$5,$6,$7)
+          on conflict (dzongkhag_id,title,source_name) do update set url=$3, published=$4, fetched_at=$7`,
+          [f.dzongkhag, f.title, f.url, f.published, f.source_name, f.source_url, f.fetched_at]);
+      }
+    }
+  });
+  await upsertSource(NEWS);
+  await query(`update sources set status=$2, last_attempt=now(), last_success=case when $2='ok' then now() else last_success end, records=$3, error=$4 where id=$1`,
+    [NEWS.id, news.failed.length === FEEDS.length ? 'error' : 'ok', news.flags.length, news.failed.join('; ') || null]);
+  return rows.length;
+}
+
 export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; records: number; message: string | null; retry_after_s?: number };
 
 /**
@@ -93,7 +130,7 @@ export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; reco
  * secret) — but at most once per interval, so they cannot be used to hammer the sources or the database.
  * A valid CRON_SECRET bypasses the interval. After a failed run a retry is allowed after 5 minutes.
  */
-export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, manual: 10 };
+export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, manual: 10 };
 const RETRY_AFTER_ERROR_MIN = 5;
 
 /** Atomically claim the right to run a job now. Returns null when claimed, or the seconds to wait. */
@@ -120,7 +157,7 @@ function withDeadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
 }
 
 export async function runJob(job: JobName, { force = false }: { force?: boolean } = {}): Promise<JobResult> {
-  const def = { worldbank: WB, adb: ADB, weather: WX, manual: MANUAL }[job] as SourceDef;
+  const def = { worldbank: WB, adb: ADB, weather: WX, leaders: PARL, manual: MANUAL }[job] as SourceDef;
   const wait = await claimRun(job, def, force);
   if (wait !== null) return { job, status: 'skipped', records: 0, message: `Refreshed recently; next refresh allowed in about ${Math.ceil(wait / 60)} min.`, retry_after_s: wait };
   try {
@@ -141,5 +178,6 @@ async function fetchAndSave(job: JobName): Promise<number> {
   if (job === 'worldbank') return replaceProjects('worldbank', await fetchWorldBank(await matcherOf()));
   if (job === 'adb') return replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
   if (job === 'weather') return saveWeather(await fetchWeather(await loadDz()));
+  if (job === 'leaders') return saveLeaders(await loadDz());
   return saveManual(await readManualFiles(), await matcherOf());
 }

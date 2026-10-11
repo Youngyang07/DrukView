@@ -84,7 +84,8 @@ d('database layer', () => {
     await db.query('drop schema public cascade; create schema public;');
     const { ensureSchema } = await import('../src/server/setup');
     const rs = await Promise.all([ensureSchema(), ensureSchema(), ensureSchema()]);
-    expect(rs.flatMap(r => r.applied).sort()).toEqual(['0001_init.sql', '0002_drop_runtime_boundaries.sql']); // each applied exactly once
+    const { MIGRATIONS } = await import('../db/migrations');
+    expect(rs.flatMap(r => r.applied).sort()).toEqual(MIGRATIONS.map(m => m.name).sort()); // each applied exactly once
     expect(await q.getDzongkhags()).toHaveLength(20);
     // restore the fixtures the remaining tests rely on
     await db.query(`insert into sources(id,name,kind) values ('worldbank','WB','api'),('adb','ADB','iati'),('weather','WX','api')`);

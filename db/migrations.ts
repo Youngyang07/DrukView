@@ -157,4 +157,40 @@ DELETE FROM sources WHERE id = 'boundaries';
 DROP TABLE IF EXISTS boundaries;
 `,
   },
+  {
+    name: '0003_leaders.sql',
+    // Elected members, refreshed daily from Parliament's public member records, plus dated news flags
+    // that invite a human to re-check an entry. Flags never carry a name.
+    sql: `
+CREATE TABLE leaders (
+  id            serial PRIMARY KEY,
+  house         text NOT NULL,              -- na | nc
+  name          text NOT NULL,
+  role          text NOT NULL,
+  constituency  text,                       -- National Assembly only
+  dzongkhag_id  text REFERENCES dzongkhags(id) ON DELETE CASCADE,  -- null for eminent members
+  eminent       boolean NOT NULL DEFAULT false,
+  parliament    text NOT NULL,
+  term_start    text,
+  term_end      text,
+  source_name   text NOT NULL,
+  source_url    text NOT NULL,
+  fetched_at    timestamptz NOT NULL
+);
+CREATE INDEX leaders_dz_idx ON leaders (dzongkhag_id);
+
+CREATE TABLE news_flags (
+  id            serial PRIMARY KEY,
+  dzongkhag_id  text NOT NULL REFERENCES dzongkhags(id) ON DELETE CASCADE,
+  title         text NOT NULL,
+  url           text,
+  published     timestamptz,
+  source_name   text NOT NULL,
+  source_url    text NOT NULL,
+  fetched_at    timestamptz NOT NULL,
+  UNIQUE (dzongkhag_id, title, source_name)
+);
+CREATE INDEX news_flags_dz_idx ON news_flags (dzongkhag_id, published DESC);
+`,
+  },
 ];

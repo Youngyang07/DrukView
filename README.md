@@ -17,12 +17,14 @@ Next.js 15 (App Router, TypeScript) · PostgreSQL (`pg`, plain SQL migrations) �
 |---|---|---|
 | World Bank Projects & Operations API | automated (`pipeline/worldbank.mjs`) | daily |
 | Asian Development Bank IATI file | automated (`pipeline/adb.mjs`; override with `ADB_IATI_URL`) | daily |
+| Parliament of Bhutan member records (National Assembly + National Council) | automated (`pipeline/leaders.mjs`; override with `PARLIAMENT_API`) | daily |
+| Kuensel and The Bhutanese feeds — leadership-change watch | automated (`pipeline/news.mjs`; override with `KUENSEL_FEED` / `BHUTANESE_FEED`) | daily, with the members |
 | Open-Meteo weather | automated (`pipeline/weather.mjs`) | daily (Vercel Hobby allows at most one run/day per cron; on a Pro plan change `vercel.json` to e.g. `37 */6 * * *`) |
 | **Ministry of Finance, National Budget Report FY 2026-27** — national summary, sector allocation, and the allocation of every dzongkhag, thromde and all 205 gewogs | **reference file** `data/reference/budget-2026-27.json` | yearly (new budget each May) |
 | NSB 2017 Population & Housing Census (Table 2.1) | **reference file** `data/reference/population-2017.json` | per census |
 | Ministry of Health, Annual Health Bulletin 2025 (Table 6.1) — all hospitals, PHCs, sub-posts, HISCs with beds | **reference file** `data/reference/health-facilities.json` | yearly |
 | MoESD Annual Education Statistics 2024 (Annexure IV) — all 566 schools by name and level | **reference file** `data/reference/schools-2024.json` | yearly |
-| Parliament of Bhutan member records (National Assembly + National Council, 4th Parliament) | **reference file** `data/reference/leaders.json`, read from Parliament's public API `cms.parliament.gov.bt/api/{na,nc}-members` | on change |
+| Parliament member records, as shipped | **reference file** `data/reference/leaders.json` — the fallback shown until the daily refresh above has run | on change |
 | MoICE Annual Industry Report FY 2025-26 (Annexure 3) and National Employment Report 2024-25 — industry licences and jobs filled per dzongkhag | **reference file** `data/reference/economy.json` | yearly |
 | Dzongkhag administration websites and dated appointment notices — Dzongdags and office contacts | **reference file** `data/reference/dzongdags.json`, each entry graded by how well it is confirmed | on change |
 | MoF / MoHCA / MoAL & other ministries' budgets, allocations, tenders, offices | **curated CSV** in `data/manual/` — these are PDFs/web pages with no API. Every row must cite its public document | on commit |
@@ -30,6 +32,11 @@ Next.js 15 (App Router, TypeScript) · PostgreSQL (`pg`, plain SQL migrations) �
 Reference files ship with the code and work even without a database. `tests/reference.test.ts` checks each against the publication's own totals (census sums, the Health Bulletin's per-dzongkhag totals rows, MoESD Table A, 47 NA seats with the constitutional split), so a transcription slip fails CI.
 
 Collectors run via `vercel.json` crons → `/api/cron/<job>` (rate-limited per job; a `CRON_SECRET` bearer skips the limit), and from the **Load / refresh data now** button on the Data sources page. Each job is isolated: on failure the previous good rows stay, the source is flagged **stale** on the Data sources page, and the run is written to the update log. A batch with any invalid record loads nothing.
+
+### How the leaders list stays current
+The daily `leaders` job reads Parliament's own member records and replaces the list — but only if the response is a **complete** Parliament: 47 National Assembly seats with the constitutional split per dzongkhag, and one elected National Council member per dzongkhag. Anything less is rejected, the previous list stays, and the source is marked stale, so a half-written or broken response can never leave a gap on the site. The job finds the current term itself (the highest-numbered Parliament that is fully seated), so it keeps working after the next election without a code change. Until the job has run, the bundled `data/reference/leaders.json` is shown instead.
+
+**Newspapers are a watch, never a source.** The same job reads the Kuensel and The Bhutanese feeds and flags articles that read like a change of office-holder in a named dzongkhag. A flag is a dated link inviting someone to re-check that entry against the official source — no name on DrukView is ever taken from a newspaper, because a headline such as "Dasho takes charge in Trongsa" cannot be parsed into a correct name, and a wrong name on a transparency site is worse than a late one. A feed that fails never fails the members refresh.
 
 ## Honesty rules (enforced in code and tests)
 - No sample/estimated data ships. With no data, the UI says so.
@@ -66,7 +73,7 @@ The automated sources were checked against their **real responses**, and the par
 What is still unproven is the *runtime* on your host (network egress, timeouts, database permissions): run the collectors once after deploying and read the **Data sources** page.
 
 ## Known gaps
-- Tenders: automated collection from Bhutan's e-GP portal is not built (source not yet verified); tenders and leadership/office entries are curated CSV only, so those modules start empty.
+- Tenders: automated collection from Bhutan's e-GP portal is not built (source not yet verified), so tenders are curated CSV only and that module starts empty.
 - World Bank records carry no sub-national location, so most are "national / unspecified"; ~10% are placed by place names in the text (labelled "inferred").
 - Dzongkha: the app is wired for locales (`/en/…`) but ships English only; a Dzongkha translation will be added once a native speaker can review it.
 - Population is the 2017 census (the next census is due 2027); per-person ratios that divide newer counts by 2017 population are labelled indicative.

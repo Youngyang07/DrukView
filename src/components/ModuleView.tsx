@@ -132,12 +132,18 @@ async function Tenders({ scope }: Props) {
 
 async function Offices({ scope, locale }: Props) {
   // Elected leaders ship with the code; curated office contacts come from the database when it is available.
-  const [o, fr] = await Promise.all([q.getOffices(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ manual: null }))]);
+  const [o, fr, live, flags] = await Promise.all([
+    q.getOffices(scope?.id ?? null).catch(() => []),
+    q.freshness().catch(() => ({ manual: null })),
+    q.getLeaders().catch(() => []),
+    q.getNewsFlags(scope?.id ?? null).catch(() => []),
+  ]);
+  const liveLeaders = live.length ? { rows: live, fetchedAt: live[0].fetched_at } : null;
   const sec = (kind: string, title: string) => { const l = o.filter(x => x.kind === kind); return l.length ? <><h3>{title}</h3><ul className="plist">{l.map((x, i) => <li key={i}><div className="t">{x.name}</div><div className="m">{[x.role, x.dzongkhag ?? 'National', x.contact].filter(Boolean).join(' · ')} · <Ext href={x.source_url}>{x.source_name}</Ext>{x.retrieved_on ? ` (checked ${x.retrieved_on})` : ''}</div></li>)}</ul></> : null; };
   // The curated offices table only appears when rows have actually been added; the Dzongdag card above already
   // carries each dzongkhag administration's own published contacts.
-  if (!o.length) return (<><Leaders scope={scope} locale={locale} /><Dzongdags scope={scope} locale={locale} /></>);
-  return (<><Leaders scope={scope} locale={locale} /><Dzongdags scope={scope} locale={locale} /><div className="card"><div className="card-h"><h2>Other offices & contacts — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
+  if (!o.length) return (<><Leaders scope={scope} locale={locale} live={liveLeaders} flags={flags} /><Dzongdags scope={scope} locale={locale} /></>);
+  return (<><Leaders scope={scope} locale={locale} live={liveLeaders} flags={flags} /><Dzongdags scope={scope} locale={locale} /><div className="card"><div className="card-h"><h2>Other offices & contacts — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
     <p className="note">Names and contacts come only from official publications; each entry cites its page and the date it was checked.</p>
     {sec('leader', 'Officials')}{sec('office', 'Offices & contacts')}
     <Cite what={`Offices – ${scopeName(scope)}`} /></div></>);

@@ -106,3 +106,19 @@ export const getTenders = (scope: string | null) => query<Tender>(`select t.id,d
 export type Office = { kind: string; dzongkhag: string | null; name: string; role: string | null; contact: string | null; source_name: string; source_url: string; retrieved_on: string | null };
 export const getOffices = (scope: string | null) => query<Office>(`select o.kind,d.name dzongkhag,o.name,o.role,o.contact,o.source_name,o.source_url,o.retrieved_on::text
   from offices o left join dzongkhags d on d.id=o.dzongkhag_id ${scope ? 'where o.dzongkhag_id=$1 or o.dzongkhag_id is null' : ''} order by o.kind desc, o.name`, scope ? [scope] : []);
+
+export type LeaderRow = { house: 'na' | 'nc'; name: string; role: string; constituency: string | null;
+  dzongkhag_id: string | null; slug: string | null; dzongkhag: string | null; eminent: boolean; parliament: string;
+  term_start: string | null; term_end: string | null; source_name: string; source_url: string; fetched_at: string };
+export const getLeaders = () => query<LeaderRow>(
+  `select l.house, l.name, l.role, l.constituency, l.dzongkhag_id, d.slug, d.name as dzongkhag, l.eminent, l.parliament,
+          l.term_start, l.term_end, l.source_name, l.source_url, l.fetched_at::text
+     from leaders l left join dzongkhags d on d.id = l.dzongkhag_id
+    order by l.house, d.name nulls last, l.name`);
+
+export type NewsFlag = { slug: string; dzongkhag: string; title: string; url: string | null; published: string | null; source_name: string; source_url: string };
+export const getNewsFlags = (dzongkhagId: string | null = null) => query<NewsFlag>(
+  `select d.slug, d.name as dzongkhag, f.title, f.url, f.published::text, f.source_name, f.source_url
+     from news_flags f join dzongkhags d on d.id = f.dzongkhag_id
+    where ($1::text is null or f.dzongkhag_id = $1)
+    order by f.published desc nulls last limit 40`, [dzongkhagId]);
