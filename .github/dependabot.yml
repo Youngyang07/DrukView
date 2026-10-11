@@ -2,6 +2,10 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: /
+    # Target main explicitly. Dependabot otherwise aims at the repository's default branch, which is still a
+    # working branch — so its pull requests landed somewhere that does not deploy. Naming the branch here
+    # keeps it right whatever that setting says.
+    target-branch: main
     schedule: { interval: monthly }
     open-pull-requests-limit: 5
     groups:
@@ -20,4 +24,5 @@ updates:
         exclude-patterns: ['next', 'react', 'react-dom', '@types/react', '@types/react-dom', 'typescript', 'vitest']
   - package-ecosystem: github-actions
     directory: /
+    target-branch: main
     schedule: { interval: monthly }
