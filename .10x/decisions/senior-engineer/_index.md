@@ -7,8 +7,14 @@
 
 ## Cross-cutting engineering principles
 
-- The fragile part must be the tested part. For a scraper that means a pure parser and a **captured** response
-  under `tests/fixtures/`; a fixture row added by hand is marked synthetic so it can never read as real data.
+- The fragile part must be the tested part, and **a fixture must be a capture**. A fixture written to match an
+  assumption tests the author, not the source: the first e-GP collector passed its tests and fetched nothing,
+  because both the parser and the fixture encoded the same wrong guess. If the request cannot be made from
+  this environment, the collector is not finished — a Vercel Sandbox has outbound network and can make it.
+  Rows added by hand live in a separate file marked synthetic so they can never read as real data.
+- **An empty state must distinguish "nothing to report" from "we could not read it."** Saying the first when
+  the second is true is a false claim about the subject, and the all-or-nothing loader does not protect
+  against it. Read the source's own health and say which.
 - `validate…()` returns a list of problems, never a boolean — the problems are shown to the reader verbatim.
 - No dependency for parsing HTML/XML/CSV. Smaller dependency surface beats prettier code on a site that
   publishes government data.

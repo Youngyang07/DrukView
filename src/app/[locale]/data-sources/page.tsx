@@ -29,9 +29,12 @@ export default async function DataSources() {
       <li>Weather is modelled for each dzongkhag’s headquarters town, not measured at a station.</li>
     </ul>
     <h2>Tenders and the e-GP portal</h2>
-    <p>The Royal Government&apos;s <Ext href="https://www.egp.gov.bt/resources/common/TenderListing.jsp?h=t">e-GP portal</Ext> publishes no API, feed or export: its tender list is a page whose results are filled in by posting its own search form.
-      DrukView therefore reads that page the way a browser does, once a day, and shows the notices it finds. Because that page&apos;s layout is the whole agreement, the run is all-or-nothing — if the table cannot be read,
-      the previous notices stay published and the source is marked stale, so a redesign at e-GP shows up here as a stale source rather than as missing or invented notices. e-GP lists live tenders only, and prints no estimated value, so DrukView shows none.</p>
+    <p>The Royal Government&apos;s <Ext href="https://www.egp.gov.bt/resources/common/TenderListing.jsp?h=t">e-GP portal</Ext> publishes no API, feed or export, and its tender page is a shell — the rows are fetched by the page&apos;s own script.
+      DrukView makes that same request once a day and reads e-GP&apos;s <b>live register</b>: every tender currently out to bid (203 notices when last measured), not a sample of it. Closed, cancelled and archived notices are not read, so a notice drops out of DrukView once it closes.</p>
+    <p>Each notice links to its own page on e-GP rather than to a search page, and e-GP publishes no estimated value in the register, so DrukView shows none rather than a guess.
+      A notice is placed in a dzongkhag only when the procuring agency&apos;s own hierarchy names exactly one; a ministry&apos;s notice is national even where the work is plainly in one place.</p>
+    <p>Because that response&apos;s shape is the whole agreement, the run is all-or-nothing: if the rows cannot be read, the previous notices stay published and the source is marked <b>stale</b> above — so a redesign at e-GP shows up here as a failed source rather than as an empty Tenders page.
+      The Tenders page says which of the two it is, because &ldquo;nothing is out to bid here&rdquo; and &ldquo;we could not read e-GP&rdquo; are different claims and only one of them is about Bhutan.</p>
     <h2>Not yet automated</h2>
     <p>Ministry of Finance, Home &amp; Cultural Affairs, Agriculture &amp; Livestock and other national budget reports are published as PDFs without an API. Office directories are likewise curated. Each such row cites its document and is validated before it can load.</p>
   </div>);

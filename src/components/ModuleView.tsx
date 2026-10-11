@@ -122,17 +122,25 @@ async function Weather({ scope, locale }: Props) {
 }
 
 async function Tenders({ scope }: Props) {
-  const [t, fr] = await Promise.all([q.getTenders(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ tenders: null, egp: null }))]);
+  const [t, fr, health] = await Promise.all([
+    q.getTenders(scope?.id ?? null).catch(() => []),
+    q.freshness().catch(() => ({ tenders: null })),
+    q.sourceHealth(EGP.id).catch(() => null),
+  ]);
   const today = new Date().toISOString().slice(0, 10);
   const open = t.filter(x => !x.closing_on || x.closing_on >= today).length;
+  // Never say "there are no tenders" when what we mean is "we could not read them". An empty table means
+  // something different depending on whether the collector has ever succeeded.
+  const collected = Boolean(health?.last_success);
+  const broken = !collected || health?.status === 'error' || health?.status === 'stale';
   return (<div className="card"><div className="card-h"><h2>Tenders — {scopeName(scope)}</h2><Fresh at={fr.tenders} label="e-GP" /></div>
-    <p className="note">Public procurement notices read from <Ext href={EGP.url}>e-GP</Ext>, the Royal Government of Bhutan&apos;s Electronic Government Procurement system
+    <p className="note">Tenders currently out to bid, from the live register of <Ext href={EGP.url}>e-GP</Ext>, the Royal Government of Bhutan&apos;s Electronic Government Procurement system
       (Procurement Management and Development Division, Ministry of Finance), refreshed daily, plus any notices added as cited CSV rows.
-      {t.length ? <> {num(open)} of {num(t.length)} shown here {open === 1 ? 'is' : 'are'} still open for bids.</> : null}</p>
+      {t.length ? <> {num(open)} of {num(t.length)} shown here {open === 1 ? 'is' : 'are'} still open.</> : null}</p>
     {t.length ? <>
       <div className="scroll"><table><thead><tr><th>Notice</th><th>Procuring agency</th><th>Where</th><th>Category</th><th>Value</th><th>Published</th><th>Closes</th></tr></thead><tbody>
         {t.map(x => <tr key={x.id}>
-          <td><Ext href={x.url}>{x.title}</Ext><br /><small>{x.tender_id ? `e-GP tender ${x.tender_id}` : x.source_name}{x.reference ? ` · ${x.reference}` : ''}{x.amendments > 0 ? ` · ${x.amendments} amendment${x.amendments === 1 ? '' : 's'} issued` : ''}</small></td>
+          <td><Ext href={x.url}>{x.title}</Ext><br /><small>{x.tender_id ? `e-GP tender ${x.tender_id}` : x.source_name}{x.reference ? ` · ${x.reference}` : ''}{x.amendments > 0 ? ` · ${x.amendments} amendment${x.amendments === 1 ? '' : 's'} issued` : ''}{x.status ? ` · ${x.status}` : ''}</small></td>
           <td>{x.agency ?? '–'}</td>
           <td>{x.dzongkhag ?? 'National'}</td>
           <td className="nw">{[x.category, x.method].filter(Boolean).join(' · ') || '–'}</td>
@@ -140,9 +148,12 @@ async function Tenders({ scope }: Props) {
           <td className="nw">{x.published_on ?? '–'}</td>
           <td className="nw">{x.closing_on ?? '–'}{x.closing_on && x.closing_on < today ? <> <small>closed</small></> : null}</td>
         </tr>)}</tbody></table></div>
-      <p className="note">e-GP does not publish an estimated value in its tender list, so no amount is shown for those notices rather than a guess.
-        Its detail pages open only inside a session of your own, so each notice links to the public tender list — search there for the e-GP tender ID shown above.</p>
-    </> : <Empty>No tender notices are published for {scopeName(scope)} right now. e-GP lists only tenders that are currently live, so a dzongkhag with nothing out to bid shows nothing here.</Empty>}
+      <p className="note">e-GP publishes no estimated value in its register, so no amount is shown for those notices rather than a guess. Each notice links to its own page on e-GP.</p>
+    </> : broken ? <Empty>
+        <b>This is a gap in DrukView, not a statement about Bhutan.</b> The last attempt to read e-GP {collected ? 'failed' : 'has not succeeded'}, so no notices can be shown for {scopeName(scope)} — there may well be tenders out to bid.
+        Check the <Ext href={EGP.url}>e-GP register</Ext> directly, and see <Link href="/en/data-sources">Data sources</Link> for what went wrong.
+      </Empty>
+      : <Empty>No tender from the e-GP live register is for {scopeName(scope)}. The register was read successfully, so this means nothing is out to bid here — not that we failed to look. A notice whose procuring agency is a ministry rather than a dzongkhag is listed under <Link href="/en/bhutan/tenders">Bhutan</Link>.</Empty>}
     <Cite what={`Tenders – ${scopeName(scope)}`} /></div>);
 }
 

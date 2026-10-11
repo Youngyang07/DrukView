@@ -1,6 +1,7 @@
 # ADR-0002: Collect e-GP tenders by reading the portal's own search page
 
-**Status:** Accepted
+**Status:** Accepted, amended 2026-10-11 (see **Correction** below — the request in the original decision was
+wrong and fetched nothing)
 **Date:** 2026-10-11
 **Deciders:** repository maintainers
 
@@ -25,6 +26,10 @@ What the portal actually offers, checked against the live site on 2026-10-11:
   lists **live** tenders only.
 
 ## Decision
+
+> **Superseded in part.** The mechanism in this section is wrong — posting the search page to itself returns
+> no rows, and the response carries no `<table>` wrapper. Read the **Correction** at the end for the request
+> the portal actually serves. The four constraints below, and the options analysis, still stand.
 
 Add `pipeline/egp.mjs`, a sixth collector in the shape of ADR-0001, that does what a browser does: `GET` the
 search page to take a `JSESSIONID`, then `POST` the search form (up to 3 pages of 20) with that cookie, and
@@ -127,3 +132,65 @@ likely the point at which paging pushes the job past 50 s and towards ADR-0001's
 5. [ ] Read the Notification-of-Contract-Award list, so awards can be matched to notices
 6. [ ] Alert the maintainer when `egp` has been stale for more than 3 days (the whole point is that a break is
        visible, which currently requires someone to look)
+
+---
+
+## Correction (same day)
+
+**The request described above was wrong, and the collector it produced fetched nothing.** The first
+production run failed with *"the tender list came back with no readable rows"*. The error was in this record,
+not only in the code: the GET behaviour and the detail-page session behaviour had been checked against the
+live portal, but the claim that posting the search form returns the rows was an **inference presented as a
+verification**. It was never tested, because this session had no outbound network and the tooling at hand
+could only issue GETs.
+
+What the portal actually does, captured through a sandbox with network access:
+
+```
+GET  /resources/common/AdvTenderListing.jsp?h=t      → JSESSIONID; the table is empty
+POST /TenderDetailsServlet                           → funName=AllTenders + the search form's fields
+                                                       (0, not "", for departmentId/district/procMethod/tenderId)
+                                                     → a bare run of <tr> rows, no <table> wrapper,
+                                                       then <input id="cntTenBrief"> and <input id="totalPages">
+```
+
+Three further claims in the original record were also wrong:
+
+| Claimed | Actual |
+|---|---|
+| Detail pages need a session, so rows must cite the search page | `ViewNotice.jsp?id=<id>&h=t` opens with **no session**. The earlier probe used `tenderId=`, the wrong parameter. Every row now cites its own notice. |
+| e-GP "lists live tenders only" | Depends entirely on `viewType`. `Live` is 11 pages / 203 open notices; unfiltered is 731 pages of history including Cancelled; `Archive` 685; `Cancelled` 37. |
+| The parser was "the tested part" | It was tested against a fixture **written by hand to match the guessed shape** — a full `<table id="resultTable">`. The real response is a bare row run, so the parser would have returned nothing even from a good response. A fixture that is not a capture tests the author's assumptions, not the source. |
+
+### What changed in the decision
+
+The collector now reads **all 11 pages of the live register** (about 13 s), not a slice: holding every tender
+out to bid is the useful thing, and it fits the job deadline. `size` above 20 makes the servlet drop the
+connection, so the page size stays at 20. A row keeps e-GP's own status word verbatim, and claims no status
+where an amendment notice occupies that cell. Validation now also rejects any citation that is not an
+`egp.gov.bt` URL.
+
+### What this cost, and the rule it earns
+
+For one day the live site showed an empty Tenders page under the sentence *"e-GP lists only tenders that are
+currently live, so a dzongkhag with nothing out to bid shows nothing here"* — a false explanation for our own
+failure, on a site whose purpose is to be checkable. The all-or-nothing guard worked exactly as designed and
+still did not help, because the failure was not in the data: it was in what the page said about missing data.
+
+Two rules follow, and both are now in the code:
+
+1. **A fixture must be a capture.** If the request cannot be made, the collector is not finished — do not
+   write a fixture to match an assumption and call the parser tested. `tests/fixtures/egp-tender-rows-real.html`
+   is portal output; the handful of cases it does not contain live in a separate file marked synthetic.
+2. **An empty state must distinguish "nothing to report" from "we could not read it."** The Tenders page now
+   checks the source's own health and says which it is. Any module that can render empty needs the same.
+
+### Action items
+
+1. [x] Collector rewritten against the observed request; verified live (203 notices, 0 validation errors)
+2. [x] Fixture replaced with a real capture; synthetic cases separated and labelled
+3. [x] Per-notice citation URLs, enforced by validation
+4. [x] Tenders page distinguishes a collector failure from a genuinely empty register
+5. [ ] Audit the other modules' empty states for the same false-explanation problem
+6. [ ] Alert when `egp` has been stale for more than 3 days — a scraper that silently stops is the failure
+       mode this ADR has now demonstrated twice
