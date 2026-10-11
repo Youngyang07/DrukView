@@ -11,12 +11,21 @@
 //   3. /resources/common/ViewNotice.jsp?id=<tenderId>&h=t is each notice's own page, and it opens with no
 //      session at all — so every row can cite the notice itself rather than a search page.
 //
-// Two things the portal does that the data must respect:
-//   * `viewType=Live` is only the name of the default tab. The response is the whole register, newest first
-//     (731 pages of 20 on 2026-10-11, so ~14,600 notices), and it includes rows the portal itself labels
-//     Cancelled. So this reads the newest few pages, and each row keeps the portal's own status word
-//     verbatim instead of a status inferred from which tab it came from.
-//   * The list carries no estimated value, so no amount is recorded.
+// What the portal's views actually contain, measured on 2026-10-11 at size=20:
+//
+//   viewType=Live       11 pages, 203 notices — every one still open. This is the live register.
+//   viewType=(empty)   731 pages — the whole history, including notices labelled Cancelled.
+//   viewType=Archive   685 pages — closed notices, labelled "Being processed".
+//   viewType=Cancelled  37 pages.
+//
+// So `Live` is read, and all of it: 11 requests take about 13 s, well inside the job deadline, and the
+// result is every tender currently out to bid rather than an arbitrary slice. `size` above 20 makes the
+// servlet drop the connection, so the page size stays at 20 even though it costs more requests.
+//
+// Two further things the data must respect:
+//   * A row carries e-GP's own status word ("Live"), except where an amendment notice takes that cell's
+//     place — then no status is claimed rather than one inferred from the view it came from.
+//   * The register carries no estimated value, so no amount is recorded.
 //
 // The parser is the tested part (tests/egp.test.ts runs it against a captured response) and the job is
 // all-or-nothing: a response without a readable row fails the run, the previous notices stay published and
@@ -38,7 +47,7 @@ export const SOURCE = {
   name: 'e-GP – Electronic Government Procurement System, Royal Government of Bhutan',
   url: PUBLIC_LISTING_URL,
   kind: 'scrape',
-  notes: 'Tender notices from the public register of e-GP (Procurement Management and Development Division, Ministry of Finance). e-GP offers no API, so the page\'s own row request is made directly and each notice links to its own e-GP page. The newest notices are read, not the whole register (about 14,600 notices on 2026-10-11); a notice keeps the status word e-GP prints for it, and no amount is shown because the register publishes none. A run that cannot read the rows fails and leaves the previous notices in place.',
+  notes: 'Every tender currently out to bid, from the live register of e-GP (Procurement Management and Development Division, Ministry of Finance) — 203 notices when last measured. e-GP offers no API, so the page\'s own row request is made directly, and each notice links to its own page on e-GP. Closed and cancelled notices are not read, and no amount is shown because the register publishes none. A run that cannot read the rows fails and leaves the previous notices in place.',
 };
 
 /** The search form's fields, with the values the portal's own script sends for an unfiltered search. */
@@ -169,11 +178,11 @@ export function validateTenders(rows) {
 const cookiesFrom = res => (res.headers.getSetCookie?.() ?? []).map(c => c.split(';')[0]).filter(Boolean).join('; ');
 
 /**
- * Read the newest notices: one session, then one POST per page. `maxPages` keeps the job well inside a
- * serverless time limit — the register is far too large to mirror, and the newest pages are what a reader
- * needs. A page that returns nothing stops the loop.
+ * Read the live register: one session, then one POST per page until the portal's own page count is reached.
+ * `maxPages` is a ceiling, not a target — it exists so an unexpected page count cannot run the job past its
+ * deadline. A page that returns nothing stops the loop.
  */
-export async function fetchEgpTenders(matcher, { fetchedAt = new Date().toISOString(), pageSize = 20, maxPages = 3, timeoutMs = 15000 } = {}) {
+export async function fetchEgpTenders(matcher, { fetchedAt = new Date().toISOString(), pageSize = 20, maxPages = 14, timeoutMs = 12000 } = {}) {
   const headers = { 'user-agent': UA, accept: 'text/html,application/xhtml+xml' };
   const listing = `${BASE}${LISTING_PATH}`;
   const first = await fetch(listing, { headers, redirect: 'follow', signal: AbortSignal.timeout(timeoutMs) });
