@@ -64,8 +64,14 @@ export async function saveWeather(rows: any[]) {
 }
 
 export type ManualFiles = { budget: string; allocations: string; tenders: string; offices: string };
-export async function readManualFiles(dir = resolve(process.cwd(), 'data/manual')): Promise<ManualFiles> {
-  const r = (f: string) => readFile(resolve(dir, f), 'utf8').catch(() => '');
+/**
+ * The curated CSVs are read at runtime, so the bundler has to be able to see which files to ship. The
+ * directory is written out literally for that reason: with a variable base, Turbopack cannot tell what is
+ * read and traces the whole project — public folder and all — into the serverless function, which is slow
+ * to deploy and eventually too large. `outputFileTracingIncludes` in next.config.ts names the same four files.
+ */
+export async function readManualFiles(): Promise<ManualFiles> {
+  const r = (f: string) => readFile(resolve(process.cwd(), 'data/manual', f), 'utf8').catch(() => '');
   return { budget: await r('budget_by_agency.csv'), allocations: await r('allocations_by_location.csv'), tenders: await r('tenders.csv'), offices: await r('offices.csv') };
 }
 
