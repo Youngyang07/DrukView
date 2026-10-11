@@ -3,6 +3,7 @@ import { issueUrl, MODULES, type ModuleSlug } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
+import { SOURCE as EGP } from '../../pipeline/egp.mjs';
 import { Dzongdags, Economy, Health, Leaders, MofBudget, Population, Schools } from './RefViews';
 import { budget, health, population, schools } from '@/lib/reference';
 
@@ -121,12 +122,27 @@ async function Weather({ scope, locale }: Props) {
 }
 
 async function Tenders({ scope }: Props) {
-  const t = await q.getTenders(scope?.id ?? null); const fr = await q.freshness();
-  return (<div className="card"><div className="card-h"><h2>Tenders — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
-    <p className="note">Public procurement notices, each linking to the original notice. Automated collection from the national e-GP portal is not yet enabled; notices are added through cited CSV rows.</p>
-    {t.length ? <div className="scroll"><table><thead><tr><th>Tender</th><th>Agency</th><th>Where</th><th>Value</th><th>Published</th><th>Closes</th><th>Status</th></tr></thead><tbody>
-      {t.map(x => <tr key={x.id}><td><Ext href={x.url}>{x.title}</Ext><br /><small>{x.source_name}</small></td><td>{x.agency ?? '–'}</td><td>{x.dzongkhag ?? 'National'}</td><td className="num">{x.value == null ? '–' : moneyFull(x.value, x.currency ?? 'BTN')}</td><td className="nw">{x.published_on ?? '–'}</td><td className="nw">{x.closing_on ?? '–'}</td><td>{x.status ?? '–'}</td></tr>)}</tbody></table></div>
-      : <Empty>No tender notices have been added for {scopeName(scope)} yet.</Empty>}
+  const [t, fr] = await Promise.all([q.getTenders(scope?.id ?? null).catch(() => []), q.freshness().catch(() => ({ tenders: null, egp: null }))]);
+  const today = new Date().toISOString().slice(0, 10);
+  const open = t.filter(x => !x.closing_on || x.closing_on >= today).length;
+  return (<div className="card"><div className="card-h"><h2>Tenders — {scopeName(scope)}</h2><Fresh at={fr.tenders} label="e-GP" /></div>
+    <p className="note">Public procurement notices read from <Ext href={EGP.url}>e-GP</Ext>, the Royal Government of Bhutan&apos;s Electronic Government Procurement system
+      (Procurement Management and Development Division, Ministry of Finance), refreshed daily, plus any notices added as cited CSV rows.
+      {t.length ? <> {num(open)} of {num(t.length)} shown here {open === 1 ? 'is' : 'are'} still open for bids.</> : null}</p>
+    {t.length ? <>
+      <div className="scroll"><table><thead><tr><th>Notice</th><th>Procuring agency</th><th>Where</th><th>Category</th><th>Value</th><th>Published</th><th>Closes</th></tr></thead><tbody>
+        {t.map(x => <tr key={x.id}>
+          <td><Ext href={x.url}>{x.title}</Ext><br /><small>{x.tender_id ? `e-GP tender ${x.tender_id}` : x.source_name}{x.reference ? ` · ${x.reference}` : ''}{x.amendments > 0 ? ` · ${x.amendments} amendment${x.amendments === 1 ? '' : 's'} issued` : ''}</small></td>
+          <td>{x.agency ?? '–'}</td>
+          <td>{x.dzongkhag ?? 'National'}</td>
+          <td className="nw">{[x.category, x.method].filter(Boolean).join(' · ') || '–'}</td>
+          <td className="num">{x.value == null ? 'not published' : moneyFull(x.value, x.currency ?? 'BTN')}</td>
+          <td className="nw">{x.published_on ?? '–'}</td>
+          <td className="nw">{x.closing_on ?? '–'}{x.closing_on && x.closing_on < today ? <> <small>closed</small></> : null}</td>
+        </tr>)}</tbody></table></div>
+      <p className="note">e-GP does not publish an estimated value in its tender list, so no amount is shown for those notices rather than a guess.
+        Its detail pages open only inside a session of your own, so each notice links to the public tender list — search there for the e-GP tender ID shown above.</p>
+    </> : <Empty>No tender notices are published for {scopeName(scope)} right now. e-GP lists only tenders that are currently live, so a dzongkhag with nothing out to bid shows nothing here.</Empty>}
     <Cite what={`Tenders – ${scopeName(scope)}`} /></div>);
 }
 

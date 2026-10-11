@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Youngyang07/DrukView/security/advisories/new
+    about: Report privately — never in a public issue. See SECURITY.md.
+  - name: How to contribute
+    url: https://github.com/Youngyang07/DrukView/blob/main/CONTRIBUTING.md
+    about: The data rules, how to add cited rows, and how to add a collector.

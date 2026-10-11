@@ -193,4 +193,20 @@ CREATE TABLE news_flags (
 CREATE INDEX news_flags_dz_idx ON news_flags (dzongkhag_id, published DESC);
 `,
   },
+  {
+    name: '0004_tenders_egp.sql',
+    // Tenders now come from two places: the e-GP portal and the curated CSV. Each job must replace only its
+    // own rows, so a row records where it came from; the extra columns are what e-GP's tender list prints.
+    sql: `
+ALTER TABLE tenders ADD COLUMN source    text NOT NULL DEFAULT 'rgob-manual';
+ALTER TABLE tenders ADD COLUMN tender_id text;
+ALTER TABLE tenders ADD COLUMN reference text;
+ALTER TABLE tenders ADD COLUMN hierarchy text;
+ALTER TABLE tenders ADD COLUMN proc_type text;
+ALTER TABLE tenders ADD COLUMN method    text;
+ALTER TABLE tenders ADD COLUMN amendments integer NOT NULL DEFAULT 0;
+CREATE INDEX tenders_closing_idx ON tenders (closing_on DESC NULLS LAST);
+CREATE INDEX tenders_source_idx  ON tenders (source);
+`,
+  },
 ];

@@ -1,0 +1,39 @@
+name: Data correction
+description: A figure, name or date on DrukView is wrong or out of date
+title: "Data: "
+labels: [data]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The most useful report this project gets. We change a published figure only on the strength of a
+        public document, so the link below is the part that matters.
+  - type: input
+    id: page
+    attributes:
+      label: Page or module
+      description: The URL on DrukView, or the dzongkhag and module.
+      placeholder: /en/trashigang/budget
+    validations: { required: true }
+  - type: textarea
+    id: shown
+    attributes:
+      label: What DrukView shows
+      placeholder: "Trashigang dzongkhag total: Nu 412.5 M"
+    validations: { required: true }
+  - type: textarea
+    id: correct
+    attributes:
+      label: What it should be, and why
+    validations: { required: true }
+  - type: input
+    id: source
+    attributes:
+      label: Link to the public document that proves it
+      description: An https link. For a PDF, give the table or page number below.
+    validations: { required: true }
+  - type: input
+    id: locator
+    attributes:
+      label: Table, annexure or page number
+      placeholder: Annexure 1, page 142
