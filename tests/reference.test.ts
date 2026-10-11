@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { DZONGKHAGS, health, population } from '@/lib/reference';
+import { DZONGKHAGS, health, leaders, population, schools } from '@/lib/reference';
 
 const slugs = DZONGKHAGS.map(d => d.slug).sort();
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
@@ -41,5 +41,42 @@ describe('reference data integrity', () => {
 
   it('every reference file cites an https source', () => {
     for (const s of [health.source, population.source]) { expect(s.url).toMatch(/^https:\/\//); expect(s.checked).toMatch(/^\d{4}-\d\d-\d\d$/); }
+  });
+});
+
+describe('schools and leaders reference data', () => {
+  it('school lists match the MoESD totals (566 schools, Table A levels)', () => {
+    const d = Object.values(schools.dzongkhags);
+    expect(Object.keys(schools.dzongkhags).sort()).toEqual(slugs);
+    for (const x of d) {
+      expect(x.schools.length).toBe(x.total);
+      expect(sum(Object.values(x.byLevel))).toBe(x.total);
+      for (const l of ['ECR', 'PS', 'LSS', 'MSS', 'HSS', 'other'] as const) expect(x.schools.filter(s => s.level === l).length).toBe(x.byLevel[l]);
+    }
+    const N = schools.national;
+    expect(sum(d.map(x => x.total))).toBe(N.total);
+    expect(N.ECR + N.PS + N.LSS + N.MSS + N.HSS + N.special).toBe(N.total);
+    expect(sum(d.map(x => x.byLevel.ECR))).toBe(N.ECR);
+    expect(sum(d.map(x => x.byLevel.PS))).toBe(N.PS);
+    expect(sum(d.map(x => x.byLevel.LSS))).toBe(N.LSS);
+    expect(sum(d.map(x => x.byLevel.other))).toBe(N.special);
+    expect(sum(d.map(x => x.byLevel.MSS + x.byLevel.HSS))).toBe(N.MSS + N.HSS); // only the combined figure is exact
+    for (const x of d) for (const s of x.schools) expect(s.name, 'no replacement characters').not.toMatch(/�/);
+  });
+
+  it('Parliament: 47 National Assembly seats with the constitutional split, one elected NC member per dzongkhag + 5 eminent', () => {
+    expect(Object.keys(leaders.dzongkhags).sort()).toEqual(slugs);
+    const na = Object.values(leaders.dzongkhags).flatMap(x => x.nationalAssembly);
+    expect(na.length).toBe(47);
+    expect(new Set(na.map(m => m.constituency)).size).toBe(47);
+    const seats = (s: string) => leaders.dzongkhags[s].nationalAssembly.length;
+    expect([seats('trashigang'), seats('samtse'), seats('mongar'), seats('pemagatshel')]).toEqual([5, 4, 3, 3]);
+    for (const [s, x] of Object.entries(leaders.dzongkhags)) {
+      expect(x.nationalCouncil.length, s).toBe(1);
+      expect(x.nationalAssembly.length, s).toBeGreaterThanOrEqual(2);
+    }
+    expect(leaders.nationalCouncilEminent.length).toBe(5);
+    expect(leaders.cabinet.some(m => m.role === 'Prime Minister')).toBe(true);
+    for (const src of Object.values(leaders.sources)) expect(src.url).toMatch(/^https:\/\//);
   });
 });
