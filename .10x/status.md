@@ -28,8 +28,16 @@ Overview and Weather were all making the Tenders page's mistake in milder form; 
 a blank box when filters matched nothing, and the Weather copy promised a refresh "every 6 hours" when the
 cron is daily. Pinned by tests/empty-states.test.ts.
 
+**Staleness alert built (2026-10-12):** the last open item in ADR-0002. A collector that *stops* leaves every
+source reading `ok` while the data ages, so staleness is now measured as the age of the last success rather than
+read off the status: `/api/cron/alerts` daily, 72 h limit (`STALE_ALERT_HOURS`), reported on the Data sources
+page, to an optional `ALERT_WEBHOOK_URL` (once a day per source, plus a recovery line), and as a 503 from
+`/api/health` for an outside uptime monitor — which is the only channel that still works when the scheduler
+itself is dead. Verified end-to-end against a real database and a real webhook listener; 78 tests pass.
+
 **Open, with owners' decisions recorded**
-1. Nothing alerts when a source has been stale for days (devops/publish-readiness — needs a destination).
+1. Point an uptime monitor at `/api/health` and (optionally) set `ALERT_WEBHOOK_URL` — the code is in place but
+   a destination is a hosting choice, so until one is set the alert is only visible on the Data sources page.
 2. Read e-GP's Notification-of-Contract-Award list (ADR-0002, action 5).
 3. A "source last changed" signal, so stale can distinguish "we failed" from "nothing new" (ADR-0001).
 4. `CRON_SECRET` must be rotated before/at publish — the historical value is exposed.

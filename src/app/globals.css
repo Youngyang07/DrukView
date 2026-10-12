@@ -58,6 +58,7 @@ h2{margin:0;font-size:1.15rem}h3{margin:16px 0 6px;font-size:1rem}small{color:va
 .q0{fill:var(--m0)}.q1{fill:var(--m1)}.q2{fill:var(--m2)}.q3{fill:var(--m3)}.q4{fill:var(--m4)}.q5{fill:var(--m5)}
 .legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:6px}.legend i{width:26px;height:10px;border-radius:3px;display:inline-block}
 .note{font-size:.8rem;color:var(--muted);margin:8px 0 0}
+.note.overdue{color:#8c1d14;font-weight:600}@media(prefers-color-scheme:dark){.note.overdue{color:#f5b1aa}}
 .tip{position:fixed;z-index:20;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:8px;font-size:.82rem;max-width:260px}
 .banner{border-radius:var(--r);padding:12px 16px;margin-bottom:16px;border:1px solid var(--line);background:var(--surface)}.banner.info{border-left:6px solid var(--saffron)}.banner.warn{border-left:6px solid #b36b00}
 .banner b{display:block;margin-bottom:2px}code{background:var(--bg);padding:1px 6px;border-radius:6px}

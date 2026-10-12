@@ -34,6 +34,23 @@ Reference files ship with the code and work even without a database. `tests/refe
 
 Collectors run via `vercel.json` crons → `/api/cron/<job>` (rate-limited per job; a `CRON_SECRET` bearer skips the limit), and from the **Load / refresh data now** button on the Data sources page. Each job is isolated: on failure the previous good rows stay, the source is flagged **stale** on the Data sources page, and the run is written to the update log. A batch with any invalid record loads nothing.
 
+### When a collector stops
+
+A job that runs and fails flags its own source **stale**. A job that stops running at all is the harder case: the
+status stays `ok` and the data simply ages, which nothing inside the app notices. So `/api/cron/alerts` checks
+the **age of each source's last success** once a day against a 72 h limit (`STALE_ALERT_HOURS`), and an overdue
+source is reported in three places:
+
+- on the **Data sources** page, so a reader can see the figures are that old;
+- to `ALERT_WEBHOOK_URL`, if set — one POST, at most once a day per source, plus a line when it recovers. The
+  body carries the message under `text`, `content` and `message`, which covers Slack, Google Chat, Discord and
+  ntfy without a per-service adapter;
+- at **`/api/health`**, which answers **503** while any source is overdue (`degraded: "stale-sources"`) or the
+  database is unreachable (`degraded: "database"`).
+
+Point any uptime monitor at `/api/health`: it is the only one of the three that still works when the scheduler
+running the other two has itself stopped.
+
 ### How the leaders list stays current
 The daily `leaders` job reads Parliament's own member records and replaces the list — but only if the response is a **complete** Parliament: 47 National Assembly seats with the constitutional split per dzongkhag, and one elected National Council member per dzongkhag. Anything less is rejected, the previous list stays, and the source is marked stale, so a half-written or broken response can never leave a gap on the site. The job finds the current term itself (the highest-numbered Parliament that is fully seated), so it keeps working after the next election without a code change. Until the job has run, the bundled `data/reference/leaders.json` is shown instead.
 
@@ -75,6 +92,8 @@ Tests: `npm test` (unit). Database integration tests run when `TEST_DATABASE_URL
 1. Import the repo into Vercel and attach a Postgres database (Neon, via the project's **Storage** tab). That sets `DATABASE_URL` — the only required setting.
 2. Open the site. **The tables are created automatically on the first visit.**
 3. Go to **Data sources → Load / refresh data now** (about a minute). Every source then also refreshes automatically once a day via Vercel Cron.
+
+Optional: `ALERT_WEBHOOK_URL` (where to send a notice when a source has not refreshed for three days — any Slack/Google Chat/Discord/ntfy incoming-webhook URL) and `STALE_ALERT_HOURS` to move that limit.
 
 Optional: `CRON_SECRET`. The data jobs only read public data, so they run without a secret but at most once per interval (World Bank/ADB and Parliament 6 h, e-GP tenders 3 h, weather 2 h, curated CSVs 10 min; 5 min after a failure). A request carrying `Authorization: Bearer $CRON_SECRET` skips that interval. Every job stops after 50 s and records why, so a slow source can never fail silently.
 
