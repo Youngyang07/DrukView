@@ -1,4 +1,5 @@
 import { timingSafeEqual } from 'node:crypto';
+import { checkStaleSources } from '@/server/alerts';
 import { dbReady, dbStatus } from '@/server/db';
 import { JOBS, runJob, type JobName } from '@/server/ingest';
 import { ensureSchema, lastSetupError } from '@/server/setup';
@@ -15,7 +16,7 @@ function hasSecret(req: Request): boolean {
 
 export async function GET(req: Request, { params }: { params: Promise<{ job: string }> }) {
   const { job } = await params;
-  if (job !== 'setup' && !(JOBS as readonly string[]).includes(job)) return Response.json({ error: 'unknown job', jobs: ['setup', ...JOBS] }, { status: 404 });
+  if (job !== 'setup' && job !== 'alerts' && !(JOBS as readonly string[]).includes(job)) return Response.json({ error: 'unknown job', jobs: ['setup', 'alerts', ...JOBS] }, { status: 404 });
   if (!(await dbReady())) {
     const st = await dbStatus();
     const message = st === 'no-url' ? 'DATABASE_URL is not set in the hosting environment variables.'
@@ -25,6 +26,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ job: str
   }
   if (job === 'setup') { // kept for compatibility: setup now also happens automatically on first visit
     try { return Response.json({ job, status: 'ok', ...(await ensureSchema()) }); }
+    catch (e) { return Response.json({ job, status: 'error', message: String((e as Error).message).slice(0, 500) }, { status: 500 }); }
+  }
+  if (job === 'alerts') { // not a collector: checks how old every source is and reports the overdue ones
+    try { const r = await checkStaleSources(); return Response.json({ job, status: r.overdue.length ? 'overdue' : 'ok', ...r }, { status: 200 }); }
     catch (e) { return Response.json({ job, status: 'error', message: String((e as Error).message).slice(0, 500) }, { status: 500 }); }
   }
   const r = await runJob(job as JobName, { force: hasSecret(req) });

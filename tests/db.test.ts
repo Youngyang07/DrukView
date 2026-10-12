@@ -123,6 +123,60 @@ d('database layer', () => {
     const fr = await q.freshness(); expect(fr.projects).toBeTruthy(); expect(fr.manual).toBeNull();
   });
 
+  // The alert exists for a collector that stops running rather than one that fails, so the state it reads is
+  // a timestamp, and the state it writes (alerted_at) is what stops a week-long outage sending a week of
+  // notices. Both only mean anything against a real database, hence here rather than in tests/alerts.test.ts.
+  test('a source overdue by days is alerted once, not on every check, and announced when it recovers', async () => {
+    const al = await import('../src/server/alerts');
+    const sent: string[] = [];
+    const send = async (text: string) => { sent.push(text); return 'sent' as const; };
+
+    await db.query(`update sources set status='ok', last_attempt=now(), last_success=now(), alerted_at=null`);
+    expect((await al.checkStaleSources({ send })).overdue).toEqual([]); // everything fresh → silence
+    expect(sent).toHaveLength(0);
+
+    // the invisible failure: still 'ok', never refreshed again
+    await db.query(`update sources set status='ok', last_success=now() - interval '5 days', last_attempt=now() - interval '5 days' where id='adb'`);
+    const first = await al.checkStaleSources({ send });
+    expect(first.overdue.map(s => s.id)).toEqual(['adb']);
+    expect(first.overdue[0].hours_late).toBeGreaterThanOrEqual(120);
+    expect(first.alerted).toEqual(['adb']);
+    expect(first.delivery).toBe('sent');
+    expect(sent).toHaveLength(1);
+    expect(sent[0]).toContain('(adb)');
+
+    const second = await al.checkStaleSources({ send }); // same day → still overdue, but says nothing again
+    expect(second.overdue.map(s => s.id)).toEqual(['adb']);
+    expect(second.alerted).toEqual([]);
+    expect(sent).toHaveLength(1);
+
+    await db.query(`update sources set alerted_at = now() - interval '25 hours' where id='adb'`);
+    expect((await al.checkStaleSources({ send })).alerted).toEqual(['adb']); // a day later it says it again
+    expect(sent).toHaveLength(2);
+
+    await db.query(`update sources set last_success=now(), status='ok' where id='adb'`); // the job starts working
+    const back = await al.checkStaleSources({ send });
+    expect(back.overdue).toEqual([]);
+    expect(back.recovered).toEqual(['adb']);
+    expect(sent[2]).toContain('is refreshing again');
+    expect((await db.query<{ n: number }>(`select count(*)::int n from sources where id='adb' and alerted_at is null`))[0].n).toBe(1);
+    expect((await al.checkStaleSources({ send })).recovered).toEqual([]); // and does not keep saying so
+    expect(sent).toHaveLength(3);
+
+    // every check is on the record even when no webhook is configured, so the Updates page shows it
+    expect((await al.checkStaleSources({ send: async () => 'no-webhook' as const })).delivery).toBe('no-webhook');
+    const log = await q.getUpdateLog(10);
+    expect(log.some(r => r.job === 'alerts')).toBe(true);
+
+    // an unconfigured webhook must not mark an outage as reported
+    await db.query(`update sources set last_success=now() - interval '9 days', alerted_at=null where id='adb'`);
+    const undelivered = await al.checkStaleSources({ send: async () => 'failed: webhook answered HTTP 500' as const });
+    expect(undelivered.delivery).toBe('failed: webhook answered HTTP 500');
+    expect((await db.query<{ n: number }>(`select count(*)::int n from sources where id='adb' and alerted_at is null`))[0].n).toBe(1);
+
+    await db.query(`update sources set status='ok', last_success=now(), last_attempt=now(), alerted_at=null`);
+  });
+
   test('jobs: rate-limited without the secret, secret bypasses, one winner under concurrency, quick retry after failure', async () => {
     expect((await ing.runJob('manual')).status).toBe('ok');
     const again = await ing.runJob('manual');

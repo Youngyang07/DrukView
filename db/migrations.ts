@@ -209,4 +209,13 @@ CREATE INDEX tenders_closing_idx ON tenders (closing_on DESC NULLS LAST);
 CREATE INDEX tenders_source_idx  ON tenders (source);
 `,
   },
+  {
+    name: '0005_source_alerts.sql',
+    // When a source was last reported as overdue, so a collector that has been dead for a week sends one
+    // notice a day instead of one per check, and so a recovery can be announced once. Null means nobody has
+    // been told — which is also the state after a recovery.
+    sql: `
+ALTER TABLE sources ADD COLUMN alerted_at timestamptz;
+`,
+  },
 ];

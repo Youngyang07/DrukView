@@ -130,8 +130,9 @@ likely the point at which paging pushes the job past 50 s and towards ADR-0001's
        `method`, `amendments`; curated job scoped to its own rows
 4. [x] Daily cron `/api/cron/tenders`, 3 h minimum interval; e-GP documented on the Data sources page
 5. [ ] Read the Notification-of-Contract-Award list, so awards can be matched to notices
-6. [ ] Alert the maintainer when `egp` has been stale for more than 3 days (the whole point is that a break is
-       visible, which currently requires someone to look)
+6. [x] Alert the maintainer when `egp` has been stale for more than 3 days (the whole point is that a break is
+       visible, which currently requires someone to look) — built for every source, not just `egp`; see
+       **The staleness alert** below
 
 ---
 
@@ -246,5 +247,41 @@ whose oracle is the author's assumption, shipped behind a UI that fails open.**
        [#22](https://github.com/Youngyang07/DrukView/pull/22),
        which found the same mistake in Overview, Projects, Funders and Weather and moved all of them onto
        one `<EmptyOr>` helper
-6. [ ] Alert when `egp` has been stale for more than 3 days — a scraper that silently stops is the failure
-       mode this ADR has now demonstrated twice
+6. [x] Alert when `egp` has been stale for more than 3 days — a scraper that silently stops is the failure
+       mode this ADR has now demonstrated twice; see **The staleness alert** below
+
+---
+
+## The staleness alert (2026-10-12)
+
+The last open item in this ADR, and the third face of the same failure: a collector that **stops** rather than
+one that breaks. `status = 'stale'` cannot catch it, because that flag is written by a job that ran and failed.
+If the scheduler stops firing, every source stays `ok`, every figure keeps its citation, and the data silently
+ages. Nothing on the site measured that.
+
+**What was built.** `src/server/alerts.ts` judges each source by the **age of its last success**, independent of
+status — 72 h by default (`STALE_ALERT_HOURS`), which is three missed daily runs. A source that has never
+succeeded is judged on when it was last tried, so a collector broken since the day it shipped is overdue rather
+than exempt. `/api/cron/alerts` runs the check daily and reports to three places:
+
+| Destination | What it is for | Fails when |
+|---|---|---|
+| The **Data sources** page | The reader, who is looking at data that old and should be told | Nobody visits |
+| `ALERT_WEBHOOK_URL` (optional) | The maintainer, pushed — once a day per source, plus a line on recovery | This app's cron is dead, or no webhook is configured |
+| **`/api/health`** → 503 | An external uptime monitor | The site is up but lying (which the other two cover) |
+
+The three are deliberately redundant in opposite directions. The webhook cannot report that the scheduler has
+stopped, because the scheduler is what sends it; `/api/health` can, because something outside the app is asking.
+That is the whole reason there are two machine channels rather than one.
+
+**What it refuses to pretend.** `alerted_at` is advanced only when a notice is actually *delivered*. An
+unconfigured or failing webhook leaves the state reading "nobody has been told", so the next run tries again —
+the alternative would be an alerting system whose records say an outage was reported when it was not, which is
+the same class of mistake as a fixture that agrees with its author.
+
+**Limits, written down rather than discovered later:** a dead scheduler plus no uptime monitor means no alert
+reaches anyone — the page is then the only signal. The threshold is a single number for every source, which is
+right only while every cron is daily; a source moved to weekly needs its own. And "overdue" still cannot tell
+"we failed to read it" from "the publisher has published nothing new" — that is the open item from ADR-0001,
+and until a source records when its *content* last changed, a correctly-working collector reading an unchanged
+publication looks exactly like a broken one.
