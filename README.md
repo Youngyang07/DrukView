@@ -1,8 +1,6 @@
 # DrukView — Every Ngultrum Accounted For
 
-**Your dzongkhag. Your data. Your right.** An open-source civic-transparency platform for Bhutan: where public money goes — development projects, budgets and allocations by dzongkhag (and gewog/village, where documents go that deep) — with the **funding source and a link to the original document on every figure**.
-
-Modelled on the district-dashboard approach of [ForThePeople.in](https://github.com/jayanthmb14/forthepeople) (MIT), reimplemented for Bhutan.
+**Your dzongkhag. Your data. Your right.** An open-source civic-transparency platform for Bhutan: where public money goes-development projects, budgets and allocations by dzongkhag (and gewog/village, where documents go that deep)-with the **funding source and a link to the original document on every figure**.
 
 ## What you get
 - **Home:** dzongkhag search + an interactive map of Bhutan (real boundaries, bundled with the app so it always renders): zoom (+ / −, Ctrl + scroll, pinch), drag when zoomed, hover names. Click a dzongkhag → it zooms in, shows its **205-gewog drill-down** (click a gewog to filter its budget lines) and opens the budget explorer (fiscal-year selector, clickable funding-source / sector / gewog bars, expandable projects).
