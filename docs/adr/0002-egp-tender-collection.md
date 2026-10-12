@@ -185,12 +185,66 @@ Two rules follow, and both are now in the code:
 2. **An empty state must distinguish "nothing to report" from "we could not read it."** The Tenders page now
    checks the source's own health and says which it is. Any module that can render empty needs the same.
 
+### What these failure modes are called
+
+Both rules above were learned the expensive way, and both have standard names. They are recorded here so that
+a contributor who hits one of them can look it up, and so that a reviewer has a word for it rather than having
+to re-derive the argument.
+
+**1. The test whose oracle is its own author.**
+
+A test needs an *oracle* — an independent statement of what the right answer is. In both of this ADR's
+failures the oracle was the author:
+
+- A **tautological test** (also *self-fulfilling test*, or *"testing the mock"*): the assertion restates the
+  implementation instead of checking it against anything outside the code. The first e-GP collector is the
+  textbook case. The fixture was drawn to match the guessed HTML, the parser was written to read that fixture,
+  the two agreed with each other and neither agreed with e-GP. Green suite, zero rows.
+- A **change-detector test** is the same defect seen from the other side: it fails when the code changes
+  rather than when the behaviour breaks.
+- Both are **weak-oracle** failures, from the **test-oracle problem**. The classical statement of the limit is
+  Dijkstra's: testing shows the presence of bugs, never their absence.
+- The practice that prevents the fixture version is **record-and-replay** — *golden capture*, VCR-style
+  cassettes, or **contract testing** against the real provider. Hence the rule: a fixture is a recording, not
+  a drawing.
+- The empty-state version — the copy read "has been collected yet" with the negation missing, and the test
+  asserted that exact broken string — is an **expected-value bug**, or **copy-paste oracle**: the expected
+  value was taken from the output instead of derived from the requirement. The counter-practice is to assert
+  the *property* (the negation is present) rather than the author's string, which is what
+  `tests/empty-states.test.ts` now does.
+
+**2. What the reader saw on the Tenders page.**
+
+The collector returned nothing and the page stated as fact that Bhutan had no open tenders, while 203 were
+out to bid:
+
+- **Silent failure** / **error swallowing** — an empty result was accepted as a valid answer.
+- Precisely: the page **failed open** instead of **failing closed**. On an unknown state it asserted a fact
+  rather than declining to. In reliability terms it broke **fail-safe defaults**; in data terms it is an
+  **absence-vs-null conflation**, rendering "we hold no rows" as "there are no rows" — the exact confusion
+  that `NULL` exists to keep separate from `0`.
+- The result is a **false negative delivered with full confidence**, which on a site whose purpose is to be
+  checkable is the worst available outcome: it is indistinguishable from data.
+
+**3. Why the suite did not catch either.**
+
+The broken sentence was caught by rendering the page and reading it, not by the tests. That is a **missing
+end-to-end (or snapshot) check over rendered output**: the suite asserted structure, never the text a reader
+would actually see. The operating rule: anything a reader will read has to be checked by looking at the
+rendered thing.
+
+One sentence for the whole episode, for anyone reviewing a change to a collector or an empty state: **a test
+whose oracle is the author's assumption, shipped behind a UI that fails open.**
+
 ### Action items
 
 1. [x] Collector rewritten against the observed request; verified live (203 notices, 0 validation errors)
 2. [x] Fixture replaced with a real capture; synthetic cases separated and labelled
 3. [x] Per-notice citation URLs, enforced by validation
 4. [x] Tenders page distinguishes a collector failure from a genuinely empty register
-5. [ ] Audit the other modules' empty states for the same false-explanation problem
+5. [x] Audit the other modules' empty states for the same false-explanation problem — done in
+       [#22](https://github.com/Youngyang07/DrukView/pull/22),
+       which found the same mistake in Overview, Projects, Funders and Weather and moved all of them onto
+       one `<EmptyOr>` helper
 6. [ ] Alert when `egp` has been stale for more than 3 days — a scraper that silently stops is the failure
        mode this ADR has now demonstrated twice
