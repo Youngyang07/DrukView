@@ -177,6 +177,32 @@ d('database layer', () => {
     await db.query(`update sources set status='ok', last_success=now(), last_attempt=now(), alerted_at=null`);
   });
 
+  test('vacancies: both collectors load from their captures, scope by dzongkhag, and a bad run keeps the old rows', async () => {
+    const { readFileSync } = await import('node:fs');
+    const blmis = await import('../pipeline/blmis.mjs'); const rcsc = await import('../pipeline/rcsc.mjs');
+    const matcher = await ing.matcherOf();
+    const counts = blmis.toCountRows(blmis.parseBlmis(readFileSync('tests/fixtures/blmis-jobseeker-real.html', 'utf8'))!, matcher, { fetchedAt: '2026-11-27T08:00:00Z' });
+    expect(await ing.saveJobPortalCounts(counts)).toBe(762); // the job records the listing total
+    const stored = await q.getJobPortalCounts();
+    expect(stored.filter(c => c.dimension === 'dzongkhag').find(c => c.slug === 'thimphu')?.count).toBe(324);
+    expect(stored.find(c => c.dimension === 'qualification' && c.label === null)?.count).toBe(1);
+
+    const page = rcsc.parseRcscPage(JSON.parse(readFileSync('tests/fixtures/rcsc-vacancies-real.json', 'utf8')));
+    const vac = rcsc.toVacancies(page.rows, matcher, { fetchedAt: '2026-11-27T08:00:00Z' });
+    expect(await ing.saveCivilServiceVacancies({ rows: vac, total: page.total! })).toBe(16);
+    expect(await q.getCivilServiceVacancies(null)).toHaveLength(16);
+    const gasa = await q.getCivilServiceVacancies('BT-GA'); // a nine-dzongkhag announcement, and Gasa's own driver post
+    expect(gasa.map(v => v.title).sort()).toEqual(['Asst. Laboratory Technician I', 'Driver III']);
+    expect(gasa.find(v => v.title === 'Driver III')).toMatchObject({ agency: 'Gasa Dzongkhag', pay_min: 10550, pay_max: 13775, pay_currency: 'BTN', closing_on: '2026-11-27' });
+    expect((await q.getCivilServiceVacancies(null))[0].closing_on <= (await q.getCivilServiceVacancies(null))[15].closing_on).toBe(true);
+
+    // a short read (fewer rows than the list's own total) and disagreeing counts are both refused, and nothing changes
+    await expect(ing.saveCivilServiceVacancies({ rows: vac.slice(0, 10), total: 16 })).rejects.toThrow(/previous vacancies kept/);
+    expect(await q.getCivilServiceVacancies(null)).toHaveLength(16);
+    await expect(ing.saveJobPortalCounts(counts.filter(c => !(c.dimension === 'dzongkhag' && c.label === 'Thimphu')))).rejects.toThrow(/previous counts kept/);
+    expect((await q.getJobPortalCounts()).length).toBe(counts.length);
+  });
+
   test('jobs: rate-limited without the secret, secret bypasses, one winner under concurrency, quick retry after failure', async () => {
     expect((await ing.runJob('manual')).status).toBe('ok');
     const again = await ing.runJob('manual');

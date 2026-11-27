@@ -218,4 +218,54 @@ CREATE INDEX tenders_source_idx  ON tenders (source);
 ALTER TABLE sources ADD COLUMN alerted_at timestamptz;
 `,
   },
+  {
+    name: '0006_vacancies.sql',
+    // Two live vacancy sources. The national job portal (BLMIS) publishes counts, not listings, so its rows
+    // are counts by one dimension each; the four dimensions group the same listings and must sum alike.
+    // The civil service (RCSC Zhiyog) publishes announcements, one row each, placed by the Commission's own
+    // location flags — an announcement open in several dzongkhags has a location row for each.
+    sql: `
+CREATE TABLE job_portal_counts (
+  id            serial PRIMARY KEY,
+  dimension     text NOT NULL CHECK (dimension IN ('dzongkhag','qualification','occupation','employer')),
+  label         text,                       -- null: the portal groups listings with no value here
+  dzongkhag_id  text REFERENCES dzongkhags(id) ON DELETE CASCADE,  -- dimension 'dzongkhag' only
+  count         integer NOT NULL CHECK (count >= 0),
+  fetched_at    timestamptz NOT NULL
+);
+CREATE INDEX job_portal_counts_dim_idx ON job_portal_counts (dimension, count DESC);
+
+CREATE TABLE civil_service_vacancies (
+  id              text PRIMARY KEY,         -- rcsc-<agencyID>-<recruitmentID>
+  agency_id       integer NOT NULL,
+  recruitment_id  integer NOT NULL,
+  title           text NOT NULL,
+  announcement    text,
+  position_level  text,
+  agency          text NOT NULL,
+  service         text,
+  employment_type text,
+  category        text,
+  qualification   text,
+  slots           integer NOT NULL CHECK (slots > 0),
+  pay_min         integer,                  -- monthly pay scale as printed, in pay_currency
+  pay_max         integer,
+  pay_currency    text,
+  published_on    date NOT NULL,
+  closing_on      date NOT NULL,
+  reannounced     boolean NOT NULL DEFAULT false,
+  applicants      integer,
+  places          text[] NOT NULL DEFAULT '{}',  -- the Commission's own location names
+  url             text NOT NULL,
+  source_name     text NOT NULL,
+  fetched_at      timestamptz NOT NULL
+);
+CREATE TABLE civil_service_vacancy_locations (
+  vacancy_id    text NOT NULL REFERENCES civil_service_vacancies(id) ON DELETE CASCADE,
+  dzongkhag_id  text NOT NULL REFERENCES dzongkhags(id) ON DELETE CASCADE,
+  PRIMARY KEY (vacancy_id, dzongkhag_id)
+);
+CREATE INDEX csv_locations_dz_idx ON civil_service_vacancy_locations (dzongkhag_id);
+`,
+  },
 ];

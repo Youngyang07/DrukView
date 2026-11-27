@@ -41,9 +41,14 @@ beside the existing sector table, never added to it. Industry & jobs adds a date
 dzongkhag and qualification. Both reconcile with printed totals in tests. Next.js bumped 16.4.0 -> 16.4.6: `next build`
 had started refusing 16.4.0 over critical advisories.
 
+**Live vacancy collectors (2026-11-27):** `blmis` (the job portal's counts by dzongkhag, qualification, occupation
+and employer, rejected unless the four agree) and `rcsc` (every open civil-service announcement from Zhiyog, rejected
+unless the count matches the list's own total). Both are tested against real captures and loaded into a real
+Postgres from the live sites. The page was rendered and read in the fresh, failed-refresh and never-collected states.
+
 **Open, with owners' decisions recorded**
-0. Live vacancy collector (BLMIS, then RCSC ZRS): blocked on a raw HTML capture to test against; the RCSC list renders
-   client-side. Note BLMIS was only readable through Firecrawl's stealth proxy, so it may refuse datacenter traffic.
+0. Live vacancy collectors built (ADR-0003): confirm `blmis` and `rcsc` read `ok` on the Data sources page after the
+   first production cron run. BLMIS answers in 20–30 s, close to the 50 s deadline.
 1. Point an uptime monitor at `/api/health` and (optionally) set `ALERT_WEBHOOK_URL` — the code is in place but
    a destination is a hosting choice, so until one is set the alert is only visible on the Data sources page.
 2. Read e-GP's Notification-of-Contract-Award list (ADR-0002, action 5).

@@ -42,6 +42,9 @@ export default async function DataSources() {
       A notice is placed in a dzongkhag only when the procuring agency&apos;s own hierarchy names exactly one; a ministry&apos;s notice is national even where the work is plainly in one place.</p>
     <p>Because that response&apos;s shape is the whole agreement, the run is all-or-nothing: if the rows cannot be read, the previous notices stay published and the source is marked <b>stale</b> above — so a redesign at e-GP shows up here as a failed source rather than as an empty Tenders page.
       The Tenders page says which of the two it is, because &ldquo;nothing is out to bid here&rdquo; and &ldquo;we could not read e-GP&rdquo; are different claims and only one of them is about Bhutan.</p>
+    <h2>Vacancies</h2>
+    <p>Two daily jobs. The national job portal, <Ext href="https://www.blmis.gov.bt/jobseeker_page/mispage">BLMIS</Ext>, publishes <b>counts</b> of its listings by dzongkhag, qualification, occupation and employer. DrukView reads those counts, not the listings, and rejects a refresh unless all four breakdowns add up to the same total. The portal does not say how long a listing stays up, so the figure is &ldquo;listed that day&rdquo;, not &ldquo;open today&rdquo;.</p>
+    <p>The Royal Civil Service Commission&apos;s <Ext href="https://jobs.rcsc.gov.bt/Application/Vacancy">Zhiyog</Ext> system lists every open civil-service announcement. DrukView makes the page&apos;s own list request and rejects a refresh unless it reads as many announcements as the list reports. Each one links to its own announcement, with pay as the monthly scale in ngultrum as printed.</p>
     <h2>When a source stops</h2>
     <p>A refresh that fails marks its source <b>stale</b> above and keeps the previous data. A refresh that never
       runs at all is harder to see — the status stays &ldquo;ok&rdquo; while the data quietly ages — so the age of each

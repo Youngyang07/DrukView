@@ -355,11 +355,11 @@ function VacancyNotices() {
   </>);
 }
 
-export function Economy({ scope, locale }: Props) {
+export function Economy({ scope, locale, liveVacancies = false }: Props & { liveVacancies?: boolean }) {
   const ind = economy.metrics.find(m => m.key === 'industry')!;
   const plc = economy.metrics.find(m => m.key === 'placements')!;
   const vac = economy.metrics.find(m => m.key === 'vacancies')!;
-  const vacWhere = <p className="note">This is the count on {vac.asOf}, not a live list. For openings today, and to apply, see <Ext href={vac.source.url}>BLMIS</Ext>. Civil-service vacancies are posted separately on the Royal Civil Service Commission’s <Ext href="https://jobs.rcsc.gov.bt/Application/Vacancy">Zhiyog Recruitment System</Ext> and are not counted here.</p>;
+  const vacWhere = <p className="note">This is the count on {vac.asOf}, kept as a dated reference. The count refreshed daily, with the civil-service vacancies from the Royal Civil Service Commission’s <Ext href="https://jobs.rcsc.gov.bt/Application/Vacancy">Zhiyog Recruitment System</Ext>, is under <b>Vacancies now</b> below. To apply, see <Ext href={vac.source.url}>BLMIS</Ext>.</p>;
   const SCALE: [string, string][] = [['cottage', 'Cottage'], ['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']];
   if (!scope) {
     const rows = DZONGKHAGS.map(d => ({ d, i: ind.dzongkhags[d.slug], p: plc.dzongkhags[d.slug]?.total ?? 0, v: vac.dzongkhags[d.slug]?.total ?? 0, pop: population.dzongkhags[d.slug]?.total ?? 0 })).filter(x => x.i);
@@ -379,11 +379,15 @@ export function Economy({ scope, locale }: Props) {
         <tr className="tot"><td>Bhutan</td>{SCALE.map(([k]) => <td className="num" key={k}>{num(ind.national[k])}</td>)}<td className="num">{num(ind.national.total)}</td>
           <td className="num">{((ind.national.total / population.national.enumerated) * 1000).toFixed(0)}</td><td className="num">{num(plc.national.total)}</td><td className="num">{num(vac.national.total)}</td></tr></tbody></table></div>
       <p className="note">* Indicative only: licences in 2026 against the 2017 census population.</p>
-      <h3>Vacancies listed on the national job portal — {num(vac.national.total)} on {vac.asOf}</h3>
-      <Bars rows={rows.filter(x => x.v > 0).sort((a, b) => b.v - a.v).map(x => ({ k: x.d.name, v: x.v, href: `/${locale}/${x.d.slug}/economy` }))} fmt={num} />
-      {vac.breakdown ? <><h4>{vac.breakdown.title}</h4>
-        <Bars rows={vac.breakdown.rows.map(r => ({ k: r.label, v: r.count }))} fmt={num} /></> : null}
-      {vacWhere}
+      {liveVacancies ? <>
+        <h3>Vacancies</h3>
+        <p className="note">The last column above is the national job portal&apos;s count on {vac.asOf}, kept as a dated reference. Today&apos;s count, refreshed daily, and the civil-service vacancies are under <b>Vacancies now</b> below.</p>
+      </> : <>
+        <h3>Vacancies listed on the national job portal — {num(vac.national.total)} on {vac.asOf}</h3>
+        <Bars rows={rows.filter(x => x.v > 0).sort((a, b) => b.v - a.v).map(x => ({ k: x.d.name, v: x.v, href: `/${locale}/${x.d.slug}/economy` }))} fmt={num} />
+        {vac.breakdown ? <><h4>{vac.breakdown.title}</h4>
+          <Bars rows={vac.breakdown.rows.map(r => ({ k: r.label, v: r.count }))} fmt={num} /></> : null}
+        {vacWhere}</>}
       <VacancyNotices />
       <SourceNote source={ind.source} notes={ind.notes} what="Industry licences" />
       <SourceNote source={plc.source} notes={plc.notes} what="Jobs filled" />
@@ -406,10 +410,11 @@ export function Economy({ scope, locale }: Props) {
     {pop ? <p className="note">That is about {((i.total / pop) * 1000).toFixed(0)} licences per 1,000 residents, against {((ind.national.total / population.national.enumerated) * 1000).toFixed(0)} nationally — indicative only, as the licence count is from 2026 and the population from the 2017 census.</p> : null}
     <p><Link className="btn" href={`/${locale}/bhutan/economy`}>Compare all dzongkhags →</Link></p>
     <SourceNote source={ind.source} notes={ind.notes} what={`Industry licences – ${scope.name}`} />
-    <h3>Vacancies listed — {num(v)} on {vac.asOf}</h3>
-    {v === 0 ? <p>No vacancy in {scope.name} was listed on the national job portal that day.</p>
-      : <p>{num(v)} of the {num(vac.national.total)} vacancies listed nationally that day were in {scope.name} ({((v / vac.national.total) * 100).toFixed(1)}%).</p>}
-    {vacWhere}
+    {liveVacancies ? null : <>
+      <h3>Vacancies listed — {num(v)} on {vac.asOf}</h3>
+      {v === 0 ? <p>No vacancy in {scope.name} was listed on the national job portal that day.</p>
+        : <p>{num(v)} of the {num(vac.national.total)} vacancies listed nationally that day were in {scope.name} ({((v / vac.national.total) * 100).toFixed(1)}%).</p>}
+      {vacWhere}</>}
     <SourceNote source={plc.source} notes={plc.notes} what={`Jobs filled – ${scope.name}`} />
     <SourceNote source={vac.source} notes={vac.notes} what={`Vacancies listed – ${scope.name}`} /></div>);
 }
