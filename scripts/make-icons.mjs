@@ -7,8 +7,8 @@ import { mkdirSync } from 'node:fs';
 const mark = (size, r, scale) => {
   const c = size / 2, ring = size * 0.219 * scale, stroke = size * 0.094 * scale;
   return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <rect width="${size}" height="${size}" rx="${r}" fill="#8a1c2b"/>
-    <circle cx="${c}" cy="${c}" r="${ring}" fill="none" stroke="#ffb400" stroke-width="${stroke}"/></svg>`);
+    <rect width="${size}" height="${size}" rx="${r}" fill="#9f1239"/>
+    <circle cx="${c}" cy="${c}" r="${ring}" fill="none" stroke="#f59e0b" stroke-width="${stroke}"/></svg>`);
 };
 mkdirSync('public/icons', { recursive: true });
 const out = [

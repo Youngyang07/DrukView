@@ -10,7 +10,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   return (<>
     <a className="skip" href="#main">Skip to content</a>
     <header className="top"><div className="wrap top-in">
-      <Link href={`/${locale}`} className="brand"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><rect width="32" height="32" rx="8" fill="var(--maroon)" /><circle cx="16" cy="16" r="7" fill="none" stroke="var(--saffron)" strokeWidth="3" /></svg>
+      <Link href={`/${locale}`} className="brand"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#9f1239" /><circle cx="16" cy="16" r="7" fill="none" stroke="#f59e0b" strokeWidth="3" /></svg>
         <div><b>DrukView</b><span>Every Ngultrum Accounted For</span></div></Link>
       <nav aria-label="Main" className="topnav">
         <Link href={`/${locale}/bhutan`}>Bhutan</Link><Link href={`/${locale}/compare`}>Compare</Link><Link href={`/${locale}/data-sources`}>Data sources</Link>

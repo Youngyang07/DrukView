@@ -52,15 +52,24 @@ export function Bars({ rows, fmt }: { rows: { k: string; v: number; href?: strin
   );
 }
 
-export const PALETTE = ['#8a1c2b', '#ffb400', '#2f6f8f', '#5c8a3c', '#9b5fc0', '#c2552b', '#4a4a4a', '#c0397a'];
-export function Stacked({ parts, fmt }: { parts: [string, number][]; fmt: (v: number) => string }) {
+/** Categorical series colours, in fixed order (light and dark steps live in globals.css as --s1..--s8). */
+export const PALETTE = ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)', 'var(--s5)', 'var(--s6)', 'var(--s7)', 'var(--s8)'];
+/** Never cycle colours: past the palette's length, the smallest parts fold into "Other". */
+const foldParts = (parts: [string, number][]): [string, number][] => {
+  if (parts.length <= PALETTE.length) return parts;
+  const sorted = [...parts].sort((a, b) => b[1] - a[1]);
+  const keep = sorted.slice(0, PALETTE.length - 1);
+  return [...keep, ['Other', sorted.slice(PALETTE.length - 1).reduce((s, p) => s + p[1], 0)]];
+};
+export function Stacked({ parts: raw, fmt }: { parts: [string, number][]; fmt: (v: number) => string }) {
+  const parts = foldParts(raw);
   const total = parts.reduce((s, p) => s + p[1], 0) || 1;
   return (
     <div>
       <div className="bar" role="img" aria-label={parts.map(p => `${p[0]} ${fmt(p[1])}`).join(', ')}>
-        {parts.map((p, i) => <span key={p[0]} style={{ width: `${(p[1] / total) * 100}%`, background: PALETTE[i % PALETTE.length] }} title={`${p[0]}: ${fmt(p[1])}`} />)}
+        {parts.map((p, i) => <span key={p[0]} style={{ width: `${(p[1] / total) * 100}%`, background: PALETTE[i] }} title={`${p[0]}: ${fmt(p[1])}`} />)}
       </div>
-      <div className="note">{parts.map((p, i) => <span key={p[0]} className="keyi"><i className="sw" style={{ background: PALETTE[i % PALETTE.length] }} />{p[0]} {fmt(p[1])}</span>)}</div>
+      <div className="note">{parts.map((p, i) => <span key={p[0]} className="keyi"><i className="sw" style={{ background: PALETTE[i] }} />{p[0]} {fmt(p[1])}</span>)}</div>
     </div>
   );
 }
