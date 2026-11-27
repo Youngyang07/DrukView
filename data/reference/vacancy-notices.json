@@ -3,7 +3,7 @@
  "notes": [
   "Each notice in this section was read on the employer's own website on 27 November 2026 and links to it. Notices are hidden once their closing date has passed, so this list shrinks until it is checked again.",
   "Social-media posts and paid aggregators are not used: a notice is listed only where the employer publishes it on its own site.",
-  "This is not a complete list of employers. The table of sources says which employers were looked at and what was found, including where nothing could be read."
+  "This is not a complete list of employers: Bhutan has many more NGOs and civil-society organisations registered with the Civil Society Organizations Authority (csoa.gov.bt). The table of sources says which employers were looked at and what was found, including where nothing could be read."
  ],
  "notices": [
   {
@@ -45,6 +45,14 @@
    "posted": "2026-11-14",
    "closes": "2026-11-30",
    "url": "https://bhutantrustfund.bt/vacancy-announcement-5/"
+  },
+  {
+   "employer": "Royal Society for Protection of Nature (RSPN)",
+   "group": "ngo",
+   "title": "Senior Climate Specialist (re-announced)",
+   "posted": "2026-11-26",
+   "closes": "2026-12-02",
+   "url": "https://rspnbhutan.org/re-announcement-2/"
   }
  ],
  "sources": [
@@ -138,6 +146,34 @@
    "page": "https://bhutan.un.org/en/jobs",
    "status": "unreadable",
    "note": "The job list is built in the browser and could not be read, so no UN vacancy is listed here. Check the page directly."
+  },
+  {
+   "employer": "Royal Society for Protection of Nature (RSPN)",
+   "group": "ngo",
+   "page": "https://rspnbhutan.org/category/announcement/",
+   "status": "open",
+   "note": "Re-announced a vacancy on 26 November 2026."
+  },
+  {
+   "employer": "Bhutan Centre for Media and Democracy (BCMD)",
+   "group": "ngo",
+   "page": "https://bcmd.bt/category/announcements/vacancies/",
+   "status": "none",
+   "note": "Its two most recent vacancy notices, from December 2025, are marked closed."
+  },
+  {
+   "employer": "Save the Children (Bhutan)",
+   "group": "ngo",
+   "page": "https://www.savethechildren.net/bhutan/bhutan-jobs",
+   "status": "none",
+   "note": "The page lists the organisation’s worldwide openings; none was based in Bhutan."
+  },
+  {
+   "employer": "WWF Bhutan",
+   "group": "ngo",
+   "page": null,
+   "status": "social",
+   "note": "Posts vacancies on Facebook; none found on a website."
   },
   {
    "employer": "Loden Foundation",

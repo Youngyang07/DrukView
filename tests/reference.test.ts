@@ -262,6 +262,6 @@ describe('vacancy notices (employers’ own sites)', () => {
       if (s.status === 'open' || s.status === 'none' || s.status === 'unreadable') expect(s.page, s.employer).toMatch(/^https:\/\//);
     }
     // every group the user asked about is covered, even where the answer is "could not be read"
-    expect(new Set(V.sources.map(s => s.group))).toEqual(new Set(['listed', 'un', 'foundation', 'media']));
+    expect(new Set(V.sources.map(s => s.group))).toEqual(new Set(['listed', 'un', 'ngo', 'foundation', 'media']));
   });
 });

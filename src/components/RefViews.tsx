@@ -339,7 +339,7 @@ function VacancyNotices() {
   const open = V.notices.filter(n => isOpen(n, today)).sort((a, b) => (a.closes ?? '9999').localeCompare(b.closes ?? '9999'));
   const closed = V.notices.length - open.length;
   return (<>
-    <h3>Vacancy notices from listed companies, UN agencies and foundations</h3>
+    <h3>Vacancy notices from listed companies, UN agencies, NGOs and foundations</h3>
     <p className="note">Read on each employer’s own website on {V.checked}. A notice disappears from this list after its closing date, so a short list may only mean the check is old — the table below shows where each employer posts.</p>
     {open.length ? <div className="scroll"><table><thead><tr><th>Employer</th><th>Position</th><th>Type</th><th>Closes</th><th>Notice</th></tr></thead><tbody>
       {open.map(n => <tr key={n.employer + n.title}><td>{n.employer}</td><td>{n.title}</td><td>{VACANCY_GROUP[n.group]}</td>
