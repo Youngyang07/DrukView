@@ -254,6 +254,164 @@
     "Someone who changed job during the year is counted twice; the report estimates 6,598 different people behind these 6,940 placements.",
     "The ministry publishes no unemployment rate by dzongkhag. The labour-force figures in its report come from the National Statistics Bureau's Quarterly Labour Force Survey and are national only."
    ]
+  },
+  {
+   "key": "vacancies",
+   "label": "Vacancies listed on the national job portal",
+   "unit": "listings",
+   "asOf": "2026-11-27",
+   "fiscalYear": null,
+   "source": {
+    "publisher": "Ministry of Industry, Commerce and Employment, Royal Government of Bhutan",
+    "title": "Bhutan Labour Market Information System (BLMIS) – Vacancies & Trainings",
+    "table": "“Job by Location” and “Job by Qualification” counts, as shown on 27 November 2026",
+    "url": "https://www.blmis.gov.bt/jobseeker_page/mispage",
+    "checked": "2026-11-27"
+   },
+   "national": {
+    "total": 762
+   },
+   "dzongkhags": {
+    "bumthang": {
+     "total": 5
+    },
+    "chukha": {
+     "total": 36
+    },
+    "dagana": {
+     "total": 7
+    },
+    "gasa": {
+     "total": 0
+    },
+    "haa": {
+     "total": 7
+    },
+    "lhuntse": {
+     "total": 0
+    },
+    "mongar": {
+     "total": 11
+    },
+    "paro": {
+     "total": 77
+    },
+    "pemagatshel": {
+     "total": 0
+    },
+    "punakha": {
+     "total": 24
+    },
+    "samdrup-jongkhar": {
+     "total": 3
+    },
+    "samtse": {
+     "total": 5
+    },
+    "sarpang": {
+     "total": 196
+    },
+    "thimphu": {
+     "total": 324
+    },
+    "trashigang": {
+     "total": 10
+    },
+    "trashiyangtse": {
+     "total": 4
+    },
+    "trongsa": {
+     "total": 2
+    },
+    "tsirang": {
+     "total": 8
+    },
+    "wangdue-phodrang": {
+     "total": 11
+    },
+    "zhemgang": {
+     "total": 32
+    }
+   },
+   "breakdown": {
+    "title": "Minimum qualification asked for",
+    "rows": [
+     {
+      "label": "No Education",
+      "count": 141
+     },
+     {
+      "label": "NFE",
+      "count": 2
+     },
+     {
+      "label": "Class I",
+      "count": 1
+     },
+     {
+      "label": "Class III",
+      "count": 3
+     },
+     {
+      "label": "Class IV",
+      "count": 3
+     },
+     {
+      "label": "Class V",
+      "count": 13
+     },
+     {
+      "label": "Class VI",
+      "count": 16
+     },
+     {
+      "label": "Class VII",
+      "count": 15
+     },
+     {
+      "label": "Class VIII",
+      "count": 78
+     },
+     {
+      "label": "Class IX",
+      "count": 6
+     },
+     {
+      "label": "Class X",
+      "count": 230
+     },
+     {
+      "label": "Class XI",
+      "count": 3
+     },
+     {
+      "label": "Class XII",
+      "count": 137
+     },
+     {
+      "label": "Certificate",
+      "count": 70
+     },
+     {
+      "label": "Diploma",
+      "count": 20
+     },
+     {
+      "label": "Bachelor's Degree",
+      "count": 23
+     },
+     {
+      "label": "Not stated",
+      "count": 1
+     }
+    ]
+   },
+   "notes": [
+    "A one-day snapshot: the vacancy listings BLMIS showed on 27 November 2026, counted by the dzongkhag the employer gave. Vacancies open and close every day, so for current openings, and to apply, use BLMIS itself.",
+    "BLMIS lists only dzongkhags with at least one vacancy. Gasa, Lhuentse and Pemagatshel did not appear that day and are recorded as 0.",
+    "BLMIS shows a count beside each dzongkhag and qualification; it does not say whether one listing can be for more than one post. One listing gave no qualification and is shown as “not stated”.",
+    "Listings are posted by employers, mostly private businesses, with a few public bodies. Civil-service vacancies are announced separately by the Royal Civil Service Commission on its Zhiyog Recruitment System (jobs.rcsc.gov.bt) and are not included here."
+   ]
   }
  ]
 }

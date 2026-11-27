@@ -133,7 +133,63 @@ describe('national budget reference data', () => {
   });
 });
 
+describe('budget themes (report §5.4-5.8)', () => {
+  const T = budget.themes;
+  const M = 1_000_000;
+
+  it('climate tagging: every column and every agency row reconciles with Table 5.7', () => {
+    const C = T.climate;
+    for (const k of ['recommended', 'mitigation', 'adaptation', 'enabling', 'noRelevance'] as const) {
+      const col = sum(C.agencies.map(a => a[k]));
+      expect(col, k).toBe(k === 'recommended' ? C.taggedBudget : C[k]);
+    }
+    for (const a of C.agencies) expect(a.mitigation + a.adaptation + a.enabling + a.noRelevance, a.agency).toBe(a.recommended);
+    // the text prints the climate total to one decimal of a million (Nu 11,179.7m); the table gives it to three
+    expect(Math.abs(C.mitigation + C.adaptation + C.enabling - C.printedTotal)).toBeLessThan(0.05 * M);
+    expect(C.agencies).toHaveLength(12);
+    // tagging covers only part of the budget, so it must never be presented as a share of the whole
+    expect(C.taggedBudget).toBeLessThan(budget.national.totalAppropriation);
+  });
+
+  it('grants, subsidies and the general reserve match Tables 5.5 and 5.6', () => {
+    for (const g of T.transfers.groups) {
+      expect(sum(g.lines.map(l => l.total)), g.name).toBe(g.total);
+      for (const l of g.lines) expect(l.current + l.capital, l.name).toBe(l.total);
+    }
+    expect(sum(T.transfers.groups.map(g => g.total))).toBe(T.transfers.total);
+    expect(T.transfers.total).toBe(1_775_722_000);
+    expect(sum(T.reserve.lines.map(l => l.current))).toBe(T.reserve.current);
+    expect(sum(T.reserve.lines.map(l => l.capital))).toBe(T.reserve.capital);
+    expect(T.reserve.current + T.reserve.capital).toBe(T.reserve.total);
+  });
+
+  it('every theme cites a section and page of the same report, and amounts are whole ngultrum', () => {
+    expect(T.source.url).toBe(budget.source.url);
+    for (const th of [T.climate, T.gender, T.stimulus, T.reserve, T.transfers]) {
+      expect(th.section).toMatch(/^5\.[4-8] /);
+      expect(th.page).toBeGreaterThan(40);
+    }
+    const walk = (o: unknown): number[] => typeof o === 'number' ? [o] : o && typeof o === 'object' ? Object.values(o).flatMap(walk) : [];
+    for (const n of walk({ ...T, source: null })) expect(Number.isInteger(n), String(n)).toBe(true);
+  });
+});
+
 describe('MoICE industry/jobs and Dzongdag reference data', () => {
+  it('vacancy snapshot: dzongkhag and qualification counts both add up to the portal total', () => {
+    const vac = economy.metrics.find(m => m.key === 'vacancies')!;
+    expect(Object.keys(vac.dzongkhags).sort()).toEqual(slugs);
+    expect(sum(Object.values(vac.dzongkhags).map(d => d.total))).toBe(vac.national.total);
+    expect(sum(vac.breakdown!.rows.map(r => r.count))).toBe(vac.national.total);
+    expect(vac.national.total).toBe(762);
+    // a snapshot must say which day it is, and cite the government portal it was read from
+    expect(vac.asOf).toMatch(/^\d{4}-\d\d-\d\d$/);
+    expect(vac.source.url).toMatch(/^https:\/\/www\.blmis\.gov\.bt\//);
+    // the notes must send readers to the live list rather than let a dated count pass as current
+    expect(vac.notes.join(' ')).toMatch(/snapshot/i);
+    expect(vac.notes.join(' ')).toMatch(/Civil-service vacancies .* not included/);
+  });
+
+
   it('industry licences reconcile with the Annual Industry Report totals', () => {
     const ind = economy.metrics.find(m => m.key === 'industry')!;
     expect(Object.keys(ind.dzongkhags).sort()).toEqual(slugs);

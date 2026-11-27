@@ -43,7 +43,7 @@ button.link{border:0;background:none;color:var(--link);text-decoration:underline
 :focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
 .card-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-h2{margin:0;font-size:1.15rem}h3{margin:16px 0 6px;font-size:1rem}small{color:var(--muted);font-weight:400}
+h2{margin:0;font-size:1.15rem}h3{margin:16px 0 6px;font-size:1rem}h4{margin:14px 0 6px;font-size:.95rem}small{color:var(--muted);font-weight:400}
 .grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}@media(max-width:860px){.grid2{grid-template-columns:1fr}}
 .mapwrap{position:relative}.mapwrap svg{width:100%;height:auto;display:block;user-select:none;-webkit-user-select:none}
 .mapwrap .tip{position:absolute}

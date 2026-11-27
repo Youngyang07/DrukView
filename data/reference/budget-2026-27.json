@@ -2617,5 +2617,348 @@
    "capital": 28440000,
    "total": 33163000
   }
- ]
+ ],
+ "themes": {
+  "source": {
+   "publisher": "Ministry of Finance, Royal Government of Bhutan",
+   "title": "National Budget Report for FY 2026-27",
+   "url": "https://mof.gov.bt/wp-content/uploads/2026/05/Budget-Report-FY-2026-27-English-1.pdf",
+   "table": "Sections 5.4-5.8: Table 5.5 (grants and subsidies, p. 45), §5.5 Economic Stimulus Program and Table 5.6 (general reserve, p. 47), §5.7 Gender Responsive Budgeting and Table 5.7 (climate co-benefits, p. 48)",
+   "checked": "2026-11-27"
+  },
+  "notes": [
+   "Themes cut across the sector table: the same ngultrum can sit in a sector, in the climate tag and in the gender allocation at once. They are never added to each other or to the sector totals.",
+   "Climate tagging covers only the 12 agencies in Table 5.7, whose budgets total Nu 44,992.2 million. The rest of the budget was not tagged, so the climate share of the whole budget is not known.",
+   "The gender and economic-stimulus amounts are printed to one decimal of a million and are stored at that precision. The report lists the gender activities in Annexure 6 (XIII); they are not transcribed here.",
+   "Blank cells in the printed tables are stored as zero. The printed column totals confirm which column each amount belongs to."
+  ],
+  "climate": {
+   "section": "5.8 Climate Co-Benefits",
+   "table": "Table 5.7 Climate Co-Benefits Related Allocation for FY 2026-27",
+   "page": 48,
+   "taggedBudget": 44992156000,
+   "mitigation": 1598962000,
+   "adaptation": 9136078000,
+   "enabling": 444623000,
+   "noRelevance": 33812493000,
+   "printedTotal": 11179700000,
+   "agencies": [
+    {
+     "agency": "MoHA",
+     "name": "Ministry of Home Affairs",
+     "recommended": 1209409000,
+     "mitigation": 3000000,
+     "adaptation": 24518000,
+     "enabling": 1220000,
+     "noRelevance": 1180671000
+    },
+    {
+     "agency": "MoF",
+     "name": "Ministry of Finance",
+     "recommended": 5913680000,
+     "mitigation": 297000000,
+     "adaptation": 7410000,
+     "enabling": 11370000,
+     "noRelevance": 5597900000
+    },
+    {
+     "agency": "MoAL",
+     "name": "Ministry of Agriculture and Livestock",
+     "recommended": 1610512000,
+     "mitigation": 0,
+     "adaptation": 89881000,
+     "enabling": 15320000,
+     "noRelevance": 1505311000
+    },
+    {
+     "agency": "MoICE",
+     "name": "Ministry of Industry, Commerce and Employment",
+     "recommended": 1105298000,
+     "mitigation": 0,
+     "adaptation": 0,
+     "enabling": 12930000,
+     "noRelevance": 1092368000
+    },
+    {
+     "agency": "MoIT",
+     "name": "Ministry of Infrastructure and Transport",
+     "recommended": 12576701000,
+     "mitigation": 289000000,
+     "adaptation": 7024242000,
+     "enabling": 79707000,
+     "noRelevance": 5183752000
+    },
+    {
+     "agency": "MoESD",
+     "name": "Ministry of Education and Skills Development",
+     "recommended": 5398326000,
+     "mitigation": 38000000,
+     "adaptation": 10066000,
+     "enabling": 1115000,
+     "noRelevance": 5349145000
+    },
+    {
+     "agency": "MoENR",
+     "name": "Ministry of Energy and Natural Resources",
+     "recommended": 1802488000,
+     "mitigation": 908073000,
+     "adaptation": 477773000,
+     "enabling": 217855000,
+     "noRelevance": 198787000
+    },
+    {
+     "agency": "NCHM",
+     "name": "National Center for Hydrology and Meteorology",
+     "recommended": 366421000,
+     "mitigation": 0,
+     "adaptation": 274151000,
+     "enabling": 91939000,
+     "noRelevance": 331000
+    },
+    {
+     "agency": "RUB",
+     "name": "Royal University of Bhutan",
+     "recommended": 658513000,
+     "mitigation": 0,
+     "adaptation": 0,
+     "enabling": 5575000,
+     "noRelevance": 652938000
+    },
+    {
+     "agency": "Cabinet Secretariat",
+     "name": "Cabinet Secretariat",
+     "recommended": 131013000,
+     "mitigation": 0,
+     "adaptation": 1232000,
+     "enabling": 0,
+     "noRelevance": 129781000
+    },
+    {
+     "agency": "RAA",
+     "name": "Royal Audit Authority",
+     "recommended": 41010000,
+     "mitigation": 0,
+     "adaptation": 0,
+     "enabling": 392000,
+     "noRelevance": 40618000
+    },
+    {
+     "agency": "LGs",
+     "name": "Local governments",
+     "recommended": 14178785000,
+     "mitigation": 63889000,
+     "adaptation": 1226805000,
+     "enabling": 7200000,
+     "noRelevance": 12880891000
+    }
+   ]
+  },
+  "gender": {
+   "section": "5.7 Gender Responsive Budgeting",
+   "page": 48,
+   "total": 1019400000,
+   "description": "Activities across agencies that directly and indirectly benefit women, children and vulnerable groups: women’s empowerment, maternal and child health, prevention of and response to gender-based violence, child protection, leadership and capacity development."
+  },
+  "stimulus": {
+   "section": "5.5 Economic Stimulus Program",
+   "page": 47,
+   "total": 854800000,
+   "programmeOutlay": 15000000000,
+   "budgetedToDate": 10244500000,
+   "budgetedToDateAsOf": "2026-04-22",
+   "description": "Spill-over activities of the programme launched in FY 2023-24: agriculture and livestock, tourism, cottage and small industries, start-up centres, the De-suung skilling programme, creative industry, youth employment, education and training."
+  },
+  "reserve": {
+   "section": "5.6 General Reserve",
+   "table": "Table 5.6 Details of General Reserve",
+   "page": 47,
+   "current": 2720000000,
+   "capital": 2350000000,
+   "total": 5070000000,
+   "lines": [
+    {
+     "name": "Remuneration for Critical Unforeseen Recruitment / Transfer benefits/Stipend Revision",
+     "current": 900000000,
+     "capital": 30000000,
+     "total": 930000000
+    },
+    {
+     "name": "Hospitality and Entertainment",
+     "current": 50000000,
+     "capital": 0,
+     "total": 50000000
+    },
+    {
+     "name": "Retirement Benefits",
+     "current": 150000000,
+     "capital": 0,
+     "total": 150000000
+    },
+    {
+     "name": "Third Country Travel",
+     "current": 50000000,
+     "capital": 0,
+     "total": 50000000
+    },
+    {
+     "name": "National Events",
+     "current": 550000000,
+     "capital": 250000000,
+     "total": 800000000
+    },
+    {
+     "name": "Adhoc Works",
+     "current": 500000000,
+     "capital": 1000000000,
+     "total": 1500000000
+    },
+    {
+     "name": "Rehabilitation Programme",
+     "current": 0,
+     "capital": 70000000,
+     "total": 70000000
+    },
+    {
+     "name": "Disaster Contingency",
+     "current": 500000000,
+     "capital": 1000000000,
+     "total": 1500000000
+    },
+    {
+     "name": "Bye Election",
+     "current": 20000000,
+     "capital": 0,
+     "total": 20000000
+    }
+   ]
+  },
+  "transfers": {
+   "section": "5.4 Transfers: Grant and Subsidy",
+   "table": "Table 5.5 Details of Grant and Subsidy for FY 2026-27",
+   "page": 45,
+   "groups": [
+    {
+     "name": "Grants",
+     "total": 266371000,
+     "lines": [
+      {
+       "name": "Druk Gyalpo Relief Fund",
+       "current": 0,
+       "capital": 100000000,
+       "total": 100000000
+      },
+      {
+       "name": "Druk Gyalpo Institute",
+       "current": 46000000,
+       "capital": 0,
+       "total": 46000000
+      },
+      {
+       "name": "Bhutan Chamber of Commerce and Industry (BCCI)",
+       "current": 10500000,
+       "capital": 9000000,
+       "total": 19500000
+      },
+      {
+       "name": "Support to Bar Council of Bhutan",
+       "current": 3818000,
+       "capital": 1558000,
+       "total": 5376000
+      },
+      {
+       "name": "Support to Bhutan Alternative Dispute Resolution Center (ADRC)",
+       "current": 7586000,
+       "capital": 3620000,
+       "total": 11206000
+      },
+      {
+       "name": "Support to Bhutan Red Cross Society",
+       "current": 9289000,
+       "capital": 0,
+       "total": 9289000
+      },
+      {
+       "name": "Support for International School",
+       "current": 75000000,
+       "capital": 0,
+       "total": 75000000
+      }
+     ]
+    },
+    {
+     "name": "Operational subsidy",
+     "total": 398541000,
+     "lines": [
+      {
+       "name": "Bhutan Broadcasting Services Corporation Limited",
+       "current": 220261000,
+       "capital": 114180000,
+       "total": 334441000
+      },
+      {
+       "name": "City Bus Service (Thimphu)",
+       "current": 57600000,
+       "capital": 0,
+       "total": 57600000
+      },
+      {
+       "name": "City Bus Service (Phuntsholing)",
+       "current": 6500000,
+       "capital": 0,
+       "total": 6500000
+      }
+     ]
+    },
+    {
+     "name": "Interest subsidy",
+     "total": 90185000,
+     "lines": [
+      {
+       "name": "Interest Subsidy for Purchase of ATR 42-600",
+       "current": 30932000,
+       "capital": 0,
+       "total": 30932000
+      },
+      {
+       "name": "Interest Subsidy for the Establishment of Integrated Agro Processing Plant (Lingmithang Mongar)",
+       "current": 9295000,
+       "capital": 0,
+       "total": 9295000
+      },
+      {
+       "name": "Subsidy to NHDCL for Debt Servicing for Phuentsholing Housing Complex",
+       "current": 49958000,
+       "capital": 0,
+       "total": 49958000
+      }
+     ]
+    },
+    {
+     "name": "Insurance and domestic power subsidy",
+     "total": 1020625000,
+     "lines": [
+      {
+       "name": "Rural House Insurance Scheme",
+       "current": 17490000,
+       "capital": 0,
+       "total": 17490000
+      },
+      {
+       "name": "Rural Life Insurance Scheme",
+       "current": 589635000,
+       "capital": 0,
+       "total": 589635000
+      },
+      {
+       "name": "Subsidy for Domestic Power Tariff",
+       "current": 413500000,
+       "capital": 0,
+       "total": 413500000
+      }
+     ]
+    }
+   ],
+   "total": 1775722000
+  }
+ }
 }

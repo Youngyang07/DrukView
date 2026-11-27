@@ -217,6 +217,52 @@ export function Leaders({ scope, locale, live, flags = [] }: Props & { live?: Li
 
 const SECTOR_PAD: Record<string, string> = { child: 'padleft', parent: '', top: '' };
 
+const sh = (part: number, whole: number) => `${((part / whole) * 100).toFixed(1)}%`;
+const cite = (section: string, page: number) => <small className="note"> (§{section.split(' ')[0]}, p. {page})</small>;
+
+function SplitTable({ lines, total, label }: { lines: { name: string; current: number; capital: number; total: number }[]; total?: number; label: string }) {
+  return (<div className="scroll"><table><thead><tr><th>{label}</th><th>Running costs</th><th>Investment</th><th>Total</th></tr></thead><tbody>
+    {lines.map(l => <tr key={l.name}><td>{l.name}</td><td className="num">{moneyFull(l.current, 'BTN')}</td><td className="num">{moneyFull(l.capital, 'BTN')}</td><td className="num">{moneyFull(l.total, 'BTN')}</td></tr>)}
+    {total !== undefined ? <tr className="tot"><td>Total</td><td className="num">{moneyFull(lines.reduce((s, l) => s + l.current, 0), 'BTN')}</td><td className="num">{moneyFull(lines.reduce((s, l) => s + l.capital, 0), 'BTN')}</td><td className="num">{moneyFull(total, 'BTN')}</td></tr> : null}
+  </tbody></table></div>);
+}
+
+/** Cross-cutting tags from §5.4-5.8 of the budget report. Every figure here overlaps the sector table and
+ *  the other themes, so the page states that and never adds them up. */
+function BudgetThemes() {
+  const T = budget.themes; const C = T.climate; const climate = C.mitigation + C.adaptation + C.enabling;
+  const disaster = T.reserve.lines.find(l => l.name === 'Disaster Contingency');
+  return (<>
+    <h3>Themes across sectors</h3>
+    <p className="note">The report also tags spending by purpose, across sectors. These amounts overlap the sector table above and each other: the same ngultrum can be in Education, in the climate tag and in the gender allocation at once. They are shown side by side but are never added together.</p>
+    <div className="kpis">
+      <Stat label="Climate co-benefits" value={money(climate, 'BTN')} sub={`tagged within ${C.agencies.length} agencies’ budgets of ${money(C.taggedBudget, 'BTN')}`} />
+      <Stat label="Gender-responsive budgeting" value={money(T.gender.total, 'BTN')} sub="activities for women, children and vulnerable groups" />
+      <Stat label="Grants & subsidies" value={money(T.transfers.total, 'BTN')} sub="to state-owned enterprises and non-budgetary bodies" />
+      <Stat label="General reserve" value={money(T.reserve.total, 'BTN')} sub={disaster ? `incl. ${money(disaster.total, 'BTN')} for disaster contingency` : 'for unforeseen expenses'} />
+    </div>
+    <h4>Climate co-benefits — {money(climate, 'BTN')}{cite(C.section, C.page)}</h4>
+    <Bars rows={[{ k: 'Adaptation', v: C.adaptation }, { k: 'Mitigation', v: C.mitigation }, { k: 'Enabling environment', v: C.enabling }]} fmt={v => money(v, 'BTN')} />
+    <div className="scroll"><table><thead><tr><th>Agency</th><th>Budget tagged</th><th>Mitigation</th><th>Adaptation</th><th>Enabling</th><th>Climate share</th></tr></thead><tbody>
+      {[...C.agencies].sort((a, b) => (b.mitigation + b.adaptation + b.enabling) - (a.mitigation + a.adaptation + a.enabling)).map(a => { const c = a.mitigation + a.adaptation + a.enabling;
+        return <tr key={a.agency}><td title={a.agency}>{a.name}</td><td className="num">{moneyFull(a.recommended, 'BTN')}</td><td className="num">{moneyFull(a.mitigation, 'BTN')}</td>
+          <td className="num">{moneyFull(a.adaptation, 'BTN')}</td><td className="num">{moneyFull(a.enabling, 'BTN')}</td><td className="num">{sh(c, a.recommended)}</td></tr>; })}
+      <tr className="tot"><td>12 agencies</td><td className="num">{moneyFull(C.taggedBudget, 'BTN')}</td><td className="num">{moneyFull(C.mitigation, 'BTN')}</td><td className="num">{moneyFull(C.adaptation, 'BTN')}</td>
+        <td className="num">{moneyFull(C.enabling, 'BTN')}</td><td className="num">{sh(climate, C.taggedBudget)}</td></tr></tbody></table></div>
+    <p className="note">Only these {C.agencies.length} agencies’ budgets were tagged. The rest of the national budget was not, so the climate share of the whole budget is not known; {sh(climate, C.taggedBudget)} is the share of the tagged part only.</p>
+    <h4>Gender-responsive budgeting — {moneyFull(T.gender.total, 'BTN')}{cite(T.gender.section, T.gender.page)}</h4>
+    <p>{T.gender.description} The report lists the activities by agency in its Annexure 6 (XIII).</p>
+    <h4>Economic Stimulus Programme — {money(T.stimulus.total, 'BTN')} this year{cite(T.stimulus.section, T.stimulus.page)}</h4>
+    <p>{T.stimulus.description} Of the programme’s committed outlay of {money(T.stimulus.programmeOutlay, 'BTN')}, {money(T.stimulus.budgetedToDate, 'BTN')} had been budgeted by {T.stimulus.budgetedToDateAsOf}.</p>
+    <h4>Grants and subsidies — {money(T.transfers.total, 'BTN')}{cite(T.transfers.section, T.transfers.page)}</h4>
+    {T.transfers.groups.map(g => <SplitTable key={g.name} label={g.name} lines={g.lines} total={g.total} />)}
+    <h4>General reserve — {money(T.reserve.total, 'BTN')}{cite(T.reserve.section, T.reserve.page)}</h4>
+    <p className="note">Held back for unforeseen and unavoidable expenses during the year; money is moved out of it only under the Guidelines for General Reserve 2022.</p>
+    <SplitTable label="Purpose" lines={T.reserve.lines} total={T.reserve.total} />
+    <SourceNote source={T.source} notes={T.notes} what={`Budget themes FY ${budget.fiscalYear}`} />
+  </>);
+}
+
 export function MofBudget({ scope, locale }: Props) {
   const B = budget; const N = B.national; const LG = B.localGovernment;
   const fy = `FY ${B.fiscalYear}`;
@@ -237,6 +283,7 @@ export function MofBudget({ scope, locale }: Props) {
           <td className="num">{moneyFull(s.current, 'BTN')}</td><td className="num">{moneyFull(s.capital, 'BTN')}</td><td className="num">{moneyFull(s.total, 'BTN')}</td>
           <td className="num">{((s.total / N.totalAppropriation) * 100).toFixed(1)}%</td></tr>)}</tbody></table></div>
       <p className="note">Indented rows are part of the sector above them and are not counted twice in the total.</p>
+      <BudgetThemes />
       <h3>Local government — {money(LG.total, 'BTN')}</h3>
       <p className="note">Dzongkhags {money(LG.dzongkhags.total, 'BTN')} · gewogs {money(LG.gewogsTotal, 'BTN')} · thromdes {money(LG.thromdesTotal, 'BTN')}. That is {((LG.total / N.totalAppropriation) * 100).toFixed(1)}% of the national budget, up from {money(LG.previousYearTotal, 'BTN')} last year.</p>
       <Bars rows={[...dzRows].sort((a, b) => b.b.total - a.b.total).map(x => ({ k: x.d.name, v: x.b.total, href: `/${locale}/${x.d.slug}/budget` }))} fmt={v => money(v, 'BTN')} />
@@ -287,9 +334,11 @@ export function MofBudget({ scope, locale }: Props) {
 export function Economy({ scope, locale }: Props) {
   const ind = economy.metrics.find(m => m.key === 'industry')!;
   const plc = economy.metrics.find(m => m.key === 'placements')!;
+  const vac = economy.metrics.find(m => m.key === 'vacancies')!;
+  const vacWhere = <p className="note">This is the count on {vac.asOf}, not a live list. For openings today, and to apply, see <Ext href={vac.source.url}>BLMIS</Ext>. Civil-service vacancies are posted separately on the Royal Civil Service Commission’s <Ext href="https://jobs.rcsc.gov.bt/Application/Vacancy">Zhiyog Recruitment System</Ext> and are not counted here.</p>;
   const SCALE: [string, string][] = [['cottage', 'Cottage'], ['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']];
   if (!scope) {
-    const rows = DZONGKHAGS.map(d => ({ d, i: ind.dzongkhags[d.slug], p: plc.dzongkhags[d.slug]?.total ?? 0, pop: population.dzongkhags[d.slug]?.total ?? 0 })).filter(x => x.i);
+    const rows = DZONGKHAGS.map(d => ({ d, i: ind.dzongkhags[d.slug], p: plc.dzongkhags[d.slug]?.total ?? 0, v: vac.dzongkhags[d.slug]?.total ?? 0, pop: population.dzongkhags[d.slug]?.total ?? 0 })).filter(x => x.i);
     return (<div className="card"><div className="card-h"><h2>Industry & jobs — Bhutan</h2><span className="fresh">Industry, Commerce & Employment</span></div>
       <div className="kpis">
         <Stat label="Active industry licences" value={num(ind.national.total)} sub={`on ${ind.asOf}`} />
@@ -299,17 +348,23 @@ export function Economy({ scope, locale }: Props) {
       </div>
       <h3>Licences by dzongkhag</h3>
       <Bars rows={[...rows].sort((a, b) => b.i.total - a.i.total).map(x => ({ k: x.d.name, v: x.i.total, href: `/${locale}/${x.d.slug}/economy` }))} fmt={num} />
-      <div className="scroll"><table><thead><tr><th>Dzongkhag</th>{SCALE.map(([, l]) => <th key={l}>{l}</th>)}<th>Total</th><th title="Different years: 2026 licences, 2017 census">Per 1,000 people*</th><th>Jobs filled {plc.fiscalYear}</th></tr></thead><tbody>
-        {[...rows].sort((a, b) => a.d.name.localeCompare(b.d.name)).map(({ d, i, p, pop }) => <tr key={d.slug}><td><Link href={`/${locale}/${d.slug}/economy`}>{d.name}</Link></td>
+      <div className="scroll"><table><thead><tr><th>Dzongkhag</th>{SCALE.map(([, l]) => <th key={l}>{l}</th>)}<th>Total</th><th title="Different years: 2026 licences, 2017 census">Per 1,000 people*</th><th>Jobs filled {plc.fiscalYear}</th><th>Vacancies listed {vac.asOf}</th></tr></thead><tbody>
+        {[...rows].sort((a, b) => a.d.name.localeCompare(b.d.name)).map(({ d, i, p, v, pop }) => <tr key={d.slug}><td><Link href={`/${locale}/${d.slug}/economy`}>{d.name}</Link></td>
           {SCALE.map(([k]) => <td className="num" key={k}>{num(i[k])}</td>)}<td className="num">{num(i.total)}</td>
-          <td className="num">{pop ? ((i.total / pop) * 1000).toFixed(0) : '–'}</td><td className="num">{num(p)}</td></tr>)}
+          <td className="num">{pop ? ((i.total / pop) * 1000).toFixed(0) : '–'}</td><td className="num">{num(p)}</td><td className="num">{num(v)}</td></tr>)}
         <tr className="tot"><td>Bhutan</td>{SCALE.map(([k]) => <td className="num" key={k}>{num(ind.national[k])}</td>)}<td className="num">{num(ind.national.total)}</td>
-          <td className="num">{((ind.national.total / population.national.enumerated) * 1000).toFixed(0)}</td><td className="num">{num(plc.national.total)}</td></tr></tbody></table></div>
+          <td className="num">{((ind.national.total / population.national.enumerated) * 1000).toFixed(0)}</td><td className="num">{num(plc.national.total)}</td><td className="num">{num(vac.national.total)}</td></tr></tbody></table></div>
       <p className="note">* Indicative only: licences in 2026 against the 2017 census population.</p>
+      <h3>Vacancies listed on the national job portal — {num(vac.national.total)} on {vac.asOf}</h3>
+      <Bars rows={rows.filter(x => x.v > 0).sort((a, b) => b.v - a.v).map(x => ({ k: x.d.name, v: x.v, href: `/${locale}/${x.d.slug}/economy` }))} fmt={num} />
+      {vac.breakdown ? <><h4>{vac.breakdown.title}</h4>
+        <Bars rows={vac.breakdown.rows.map(r => ({ k: r.label, v: r.count }))} fmt={num} /></> : null}
+      {vacWhere}
       <SourceNote source={ind.source} notes={ind.notes} what="Industry licences" />
-      <SourceNote source={plc.source} notes={plc.notes} what="Jobs filled" /></div>);
+      <SourceNote source={plc.source} notes={plc.notes} what="Jobs filled" />
+      <SourceNote source={vac.source} notes={vac.notes} what="Vacancies listed" /></div>);
   }
-  const i = ind.dzongkhags[scope.slug]; const p = plc.dzongkhags[scope.slug]?.total ?? 0;
+  const i = ind.dzongkhags[scope.slug]; const p = plc.dzongkhags[scope.slug]?.total ?? 0; const v = vac.dzongkhags[scope.slug]?.total ?? 0;
   if (!i) return <div className="card"><div className="empty">No industry figures recorded for {scope.name}.</div></div>;
   const rank = Object.values(ind.dzongkhags).filter(x => x.total > i.total).length + 1;
   const pop = population.dzongkhags[scope.slug]?.total ?? 0;
@@ -319,13 +374,19 @@ export function Economy({ scope, locale }: Props) {
       <Stat label="Cottage & small" value={num(i.cottage + i.small)} sub={`${num(i.cottage)} cottage · ${num(i.small)} small`} />
       <Stat label="Medium & large" value={num(i.medium + i.large)} sub={`${num(i.medium)} medium · ${num(i.large)} large`} />
       <Stat label={`Jobs filled ${plc.fiscalYear}`} value={num(p)} sub="through the national labour system" />
+      <Stat label="Vacancies listed" value={num(v)} sub={`on the national job portal, ${vac.asOf}`} />
     </div>
     <h3>Licences by size of business</h3>
     <Bars rows={SCALE.map(([k, l]) => ({ k: l, v: i[k] })).filter(r => r.v > 0)} fmt={num} />
     {pop ? <p className="note">That is about {((i.total / pop) * 1000).toFixed(0)} licences per 1,000 residents, against {((ind.national.total / population.national.enumerated) * 1000).toFixed(0)} nationally — indicative only, as the licence count is from 2026 and the population from the 2017 census.</p> : null}
     <p><Link className="btn" href={`/${locale}/bhutan/economy`}>Compare all dzongkhags →</Link></p>
     <SourceNote source={ind.source} notes={ind.notes} what={`Industry licences – ${scope.name}`} />
-    <SourceNote source={plc.source} notes={plc.notes} what={`Jobs filled – ${scope.name}`} /></div>);
+    <h3>Vacancies listed — {num(v)} on {vac.asOf}</h3>
+    {v === 0 ? <p>No vacancy in {scope.name} was listed on the national job portal that day.</p>
+      : <p>{num(v)} of the {num(vac.national.total)} vacancies listed nationally that day were in {scope.name} ({((v / vac.national.total) * 100).toFixed(1)}%).</p>}
+    {vacWhere}
+    <SourceNote source={plc.source} notes={plc.notes} what={`Jobs filled – ${scope.name}`} />
+    <SourceNote source={vac.source} notes={vac.notes} what={`Vacancies listed – ${scope.name}`} /></div>);
 }
 
 export function Dzongdags({ scope }: Props) {
