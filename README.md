@@ -71,6 +71,11 @@ Two daily jobs, written up in [ADR-0003](docs/adr/0003-live-vacancy-collectors.m
 
 `rcsc` reads every open civil-service announcement from the Commission's Zhiyog system, through the same list request the page makes. That request needs every filter option sent, because blank filters match nothing. A refresh is rejected unless it reads as many announcements as the list itself reports. Each row links to its own announcement. Pay is the monthly pay scale in ngultrum as printed, and an announcement open in several dzongkhags appears under each, from the Commission's own location flags.
 
+### On phones, and as an app
+DrukView is one site for desktop and mobile. On a phone it uses a compact header and a tab bar at the bottom of the screen, and wide tables scroll sideways with the row label pinned. It can also be installed as an app: on Android, Chrome or Samsung Internet offer **Install** (there is also a button in the footer); on iPhone or iPad, tap **Share**, then **Add to Home Screen**. The installed app opens full-screen from its own icon.
+
+There is deliberately no offline copy of the data. Without a connection, the app shows an offline page rather than a saved page, because a figure whose date you cannot see could be weeks old. The service worker (`public/sw.js`) only caches the site's own build files, which never change, to make the app start faster. Icons are regenerated with `node scripts/make-icons.mjs`.
+
 ## Contributing## Contributing
 DrukView is open source (MIT) and open to anyone. Start with **[CONTRIBUTING.md](CONTRIBUTING.md)** — it sets out the seven data rules (never invent a number; cite every row; never mix Nu. and US$; never guess an identity or a place; reject the batch, not the row; say what you do not know; keep the date), how to add cited CSV rows or a reference dataset, and how to write a collector.
 

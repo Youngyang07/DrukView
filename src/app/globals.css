@@ -86,6 +86,8 @@ details summary{cursor:pointer;list-style:none}details summary::before{content:"
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 .loaddata button[disabled]{opacity:.6;cursor:wait}
 .plist li,td,.note,.banner{overflow-wrap:anywhere}
+/* inside a sideways-scrolling table, let cells keep whole words: the table scrolls instead of crushing a column */
+.scroll td{overflow-wrap:break-word}
 @media(max-width:520px){.mapctl button{width:30px;height:30px;font-size:1rem;opacity:.92}.mapback{font-size:.85rem;padding:5px 8px}}
 /* reference-data modules */
 .srcbox{margin-top:18px;padding:10px 14px;border-left:3px solid var(--maroon);background:var(--q0);border-radius:6px;font-size:.84rem}.srcbox p{margin:.3em 0}.srcbox ul{margin:.3em 0;padding-left:1.2em}
@@ -96,3 +98,31 @@ tr.tot td{font-weight:700;border-top:2px solid var(--line)}
 .conf{display:inline-block;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:999px;vertical-align:middle}
 .c-confirmed{background:#dff0d8;color:#2d5a1b}.c-website{background:#fcf0cd;color:#7a5a05}.c-unconfirmed{background:#f6dcd8;color:#8a1c2b}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .c-confirmed{background:#24401a;color:#b9e3a4}:root:not([data-theme="light"]) .c-website{background:#4a3a08;color:#f0d78a}:root:not([data-theme="light"]) .c-unconfirmed{background:#4d1a18;color:#f3b4ae}}
+/* installable app + phone layout */
+.tabbar{display:none}
+.install{margin:10px 0 0}.install button{min-height:44px}
+@media(max-width:720px){
+  .top{padding-top:env(safe-area-inset-top)}
+  .top-in{padding-top:8px;padding-bottom:8px}
+  .topnav{display:none!important}
+  .brand span{display:none}
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;color:var(--muted);text-decoration:none;font-size:.7rem;font-weight:600}
+  .tabbar a[aria-current=page]{color:var(--maroon)}
+  @media(prefers-color-scheme:dark){.tabbar a[aria-current=page]{color:var(--saffron)}}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+  .kpi{padding:10px 12px}.kpi b{font-size:1.25rem}
+  .card{padding:14px 12px}
+  .pagetitle{font-size:1.35rem}
+  .side{scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+  .side a{scroll-snap-align:start}
+  /* wide tables scroll sideways; keep the row label in view while they do */
+  .scroll table th:first-child,.scroll table td:first-child{position:sticky;left:0;background:var(--surface);z-index:1;min-width:36vw;max-width:46vw;box-shadow:1px 0 0 var(--line)}
+}
+@media(pointer:coarse){
+  .row{min-height:40px}.row > span > a{display:block;padding:9px 0}.chips a,.side a{padding-top:10px;padding-bottom:10px}
+  .mapctl button{width:40px;height:40px}
+  select,input,button:not(.link):not(.row),.btn{min-height:40px}
+}
+@media(display-mode:standalone){.skip{display:none}}
