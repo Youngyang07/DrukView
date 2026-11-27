@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { issueUrl } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
-import { budget, CONFIDENCE_LABEL, dzongdags, DZONGKHAGS, economy, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type Member, type RefSource, type SchoolLevel } from '@/lib/reference';
+import { budget, CONFIDENCE_LABEL, dzongdags, DZONGKHAGS, economy, isOpen, VACANCY_GROUP, VACANCY_STATUS, vacancyNotices, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type Member, type RefSource, type SchoolLevel } from '@/lib/reference';
 import FacilityList, { type FacilityRow } from './FacilityList';
 import { Bars, Ext, Fresh, Stat } from './ui';
 
@@ -331,6 +331,30 @@ export function MofBudget({ scope, locale }: Props) {
     {src}</div>);
 }
 
+/** Vacancy notices read on employers' own sites. Closed notices drop out by date, and the "where we looked"
+ *  table keeps "nothing open" apart from "could not be read", so an empty list never reads as "no jobs". */
+function VacancyNotices() {
+  const V = vacancyNotices;
+  const today = new Date().toISOString().slice(0, 10);
+  const open = V.notices.filter(n => isOpen(n, today)).sort((a, b) => (a.closes ?? '9999').localeCompare(b.closes ?? '9999'));
+  const closed = V.notices.length - open.length;
+  return (<>
+    <h3>Vacancy notices from listed companies, UN agencies and foundations</h3>
+    <p className="note">Read on each employer’s own website on {V.checked}. A notice disappears from this list after its closing date, so a short list may only mean the check is old — the table below shows where each employer posts.</p>
+    {open.length ? <div className="scroll"><table><thead><tr><th>Employer</th><th>Position</th><th>Type</th><th>Closes</th><th>Notice</th></tr></thead><tbody>
+      {open.map(n => <tr key={n.employer + n.title}><td>{n.employer}</td><td>{n.title}</td><td>{VACANCY_GROUP[n.group]}</td>
+        <td className="nw">{n.closes ?? 'not stated'}</td><td><Ext href={n.url}>employer’s notice</Ext></td></tr>)}</tbody></table></div>
+      : <p className="empty">All {V.notices.length} notices found on {V.checked} have now closed. That says nothing about vacancies posted since — check the employers’ pages below.</p>}
+    {open.length && closed ? <p className="note">{closed} notice{closed === 1 ? '' : 's'} found on {V.checked} {closed === 1 ? 'has' : 'have'} since closed and {closed === 1 ? 'is' : 'are'} not shown.</p> : null}
+    <h4>Where we looked</h4>
+    <div className="scroll"><table><thead><tr><th>Employer</th><th>Type</th><th>Result on {V.checked}</th><th>What we found</th></tr></thead><tbody>
+      {V.sources.map(s => <tr key={s.employer}><td>{s.page ? <Ext href={s.page}>{s.employer}</Ext> : s.employer}</td><td>{VACANCY_GROUP[s.group]}</td>
+        <td className="nw">{VACANCY_STATUS[s.status]}</td><td>{s.note}</td></tr>)}</tbody></table></div>
+    <div className="srcbox"><ul>{V.notes.map(n => <li key={n}>{n}</li>)}</ul>
+      <p>Spotted a mistake, or know an employer’s vacancy page? <a href={issueUrl('Vacancy source', 'Employer:\nLink to its own vacancy page:')} target="_blank" rel="noopener noreferrer">Tell us on GitHub</a>.</p></div>
+  </>);
+}
+
 export function Economy({ scope, locale }: Props) {
   const ind = economy.metrics.find(m => m.key === 'industry')!;
   const plc = economy.metrics.find(m => m.key === 'placements')!;
@@ -360,6 +384,7 @@ export function Economy({ scope, locale }: Props) {
       {vac.breakdown ? <><h4>{vac.breakdown.title}</h4>
         <Bars rows={vac.breakdown.rows.map(r => ({ k: r.label, v: r.count }))} fmt={num} /></> : null}
       {vacWhere}
+      <VacancyNotices />
       <SourceNote source={ind.source} notes={ind.notes} what="Industry licences" />
       <SourceNote source={plc.source} notes={plc.notes} what="Jobs filled" />
       <SourceNote source={vac.source} notes={vac.notes} what="Vacancies listed" /></div>);

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { budget, dzongdags, DZONGKHAGS, economy, health, leaders, population, schools } from '@/lib/reference';
+import { budget, dzongdags, DZONGKHAGS, economy, health, isOpen, leaders, population, schools, vacancyNotices } from '@/lib/reference';
 
 const slugs = DZONGKHAGS.map(d => d.slug).sort();
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
@@ -221,5 +221,47 @@ describe('MoICE industry/jobs and Dzongdag reference data', () => {
       if (d.confidence === 'confirmed') expect(d.note, slug).toBeTruthy();
     }
     expect(dzongdags.checked).toMatch(/^\d{4}-\d\d-\d\d$/);
+  });
+});
+
+describe('vacancy notices (employers’ own sites)', () => {
+  const V = vacancyNotices;
+  const host = (u: string) => new URL(u).hostname.replace(/^www\./, '');
+
+  it('every notice links the employer’s own site, never social media or an aggregator', () => {
+    for (const n of V.notices) {
+      expect(n.url, n.title).toMatch(/^https:\/\//);
+      expect(host(n.url), n.url).not.toMatch(/facebook|instagram|tiktok|x\.com|twitter|dziseldra|unjobs|unjobnet|untalent|linkedin/);
+    }
+  });
+
+  it('dates are real, in order, and the check date is stated', () => {
+    expect(V.checked).toMatch(/^\d{4}-\d\d-\d\d$/);
+    for (const n of V.notices) {
+      for (const d of [n.posted, n.closes]) if (d) expect(Number.isNaN(Date.parse(d)), d).toBe(false);
+      if (n.posted) expect(n.posted <= V.checked, n.title).toBe(true);
+      if (n.posted && n.closes) expect(n.posted <= n.closes, n.title).toBe(true);
+      // a notice must have been open on the day it was read, or it should not have been recorded
+      expect(isOpen(n, V.checked), n.title).toBe(true);
+    }
+  });
+
+  it('a closed notice drops out, and one with no closing date stays until the next check', () => {
+    const n = { employer: 'X', group: 'listed' as const, title: 'T', posted: '2026-11-01', url: 'https://x.bt/' };
+    expect(isOpen({ ...n, closes: '2026-11-30' }, '2026-11-30')).toBe(true);   // open through the closing day
+    expect(isOpen({ ...n, closes: '2026-11-30' }, '2026-12-01')).toBe(false);
+    expect(isOpen({ ...n, closes: null }, '2027-06-01')).toBe(true);
+  });
+
+  it('the sources table agrees with the notices, and says why nothing is listed where nothing is', () => {
+    const openEmployers = new Set(V.sources.filter(s => s.status === 'open').map(s => s.employer));
+    expect(new Set(V.notices.map(n => n.employer))).toEqual(openEmployers);
+    for (const s of V.sources) {
+      expect(['open', 'none', 'social', 'not-found', 'unreadable'], s.employer).toContain(s.status);
+      expect(s.note.length, s.employer).toBeGreaterThan(10);
+      if (s.status === 'open' || s.status === 'none' || s.status === 'unreadable') expect(s.page, s.employer).toMatch(/^https:\/\//);
+    }
+    // every group the user asked about is covered, even where the answer is "could not be read"
+    expect(new Set(V.sources.map(s => s.group))).toEqual(new Set(['listed', 'un', 'foundation', 'media']));
   });
 });

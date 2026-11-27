@@ -9,6 +9,7 @@ import leadersJson from '../../data/reference/leaders.json';
 import budgetJson from '../../data/reference/budget-2026-27.json';
 import economyJson from '../../data/reference/economy.json';
 import dzongdagJson from '../../data/reference/dzongdags.json';
+import vacancyNoticesJson from '../../data/reference/vacancy-notices.json';
 
 export type RefSource = { publisher: string; title: string; table?: string; url: string; checked: string };
 
@@ -54,6 +55,20 @@ export type EconMetric = { key: string; label: string; unit: string; asOf: strin
   breakdown?: { title: string; rows: { label: string; count: number }[] } };
 export type EconomyData = { metrics: EconMetric[] };
 
+export type VacancyGroup = 'listed' | 'un' | 'foundation' | 'media';
+/** What a source showed when it was checked. "none" (nothing open) and "unreadable" (could not tell) are
+ *  different claims and are shown differently; see the empty-state rule in docs/adr/0002. */
+export type VacancySourceStatus = 'open' | 'none' | 'social' | 'not-found' | 'unreadable';
+export type VacancyNotice = { employer: string; group: VacancyGroup; title: string; posted: string | null; closes: string | null; url: string };
+export type VacancyNoticesData = { checked: string; notes: string[]; notices: VacancyNotice[];
+  sources: { employer: string; group: VacancyGroup; page: string | null; status: VacancySourceStatus; note: string }[] };
+export const VACANCY_GROUP: Record<VacancyGroup, string> = { listed: 'Listed company (RSEB)', un: 'UN agency', foundation: 'Foundation / trust', media: 'Newspaper' };
+export const VACANCY_STATUS: Record<VacancySourceStatus, string> = {
+  open: 'Vacancy open', none: 'Nothing open', social: 'Social media only', 'not-found': 'No vacancy page found', unreadable: 'Could not be read',
+};
+/** A notice is shown until the end of its closing day; one with no closing date stays until the next check. */
+export const isOpen = (n: VacancyNotice, today: string) => n.closes === null || n.closes >= today;
+
 export type Dzongdag = { name: string; confidence: 'confirmed' | 'website' | 'unconfirmed'; asOf: string | null; note: string | null; sourceTitle: string | null; sourceUrl: string | null };
 export type DzOffice = { name?: string; phone?: string; email?: string; address?: string; website?: string; sourceUrl?: string };
 export type DzongdagData = { notes: string[]; checked: string; dzongkhags: Record<string, { dzongdag?: Dzongdag; office?: DzOffice }> };
@@ -61,6 +76,7 @@ export type DzongdagData = { notes: string[]; checked: string; dzongkhags: Recor
 export const health = healthJson as unknown as HealthData;
 export const economy = economyJson as unknown as EconomyData;
 export const dzongdags = dzongdagJson as unknown as DzongdagData;
+export const vacancyNotices = vacancyNoticesJson as unknown as VacancyNoticesData;
 export const CONFIDENCE_LABEL: Record<Dzongdag['confidence'], string> = {
   confirmed: 'Confirmed by a dated appointment notice',
   website: 'From the dzongkhag website — the page carries no date',
@@ -93,6 +109,9 @@ export const REFERENCE_SOURCES: { what: string; source: RefSource; notes: string
   { what: `National budget FY ${budget.fiscalYear}`, source: budget.source, notes: budget.notes },
   { what: `Budget themes FY ${budget.fiscalYear} (climate, gender, stimulus, reserve, grants & subsidies)`, source: budget.themes.source, notes: budget.themes.notes },
   ...economy.metrics.map(m => ({ what: `${m.label} (MoICE)`, source: m.source, notes: m.notes })),
+  { what: 'Vacancy notices from listed companies, UN agencies and foundations',
+    source: { publisher: 'Employers’ own websites', title: 'vacancy and career pages of the companies listed on the Royal Securities Exchange of Bhutan, the UN in Bhutan, and foundations', table: 'each notice links its own page', url: 'https://rsebl.org.bt/listedscripts', checked: vacancyNotices.checked },
+    notes: vacancyNotices.notes },
   { what: 'Population (census)', source: population.source, notes: population.notes },
   { what: 'Health facilities', source: health.source, notes: health.notes },
   { what: 'Schools', source: schools.source, notes: schools.notes },

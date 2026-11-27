@@ -1,0 +1,178 @@
+{
+ "checked": "2026-11-27",
+ "notes": [
+  "Each notice in this section was read on the employer's own website on 27 November 2026 and links to it. Notices are hidden once their closing date has passed, so this list shrinks until it is checked again.",
+  "Social-media posts and paid aggregators are not used: a notice is listed only where the employer publishes it on its own site.",
+  "This is not a complete list of employers. The table of sources says which employers were looked at and what was found, including where nothing could be read."
+ ],
+ "notices": [
+  {
+   "employer": "Bhutan National Bank Ltd",
+   "group": "listed",
+   "title": "Director, Technology and Innovation",
+   "posted": "2026-11-19",
+   "closes": "2026-12-08",
+   "url": "https://bnb.bt/vacancy-announcement-for-the-post-of-director-technology-and-innovation/"
+  },
+  {
+   "employer": "Kuensel Corporation Ltd",
+   "group": "listed",
+   "title": "Chief Executive Officer",
+   "posted": null,
+   "closes": null,
+   "url": "https://kuenselonline.com/career"
+  },
+  {
+   "employer": "Loden Foundation",
+   "group": "foundation",
+   "title": "Finance Officer",
+   "posted": "2026-11-09",
+   "closes": "2026-11-29",
+   "url": "https://www.loden.org/vacancy-announcement-finance-officer/"
+  },
+  {
+   "employer": "Loden Foundation",
+   "group": "foundation",
+   "title": "Finance Manager",
+   "posted": "2026-11-09",
+   "closes": "2026-11-29",
+   "url": "https://www.loden.org/vacancy-announcement-finance-officer/"
+  },
+  {
+   "employer": "Bhutan Trust Fund for Environmental Conservation",
+   "group": "foundation",
+   "title": "IT Officer",
+   "posted": "2026-11-14",
+   "closes": "2026-11-30",
+   "url": "https://bhutantrustfund.bt/vacancy-announcement-5/"
+  }
+ ],
+ "sources": [
+  {
+   "employer": "Bhutan National Bank Ltd",
+   "group": "listed",
+   "page": "https://bnb.bt/vacancy-announcement-for-the-post-of-director-technology-and-innovation/",
+   "status": "open",
+   "note": "1 vacancy notice on its website."
+  },
+  {
+   "employer": "Kuensel Corporation Ltd",
+   "group": "listed",
+   "page": "https://kuenselonline.com/career",
+   "status": "open",
+   "note": "Its career page announces one vacancy; neither the page nor the linked terms of reference gives a closing date that could be read."
+  },
+  {
+   "employer": "Druk PNB Bank Ltd",
+   "group": "listed",
+   "page": "https://drukpnbbank.bt/vacancy-announcement/",
+   "status": "none",
+   "note": "Its vacancy page shows only a notice from 2021."
+  },
+  {
+   "employer": "Royal Insurance Corporation of Bhutan Ltd",
+   "group": "listed",
+   "page": "https://www.ricb.bt/category/announcement/career/",
+   "status": "none",
+   "note": "Latest vacancy notice 3 September 2026; the posts since then are shortlists and selection results."
+  },
+  {
+   "employer": "Penden Cement Authority Ltd",
+   "group": "listed",
+   "page": "https://pendencement.bt/career",
+   "status": "none",
+   "note": "Latest vacancy notice 3 September 2026, followed by a shortlisting result."
+  },
+  {
+   "employer": "State Trading Corporation of Bhutan Ltd",
+   "group": "listed",
+   "page": "https://www.stcb.bt/vacancy.php",
+   "status": "none",
+   "note": "The page says “No Vacancy at the Moment”."
+  },
+  {
+   "employer": "Bhutan Insurance Ltd",
+   "group": "listed",
+   "page": "https://www.bil.bt/announcements/shortlisted-candidates-for-viva-voce-9",
+   "status": "none",
+   "note": "Latest vacancy notice 30 September 2026; interviews for it were held on 26–27 November."
+  },
+  {
+   "employer": "Bhutan Ferro Alloys Ltd",
+   "group": "listed",
+   "page": "https://www.bfalbt.com/career/",
+   "status": "none",
+   "note": "Its career page lists no vacancy."
+  },
+  {
+   "employer": "T Bank Ltd",
+   "group": "listed",
+   "page": null,
+   "status": "social",
+   "note": "Posts vacancies on Facebook and Instagram; none found on its website."
+  },
+  {
+   "employer": "Dungsam Polymers Ltd",
+   "group": "listed",
+   "page": null,
+   "status": "social",
+   "note": "Posts vacancies on Facebook and TikTok; none found on a website."
+  },
+  {
+   "employer": "Bhutan Carbide & Chemicals Ltd",
+   "group": "listed",
+   "page": null,
+   "status": "social",
+   "note": "Posts vacancies on Facebook; none found on a website."
+  },
+  {
+   "employer": "Bhutan Board Products, Bhutan Polymers, Bhutan Tourism Corporation, Druk Ferro Alloys, Druk Wang Alloys, GIC Bhutan Re",
+   "group": "listed",
+   "page": null,
+   "status": "not-found",
+   "note": "No vacancy page was found for these listed companies."
+  },
+  {
+   "employer": "United Nations in Bhutan (all agencies, including UNDP, UNICEF and WHO)",
+   "group": "un",
+   "page": "https://bhutan.un.org/en/jobs",
+   "status": "unreadable",
+   "note": "The job list is built in the browser and could not be read, so no UN vacancy is listed here. Check the page directly."
+  },
+  {
+   "employer": "Loden Foundation",
+   "group": "foundation",
+   "page": "https://www.loden.org/vacancy-announcement-finance-officer/",
+   "status": "open",
+   "note": "1 notice for 2 posts."
+  },
+  {
+   "employer": "Bhutan Trust Fund for Environmental Conservation",
+   "group": "foundation",
+   "page": "https://bhutantrustfund.bt/vacancy-announcement-5/",
+   "status": "open",
+   "note": "1 vacancy notice."
+  },
+  {
+   "employer": "Tarayana Foundation",
+   "group": "foundation",
+   "page": "https://www.tarayanafoundation.org/tarayana-foundation-announces-shortlisted-candidates-for-assistant-events-and-partnership-officer-position/",
+   "status": "none",
+   "note": "Latest notice is an interview call for 26 November 2026."
+  },
+  {
+   "employer": "Kuensel (newspaper)",
+   "group": "media",
+   "page": "https://kuenselonline.com/career",
+   "status": "not-found",
+   "note": "No section of vacancy adverts from other employers was found on kuenselonline.com; the old /vacancy-announcements address returns “not found”. Kuensel’s own vacancy is listed above."
+  },
+  {
+   "employer": "The Bhutanese (newspaper)",
+   "group": "media",
+   "page": "https://thebhutanese.bt/category/ads/",
+   "status": "unreadable",
+   "note": "Vacancy adverts are published as images in posts titled “Ads”, so their text cannot be read."
+  }
+ ]
+}
