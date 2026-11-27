@@ -107,6 +107,8 @@ The automated sources were checked against their **real responses**, and the par
 What is still unproven is the *runtime* on your host (network egress, timeouts, database permissions): run the collectors once after deploying and read the **Data sources** page.
 
 ## Known gaps
+- Job vacancies: the count is a dated snapshot of the Ministry of Industry, Commerce and Employment's job portal (BLMIS, 27 November 2026), not a live feed. A live collector needs a raw capture of BLMIS's own HTML to test against first (see CONTRIBUTING: a fixture must be a capture). Civil-service vacancies on the RCSC Zhiyog Recruitment System are linked but not counted: that page builds its list in the browser and could not be read.
+- Budget themes: only the totals and tables the report prints (§5.4-5.8) are transcribed. The agency-level gender activities in Annexure 6 (XIII) are not, and climate tagging covers 12 agencies, not the whole budget.
 - Tenders: only e-GP's live register is read, so a notice that closes drops out of DrukView at the next refresh rather than becoming an archive — the portal's Archive (685 pages), Cancelled (37) and Contract-award views are not read yet, and reading them would mean a different, much larger job. e-GP publishes no estimated value, so the Value column is empty for its notices. A notice whose procuring agency is a ministry is national, even where the work is plainly in one dzongkhag.
 - World Bank records carry no sub-national location, so most are "national / unspecified"; ~10% are placed by place names in the text (labelled "inferred").
 - Dzongkha: the app is wired for locales (`/en/…`) but ships English only; a Dzongkha translation will be added once a native speaker can review it.

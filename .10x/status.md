@@ -35,7 +35,15 @@ page, to an optional `ALERT_WEBHOOK_URL` (once a day per source, plus a recovery
 `/api/health` for an outside uptime monitor — which is the only channel that still works when the scheduler
 itself is dead. Verified end-to-end against a real database and a real webhook listener; 78 tests pass.
 
+**Budget themes and job vacancies (2026-11-27):** the Budget page now shows the report's cross-cutting tags
+(climate co-benefits, gender-responsive budgeting, economic stimulus, general reserve, grants and subsidies; §5.4-5.8)
+beside the existing sector table, never added to it. Industry & jobs adds a dated BLMIS snapshot: 762 vacancy listings by
+dzongkhag and qualification. Both reconcile with printed totals in tests. Next.js bumped 16.4.0 -> 16.4.6: `next build`
+had started refusing 16.4.0 over critical advisories.
+
 **Open, with owners' decisions recorded**
+0. Live vacancy collector (BLMIS, then RCSC ZRS): blocked on a raw HTML capture to test against; the RCSC list renders
+   client-side. Note BLMIS was only readable through Firecrawl's stealth proxy, so it may refuse datacenter traffic.
 1. Point an uptime monitor at `/api/health` and (optionally) set `ALERT_WEBHOOK_URL` — the code is in place but
    a destination is a hosting choice, so until one is set the alert is only visible on the Data sources page.
 2. Read e-GP's Notification-of-Contract-Award list (ADR-0002, action 5).
