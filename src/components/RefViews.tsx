@@ -333,7 +333,7 @@ export function MofBudget({ scope, locale }: Props) {
 
 /** Vacancy notices read on employers' own sites. Closed notices drop out by date, and the "where we looked"
  *  table keeps "nothing open" apart from "could not be read", so an empty list never reads as "no jobs". */
-function VacancyNotices() {
+export function VacancyNotices() {
   const V = vacancyNotices;
   const today = new Date().toISOString().slice(0, 10);
   const open = V.notices.filter(n => isOpen(n, today)).sort((a, b) => (a.closes ?? '9999').localeCompare(b.closes ?? '9999'));
@@ -356,10 +356,11 @@ function VacancyNotices() {
 }
 
 export function Economy({ scope, locale, liveVacancies = false }: Props & { liveVacancies?: boolean }) {
+  const jobsHref = `/${locale}/${scope ? scope.slug : 'bhutan'}/jobs`;
   const ind = economy.metrics.find(m => m.key === 'industry')!;
   const plc = economy.metrics.find(m => m.key === 'placements')!;
   const vac = economy.metrics.find(m => m.key === 'vacancies')!;
-  const vacWhere = <p className="note">This is the count on {vac.asOf}, kept as a dated reference. The count refreshed daily, with the civil-service vacancies from the Royal Civil Service Commission’s <Ext href="https://jobs.rcsc.gov.bt/Application/Vacancy">Zhiyog Recruitment System</Ext>, is under <b>Vacancies now</b> below. To apply, see <Ext href={vac.source.url}>BLMIS</Ext>.</p>;
+  const vacWhere = <p className="note">This is the count on {vac.asOf}, kept as a dated reference. The count refreshed hourly, with the civil-service vacancies from the Royal Civil Service Commission’s <Ext href="https://jobs.rcsc.gov.bt/Application/Vacancy">Zhiyog Recruitment System</Ext>, is on the <Link href={jobsHref}>Job vacancies</Link> page. To apply, see <Ext href={vac.source.url}>BLMIS</Ext>.</p>;
   const SCALE: [string, string][] = [['cottage', 'Cottage'], ['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']];
   if (!scope) {
     const rows = DZONGKHAGS.map(d => ({ d, i: ind.dzongkhags[d.slug], p: plc.dzongkhags[d.slug]?.total ?? 0, v: vac.dzongkhags[d.slug]?.total ?? 0, pop: population.dzongkhags[d.slug]?.total ?? 0 })).filter(x => x.i);
@@ -381,14 +382,13 @@ export function Economy({ scope, locale, liveVacancies = false }: Props & { live
       <p className="note">* Indicative only: licences in 2026 against the 2017 census population.</p>
       {liveVacancies ? <>
         <h3>Vacancies</h3>
-        <p className="note">The last column above is the national job portal&apos;s count on {vac.asOf}, kept as a dated reference. Today&apos;s count, refreshed daily, and the civil-service vacancies are under <b>Vacancies now</b> below.</p>
+        <p className="note">The last column above is the national job portal&apos;s count on {vac.asOf}, kept as a dated reference. Today&apos;s count, refreshed hourly, and the open civil-service posts are on the <Link href={jobsHref}>Job vacancies</Link> page.</p>
       </> : <>
         <h3>Vacancies listed on the national job portal — {num(vac.national.total)} on {vac.asOf}</h3>
         <Bars rows={rows.filter(x => x.v > 0).sort((a, b) => b.v - a.v).map(x => ({ k: x.d.name, v: x.v, href: `/${locale}/${x.d.slug}/economy` }))} fmt={num} />
         {vac.breakdown ? <><h4>{vac.breakdown.title}</h4>
           <Bars rows={vac.breakdown.rows.map(r => ({ k: r.label, v: r.count }))} fmt={num} /></> : null}
         {vacWhere}</>}
-      <VacancyNotices />
       <SourceNote source={ind.source} notes={ind.notes} what="Industry licences" />
       <SourceNote source={plc.source} notes={plc.notes} what="Jobs filled" />
       <SourceNote source={vac.source} notes={vac.notes} what="Vacancies listed" /></div>);

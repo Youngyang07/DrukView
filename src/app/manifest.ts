@@ -24,7 +24,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       { name: 'Bhutan', url: '/en/bhutan', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
       { name: 'Compare dzongkhags', url: '/en/compare', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-      { name: 'Jobs and vacancies', url: '/en/bhutan/economy', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+      { name: 'Job vacancies', url: '/en/bhutan/jobs', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
     ],
   };
 }

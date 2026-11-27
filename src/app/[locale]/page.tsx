@@ -17,6 +17,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <h1>Your dzongkhag. Your data. Your right.</h1>
       <p>Track projects. Follow funds. Build trust. See where Bhutan’s public money goes — budgets, allocations and development projects by dzongkhag, with the funding source and the original document behind every figure.</p>
       {ready ? <DzSearch items={dz.map(d => ({ slug: d.slug, name: d.name }))} locale={locale} /> : null}
+      <p className="hero-links"><Link href={`/${locale}/bhutan/jobs`}>Looking for work? See job vacancies →</Link></p>
     </div></section>
     <div className="wrap page">
       {!ready ? <NoDatabase /> : null}
