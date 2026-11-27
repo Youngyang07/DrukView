@@ -4,6 +4,8 @@ import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, EmptyOr, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
 import { SOURCE as EGP } from '../../pipeline/egp.mjs';
+import { SOURCE as BLMIS } from '../../pipeline/blmis.mjs';
+import { SOURCE as RCSC } from '../../pipeline/rcsc.mjs';
 import { Dzongdags, Economy, Health, Leaders, MofBudget, Population, Schools } from './RefViews';
 import { budget, health, population, schools } from '@/lib/reference';
 
@@ -195,6 +197,96 @@ async function Offices({ scope, locale }: Props) {
     <Cite what={`Offices – ${scopeName(scope)}`} /></div></>);
 }
 
+/** "Nu.18,095–23,570 a month", or what the Commission did not print. Never converted, never summed. */
+const payScale = (v: q.CivilVacancy) => {
+  if (v.pay_min == null && v.pay_max == null) return 'not printed';
+  const lo = v.pay_min ?? v.pay_max!, hi = v.pay_max ?? v.pay_min!;
+  return `${moneyFull(lo, v.pay_currency ?? 'BTN')}${hi !== lo ? `–${num(hi)}` : ''} a month`;
+};
+
+/**
+ * Vacancies as the two live collectors last read them. Each half says which of three things it is showing:
+ * a fresh read, an older read kept because the last refresh failed, or nothing because the source has
+ * never been read — and only the first can say "none" about a dzongkhag.
+ */
+async function LiveVacancies({ scope, locale }: Props) {
+  const [counts, civil, health] = await Promise.all([
+    q.getJobPortalCounts().catch(() => [] as q.PortalCount[]),
+    q.getCivilServiceVacancies(scope?.id ?? null).catch(() => [] as q.CivilVacancy[]),
+    q.healthOf([BLMIS.id, RCSC.id]).catch(() => [] as q.SourceHealth[]),
+  ]);
+  const h = (id: string) => health.find(x => x.id === id);
+  const failedNote = (id: string, what: string, at: string | undefined) => {
+    const s = h(id);
+    return s?.last_success && (s.status === 'stale' || s.status === 'error')
+      ? <p className="note overdue">The last refresh of {what} failed, so what is shown here was read on {at ?? s.last_success.slice(0, 10)}.{s.error ? ` The error was: ${s.error.slice(0, 200)}` : ''}</p> : null;
+  };
+  const today = new Date().toISOString().slice(0, 10);
+  const of = (d: q.PortalCount['dimension']) => counts.filter(c => c.dimension === d);
+  const dz = of('dzongkhag');
+  const total = dz.reduce((s, c) => s + c.count, 0);
+  const countsOn = counts[0]?.fetched_at.slice(0, 10);
+  const here = scope ? dz.find(c => c.dzongkhag_id === scope.id)?.count ?? 0 : total;
+  const open = civil.filter(v => v.closing_on >= today);
+  const closedSince = civil.length - open.length;
+  const posts = open.reduce((s, v) => s + v.slots, 0);
+  const civilOn = civil[0]?.fetched_at.slice(0, 10) ?? h(RCSC.id)?.last_success?.slice(0, 10);
+
+  return (<div className="card"><div className="card-h"><h2>Vacancies now — {scopeName(scope)}</h2>
+    <span><Fresh at={h(BLMIS.id)?.last_success} label="Job portal" /> <Fresh at={h(RCSC.id)?.last_success} label="Civil service" /></span></div>
+    <p className="note">Read daily from the two public vacancy systems: the national job portal (<Ext href={BLMIS.url}>BLMIS</Ext>, Ministry of Industry, Commerce and Employment) and the civil-service recruitment system (<Ext href={RCSC.url}>Zhiyog</Ext>, Royal Civil Service Commission). To apply, use those sites.</p>
+
+    <h3>Civil service{open.length ? ` — ${num(open.length)} announcement${open.length === 1 ? '' : 's'} open, ${num(posts)} post${posts === 1 ? '' : 's'}` : ''}</h3>
+    {failedNote(RCSC.id, 'Zhiyog', civilOn)}
+    {open.length ? <>
+      <div className="scroll"><table><thead><tr><th>Position</th><th>Agency</th><th>Where</th><th>Posts</th><th>Pay scale</th><th>Closes</th></tr></thead><tbody>
+        {open.map(v => <tr key={v.id}>
+          <td><Ext href={v.url}>{v.title}</Ext><br /><small>{[v.position_level, v.employment_type, v.category, v.reannounced ? 're-announced' : null].filter(Boolean).join(' · ')}</small>
+            {v.qualification ? <><br /><small>Needs: {v.qualification}</small></> : null}</td>
+          <td>{v.agency}</td>
+          <td>{v.where_names.length ? v.where_names.join(', ') : 'not stated'}</td>
+          <td className="num">{num(v.slots)}</td>
+          <td className="nw">{payScale(v)}</td>
+          <td className="nw">{v.closing_on}</td>
+        </tr>)}</tbody></table></div>
+      <p className="note">Pay is the position&apos;s monthly pay scale in ngultrum as the Commission prints it. An announcement open in several dzongkhags is listed under each{scope ? '' : ', but counted once here'}.{closedSince ? ` ${num(closedSince)} announcement${closedSince === 1 ? ' has' : 's have'} closed since the last read and ${closedSince === 1 ? 'is' : 'are'} not shown.` : ''}</p>
+    </> : <EmptyOr health={health} ids={[RCSC.id]} what="the civil-service vacancy list">
+        No civil-service vacancy{scope ? ` in ${scope.name}` : ''} was open on Zhiyog when it was last read{civilOn ? ` (${civilOn})` : ''}. The list was read successfully, so none was open — not that we failed to look.
+      </EmptyOr>}
+
+    <h3>National job portal{counts.length ? ` — ${num(here)} listed${countsOn ? ` on ${countsOn}` : ''}` : ''}</h3>
+    {failedNote(BLMIS.id, 'BLMIS', countsOn)}
+    {counts.length ? (scope ? <>
+      {here ? <p>{num(here)} of the {num(total)} vacancies listed on BLMIS that day were in {scope.name} ({((here / total) * 100).toFixed(1)}%).</p>
+        : <p>None of the {num(total)} vacancies listed on BLMIS that day was in {scope.name}.</p>}
+      <p className="note">BLMIS publishes counts by dzongkhag, not the listings themselves, so the jobs cannot be listed here. <Link href={`/${locale}/bhutan/economy`}>See the national breakdown</Link>, or search <Ext href={BLMIS.url}>BLMIS</Ext> to apply.</p>
+    </> : <>
+      <div className="kpis">
+        <Stat label="Listed on BLMIS" value={num(total)} sub={`on ${countsOn}`} />
+        <Stat label="Dzongkhags with a listing" value={`${num(dz.filter(c => c.count > 0).length)} of 20`} />
+        <Stat label="Employers listing" value={num(of('employer').length)} />
+      </div>
+      <h4>By dzongkhag</h4>
+      <Bars rows={dz.map(c => ({ k: c.dzongkhag ?? c.label ?? 'Not stated', v: c.count, href: c.slug ? `/${locale}/${c.slug}/economy` : undefined }))} fmt={num} />
+      <h4>By minimum qualification</h4>
+      <Bars rows={of('qualification').map(c => ({ k: c.label ?? 'Not stated', v: c.count }))} fmt={num} />
+      <h4>Most-listed occupations</h4>
+      <Bars rows={of('occupation').slice(0, 12).map(c => ({ k: c.label ?? 'Not stated', v: c.count }))} fmt={num} />
+      <p className="note">These are the counts BLMIS publishes on its job-seeker page, not a list of jobs. The portal does not say how long a listing stays up, and listings with old posting dates appear in it, so read this as &ldquo;listed on BLMIS that day&rdquo;, not &ldquo;open today&rdquo;. The four breakdowns are checked to add up to the same total before a refresh is accepted.</p>
+    </>) : <EmptyOr health={health} ids={[BLMIS.id]} what="the national job portal's counts">
+        BLMIS listed no vacancy when it was last read.
+      </EmptyOr>}
+    <Cite what={`Vacancies now – ${scopeName(scope)}`} /></div>);
+}
+
+/** The dated snapshot's charts give way to the live counts once those are being refreshed; while the live
+ *  source is missing or failing, the snapshot is all there is, so it stays. */
+async function EconomyModule(p: Props) {
+  const [hs] = await q.healthOf([BLMIS.id]).catch(() => [] as q.SourceHealth[]);
+  const live = !!hs?.last_success && hs.status === 'ok';
+  return (<><Economy scope={p.scope} locale={p.locale} liveVacancies={live} /><LiveVacancies {...p} /></>);
+}
+
 export default async function ModuleView(p: Props) {
   switch (p.module) {
     case '': return <Overview {...p} />;
@@ -207,6 +299,6 @@ export default async function ModuleView(p: Props) {
     case 'population': return <Population scope={p.scope} locale={p.locale} />;
     case 'health': return <Health scope={p.scope} locale={p.locale} />;
     case 'schools': return <Schools scope={p.scope} locale={p.locale} />;
-    case 'economy': return <Economy scope={p.scope} locale={p.locale} />;
+    case 'economy': return <EconomyModule {...p} />;
   }
 }

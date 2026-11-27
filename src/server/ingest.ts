@@ -12,6 +12,8 @@ import { fetchWeather, SOURCE as WX } from '../../pipeline/weather.mjs';
 import { fetchLeaders, validateLeaders, SOURCE as PARL } from '../../pipeline/leaders.mjs';
 import { fetchNewsFlags, FEEDS, SOURCE as NEWS } from '../../pipeline/news.mjs';
 import { fetchEgpTenders, validateTenders, SOURCE as EGP } from '../../pipeline/egp.mjs';
+import { fetchBlmis, validateBlmis, SOURCE as BLMIS } from '../../pipeline/blmis.mjs';
+import { fetchRcscVacancies, validateRcsc, SOURCE as RCSC } from '../../pipeline/rcsc.mjs';
 import { validateProjects } from '../../pipeline/validate.mjs';
 import { parseCsv, buildBudget, buildAllocations, buildTenders, buildOffices } from '../../pipeline/ingest-manual.mjs';
 
@@ -21,7 +23,7 @@ export const MANUAL: SourceDef = {
   url: 'https://www.mof.gov.bt/publications/', kind: 'manual',
   notes: 'National budget reports, tender notices and office directories are published as PDFs/web pages without an API. Rows are transcribed into data/manual/*.csv and every row must cite its public document.',
 };
-export const JOBS = ['worldbank', 'adb', 'weather', 'leaders', 'tenders', 'manual'] as const;
+export const JOBS = ['worldbank', 'adb', 'weather', 'leaders', 'tenders', 'blmis', 'rcsc', 'manual'] as const;
 export type JobName = (typeof JOBS)[number];
 
 type Dz = { id: string; slug: string; name: string; aliases: string[]; lat: number; lon: number };
@@ -152,6 +154,41 @@ export async function saveEgpTenders(matcher: any): Promise<number> {
   return rows.length;
 }
 
+/**
+ * Replace the job portal's counts, but only with a set whose four breakdowns agree: a page that has changed
+ * shape leaves the previous counts in place and the source marked stale.
+ */
+export async function saveJobPortalCounts(rows: any[]): Promise<number> {
+  const errs = validateBlmis(rows);
+  if (errs.length) throw new Error(`BLMIS counts rejected (${errs.length} problems), previous counts kept. First: ${errs[0]}`);
+  await withTx(async c => {
+    await c.query('delete from job_portal_counts');
+    for (const r of rows) await c.query('insert into job_portal_counts(dimension,label,dzongkhag_id,count,fetched_at) values ($1,$2,$3,$4,$5)',
+      [r.dimension, r.label, r.dzongkhag, r.count, r.fetched_at]);
+  });
+  return rows.filter(r => r.dimension === 'dzongkhag').reduce((s, r) => s + r.count, 0);
+}
+
+/**
+ * Replace the civil-service vacancies with the Commission's complete list. The list's own total must match
+ * what was read, so a run cut short by a dropped connection cannot publish half the vacancies as all of them.
+ */
+export async function saveCivilServiceVacancies({ rows, total }: { rows: any[]; total: number }): Promise<number> {
+  const errs = validateRcsc(rows, { total });
+  if (errs.length) throw new Error(`Zhiyog vacancy list rejected (${errs.length} problems), previous vacancies kept. First: ${errs[0]}`);
+  await withTx(async c => {
+    await c.query('delete from civil_service_vacancies'); // cascades to locations
+    for (const r of rows) {
+      await c.query(`insert into civil_service_vacancies(id,agency_id,recruitment_id,title,announcement,position_level,agency,service,employment_type,category,qualification,slots,pay_min,pay_max,pay_currency,published_on,closing_on,reannounced,applicants,places,url,source_name,fetched_at)
+        values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)`,
+        [r.id, r.agency_id, r.recruitment_id, r.title, r.announcement, r.position_level, r.agency, r.service, r.employment_type, r.category, r.qualification,
+          r.slots, r.pay_min, r.pay_max, r.pay_currency, r.published_on, r.closing_on, r.reannounced, r.applicants, r.places, r.url, r.source_name, r.fetched_at]);
+      for (const dz of new Set<string>(r.dzongkhags)) await c.query('insert into civil_service_vacancy_locations(vacancy_id,dzongkhag_id) values ($1,$2)', [r.id, dz]);
+    }
+  });
+  return rows.length;
+}
+
 export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; records: number; message: string | null; retry_after_s?: number };
 
 /**
@@ -159,7 +196,7 @@ export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; reco
  * secret) — but at most once per interval, so they cannot be used to hammer the sources or the database.
  * A valid CRON_SECRET bypasses the interval. After a failed run a retry is allowed after 5 minutes.
  */
-export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, tenders: 180, manual: 10 };
+export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, tenders: 180, blmis: 360, rcsc: 180, manual: 10 };
 const RETRY_AFTER_ERROR_MIN = 5;
 
 /** Atomically claim the right to run a job now. Returns null when claimed, or the seconds to wait. */
@@ -186,7 +223,7 @@ function withDeadline<T>(p: Promise<T>, ms: number, what: string): Promise<T> {
 }
 
 export async function runJob(job: JobName, { force = false }: { force?: boolean } = {}): Promise<JobResult> {
-  const def = { worldbank: WB, adb: ADB, weather: WX, leaders: PARL, tenders: EGP, manual: MANUAL }[job] as SourceDef;
+  const def = { worldbank: WB, adb: ADB, weather: WX, leaders: PARL, tenders: EGP, blmis: BLMIS, rcsc: RCSC, manual: MANUAL }[job] as SourceDef;
   const wait = await claimRun(job, def, force);
   if (wait !== null) return { job, status: 'skipped', records: 0, message: `Refreshed recently; next refresh allowed in about ${Math.ceil(wait / 60)} min.`, retry_after_s: wait };
   try {
@@ -209,5 +246,7 @@ async function fetchAndSave(job: JobName): Promise<number> {
   if (job === 'weather') return saveWeather(await fetchWeather(await loadDz()));
   if (job === 'leaders') return saveLeaders(await loadDz());
   if (job === 'tenders') return saveEgpTenders(await matcherOf());
+  if (job === 'blmis') return saveJobPortalCounts((await fetchBlmis(await matcherOf())).rows);
+  if (job === 'rcsc') return saveCivilServiceVacancies(await fetchRcscVacancies(await matcherOf()));
   return saveManual(await readManualFiles(), await matcherOf());
 }

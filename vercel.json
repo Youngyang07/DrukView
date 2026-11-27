@@ -21,6 +21,14 @@
       "schedule": "57 4 * * *"
     },
     {
+      "path": "/api/cron/blmis",
+      "schedule": "17 5 * * *"
+    },
+    {
+      "path": "/api/cron/rcsc",
+      "schedule": "27 5 * * *"
+    },
+    {
       "path": "/api/cron/alerts",
       "schedule": "7 6 * * *"
     }
