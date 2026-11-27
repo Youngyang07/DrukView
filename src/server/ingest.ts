@@ -12,8 +12,8 @@ import { fetchWeather, SOURCE as WX } from '../../pipeline/weather.mjs';
 import { fetchLeaders, validateLeaders, SOURCE as PARL } from '../../pipeline/leaders.mjs';
 import { fetchNewsFlags, FEEDS, SOURCE as NEWS } from '../../pipeline/news.mjs';
 import { fetchEgpTenders, validateTenders, SOURCE as EGP } from '../../pipeline/egp.mjs';
-import { fetchBlmis, validateBlmis, SOURCE as BLMIS } from '../../pipeline/blmis.mjs';
-import { fetchRcscVacancies, validateRcsc, SOURCE as RCSC } from '../../pipeline/rcsc.mjs';
+import { fetchBlmis, sameCounts, validateBlmis, SOURCE as BLMIS } from '../../pipeline/blmis.mjs';
+import { diffVacancies, fetchRcscVacancies, validateRcsc, SOURCE as RCSC } from '../../pipeline/rcsc.mjs';
 import { validateProjects } from '../../pipeline/validate.mjs';
 import { parseCsv, buildBudget, buildAllocations, buildTenders, buildOffices } from '../../pipeline/ingest-manual.mjs';
 
@@ -154,39 +154,65 @@ export async function saveEgpTenders(matcher: any): Promise<number> {
   return rows.length;
 }
 
+/** What a job saved: the record count, and a line for the update log when there is more to say. */
+export type Saved = number | { records: number; message: string };
+
 /**
  * Replace the job portal's counts, but only with a set whose four breakdowns agree: a page that has changed
- * shape leaves the previous counts in place and the source marked stale.
+ * shape leaves the previous counts in place and the source marked stale. A set identical to the stored one
+ * is not rewritten, because the portal often stands still between hourly checks.
  */
-export async function saveJobPortalCounts(rows: any[]): Promise<number> {
+export async function saveJobPortalCounts(rows: any[]): Promise<Saved> {
   const errs = validateBlmis(rows);
   if (errs.length) throw new Error(`BLMIS counts rejected (${errs.length} problems), previous counts kept. First: ${errs[0]}`);
+  const total = rows.filter(r => r.dimension === 'dzongkhag').reduce((s, r) => s + r.count, 0);
+  const stored = await query<{ dimension: string; label: string | null; count: number }>('select dimension, label, count from job_portal_counts');
+  if (sameCounts(stored, rows)) return { records: total, message: `${total} listings, unchanged since the last read` };
   await withTx(async c => {
-    await c.query('delete from job_portal_counts');
+    await c.query('DELETE FROM job_portal_counts');
     for (const r of rows) await c.query('insert into job_portal_counts(dimension,label,dzongkhag_id,count,fetched_at) values ($1,$2,$3,$4,$5)',
       [r.dimension, r.label, r.dzongkhag, r.count, r.fetched_at]);
   });
-  return rows.filter(r => r.dimension === 'dzongkhag').reduce((s, r) => s + r.count, 0);
+  return { records: total, message: `${total} listings, counts changed` };
 }
 
+const VACANCY_COLS = ['agency_id', 'recruitment_id', 'title', 'announcement', 'position_level', 'agency', 'service', 'employment_type', 'category',
+  'qualification', 'slots', 'pay_min', 'pay_max', 'pay_currency', 'published_on', 'closing_on', 'reannounced', 'applicants', 'places', 'url', 'source_name', 'fetched_at'] as const;
+
 /**
- * Replace the civil-service vacancies with the Commission's complete list. The list's own total must match
- * what was read, so a run cut short by a dropped connection cannot publish half the vacancies as all of them.
+ * Bring the civil-service vacancies in line with the Commission's complete list, one announcement per row.
+ * The list's own total must match what was read, so a run cut short by a dropped connection cannot publish
+ * half the vacancies as all of them. Then each announcement, by its own id, is added once, updated only when
+ * what it says has changed, and removed when Zhiyog stops listing it. Unchanged rows are not touched, so
+ * when DrukView first saw a vacancy survives every refresh.
  */
-export async function saveCivilServiceVacancies({ rows, total }: { rows: any[]; total: number }): Promise<number> {
+export async function saveCivilServiceVacancies({ rows, total }: { rows: any[]; total: number }): Promise<Saved> {
   const errs = validateRcsc(rows, { total });
   if (errs.length) throw new Error(`Zhiyog vacancy list rejected (${errs.length} problems), previous vacancies kept. First: ${errs[0]}`);
-  await withTx(async c => {
-    await c.query('delete from civil_service_vacancies'); // cascades to locations
-    for (const r of rows) {
-      await c.query(`insert into civil_service_vacancies(id,agency_id,recruitment_id,title,announcement,position_level,agency,service,employment_type,category,qualification,slots,pay_min,pay_max,pay_currency,published_on,closing_on,reannounced,applicants,places,url,source_name,fetched_at)
-        values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)`,
-        [r.id, r.agency_id, r.recruitment_id, r.title, r.announcement, r.position_level, r.agency, r.service, r.employment_type, r.category, r.qualification,
-          r.slots, r.pay_min, r.pay_max, r.pay_currency, r.published_on, r.closing_on, r.reannounced, r.applicants, r.places, r.url, r.source_name, r.fetched_at]);
-      for (const dz of new Set<string>(r.dzongkhags)) await c.query('insert into civil_service_vacancy_locations(vacancy_id,dzongkhag_id) values ($1,$2)', [r.id, dz]);
+  const d = await withTx(async c => {
+    const stored = new Map<string, string>((await c.query("select id, coalesce(content_hash, '') h from civil_service_vacancies for update")).rows.map(r => [r.id, r.h]));
+    const plan = diffVacancies(stored, rows);
+    const vals = (r: any) => VACANCY_COLS.map(k => r[k]);
+    const n = VACANCY_COLS.length;
+    for (const r of plan.added) {
+      await c.query(`insert into civil_service_vacancies(id,${VACANCY_COLS.join(',')},content_hash) values ($1,${VACANCY_COLS.map((_, i) => `$${i + 2}`).join(',')},$${n + 2})`,
+        [r.id, ...vals(r), r.hash]);
     }
+    for (const r of plan.changed) {
+      await c.query(`update civil_service_vacancies set ${VACANCY_COLS.map((k, i) => `${k}=$${i + 2}`).join(',')}, content_hash=$${n + 2}, updated_at=now() where id=$1`,
+        [r.id, ...vals(r), r.hash]);
+      await c.query('DELETE FROM civil_service_vacancy_locations WHERE vacancy_id=$1', [r.id]);
+    }
+    for (const r of [...plan.added, ...plan.changed]) {
+      for (const dz of new Set<string>(r.dzongkhags)) {
+        await c.query('insert into civil_service_vacancy_locations(vacancy_id,dzongkhag_id) values ($1,$2) on conflict do nothing', [r.id, dz]);
+      }
+    }
+    if (plan.removed.length) await c.query('DELETE FROM civil_service_vacancies WHERE id = any($1)', [plan.removed]); // cascades to locations
+    return plan;
   });
-  return rows.length;
+  const open = d.added.length + d.changed.length + d.unchanged.length;
+  return { records: open, message: `${open} open: ${d.added.length} new, ${d.changed.length} changed, ${d.removed.length} removed, ${d.unchanged.length} unchanged` };
 }
 
 export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; records: number; message: string | null; retry_after_s?: number };
@@ -196,7 +222,7 @@ export type JobResult = { job: JobName; status: 'ok' | 'error' | 'skipped'; reco
  * secret) — but at most once per interval, so they cannot be used to hammer the sources or the database.
  * A valid CRON_SECRET bypasses the interval. After a failed run a retry is allowed after 5 minutes.
  */
-export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, tenders: 180, blmis: 360, rcsc: 180, manual: 10 };
+export const MIN_INTERVAL_MIN: Record<JobName, number> = { worldbank: 360, adb: 360, weather: 120, leaders: 360, tenders: 180, blmis: 50, rcsc: 50, manual: 10 };
 const RETRY_AFTER_ERROR_MIN = 5;
 
 /** Atomically claim the right to run a job now. Returns null when claimed, or the seconds to wait. */
@@ -227,10 +253,12 @@ export async function runJob(job: JobName, { force = false }: { force?: boolean 
   const wait = await claimRun(job, def, force);
   if (wait !== null) return { job, status: 'skipped', records: 0, message: `Refreshed recently; next refresh allowed in about ${Math.ceil(wait / 60)} min.`, retry_after_s: wait };
   try {
-    const n = await withDeadline(fetchAndSave(job), JOB_DEADLINE_MS, job);
+    const saved = await withDeadline(fetchAndSave(job), JOB_DEADLINE_MS, job);
+    const n = typeof saved === 'number' ? saved : saved.records;
+    const note = typeof saved === 'number' ? null : saved.message;
     await query(`update sources set status='ok', last_success=now(), records=$2, error=null where id=$1`, [def.id, n]);
-    await query('insert into update_log(job,status,records) values ($1,$2,$3)', [job, 'ok', n]);
-    return { job, status: 'ok', records: n, message: null };
+    await query('insert into update_log(job,status,records,message) values ($1,$2,$3,$4)', [job, 'ok', n, note]);
+    return { job, status: 'ok', records: n, message: note };
   } catch (e) {
     const msg = String((e as Error).message).slice(0, 800);
     // keep previous good data; flag stale if we ever succeeded, else error
@@ -240,7 +268,7 @@ export async function runJob(job: JobName, { force = false }: { force?: boolean 
   }
 }
 
-async function fetchAndSave(job: JobName): Promise<number> {
+async function fetchAndSave(job: JobName): Promise<Saved> {
   if (job === 'worldbank') return replaceProjects('worldbank', await fetchWorldBank(await matcherOf()));
   if (job === 'adb') return replaceProjects('adb', await fetchAdb(await matcherOf(), (sectors as { sectors: Record<string, string> }).sectors));
   if (job === 'weather') return saveWeather(await fetchWeather(await loadDz()));

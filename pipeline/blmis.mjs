@@ -142,3 +142,14 @@ export async function fetchBlmis(matcher, { fetchedAt = new Date().toISOString()
   }
   throw new Error(`BLMIS job-seeker page: ${last?.message ?? last}${last?.cause?.code ? ` (${last.cause.code})` : ''}`);
 }
+
+/**
+ * Whether a fresh read says exactly what is already stored. The portal's counts often stand still for hours,
+ * and an hourly refresh should not rewrite an identical set.
+ * @param {{ dimension: string, label: string | null, count: number }[]} a
+ * @param {{ dimension: string, label: string | null, count: number }[]} b
+ */
+export function sameCounts(a, b) {
+  const key = rows => rows.map(r => `${r.dimension}\u0000${r.label ?? ''}\u0000${r.count}`).sort().join('\n');
+  return a.length === b.length && key(a) === key(b);
+}

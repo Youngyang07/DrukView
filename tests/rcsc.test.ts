@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { detailUrl, FILTERS, LOCATION_FLAGS, parseRcscPage, rcscDate, searchBody, toVacancies, validateRcsc } from '../pipeline/rcsc.mjs';
+import { detailUrl, diffVacancies, FILTERS, LOCATION_FLAGS, parseRcscPage, rcscDate, searchBody, toVacancies, validateRcsc, vacancyHash } from '../pipeline/rcsc.mjs';
 import { makeGeoMatcher } from '../pipeline/lib.mjs';
 
 const DZ = JSON.parse(readFileSync('shared/dzongkhags.json', 'utf8')).dzongkhags;
@@ -93,5 +93,37 @@ describe('Zhiyog vacancy list', () => {
 
   it('pins citations to the real site', () => {
     expect(detailUrl(1, 2)).toBe('https://jobs.rcsc.gov.bt/Application/VacancyDetail/1/2');
+  });
+
+  describe('hourly refresh: each announcement once, rewritten only when it changes', () => {
+    const fresh = () => parsed();
+    const storedFrom = (rows: { id: string }[]) => new Map(rows.map(r => [r.id, vacancyHash(r)]));
+
+    it('a second identical read changes nothing', () => {
+      const d = diffVacancies(storedFrom(fresh()), fresh());
+      expect([d.added.length, d.changed.length, d.removed.length, d.unchanged.length]).toEqual([0, 0, 0, 16]);
+    });
+    it('the read time and applicant counts move every hour but are not changes', () => {
+      const later = fresh().map(v => ({ ...v, fetched_at: '2026-11-27T09:00:00.000Z', applicants: (v.applicants ?? 0) + 7 }));
+      expect(diffVacancies(storedFrom(fresh()), later).changed).toHaveLength(0);
+    });
+    it('a new closing date (a re-announcement keeps its id) is one change, not a second vacancy', () => {
+      const later = fresh();
+      later[0] = { ...later[0], closing_on: '2026-12-20', reannounced: true };
+      const d = diffVacancies(storedFrom(fresh()), later);
+      expect(d.changed.map(v => v.id)).toEqual([later[0].id]);
+      expect(d.added).toHaveLength(0);
+    });
+    it('new announcements are added, withdrawn ones removed', () => {
+      const all = fresh();
+      const d = diffVacancies(storedFrom(all.slice(1)), all.slice(0, 15));
+      expect(d.added.map(v => v.id)).toEqual([all[0].id]);
+      expect(d.removed).toEqual([all[15].id]);
+    });
+    it('the same announcement twice in one read is kept once', () => {
+      const all = fresh();
+      const d = diffVacancies(new Map(), [...all, all[3]]);
+      expect(d.added).toHaveLength(16);
+    });
   });
 });

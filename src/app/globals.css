@@ -134,3 +134,4 @@ tr.tot td{font-weight:700;border-top:2px solid var(--line)}
   select,input,button:not(.link):not(.row),.btn{min-height:40px}
 }
 @media(display-mode:standalone){.skip{display:none}}
+.b-new{background:var(--tint);color:var(--brand);border-color:transparent;font-weight:600;vertical-align:middle}

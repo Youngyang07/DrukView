@@ -268,4 +268,15 @@ CREATE TABLE civil_service_vacancy_locations (
 CREATE INDEX csv_locations_dz_idx ON civil_service_vacancy_locations (dzongkhag_id);
 `,
   },
+  {
+    name: '0007_vacancy_changes.sql',
+    // Hourly refreshes update a vacancy only when what it says has changed. content_hash is that fingerprint,
+    // first_seen_at is when DrukView first read the announcement (kept across refreshes), updated_at the last
+    // time its content changed. Rows that existed before this migration count as first seen now.
+    sql: `
+ALTER TABLE civil_service_vacancies ADD COLUMN content_hash  text;
+ALTER TABLE civil_service_vacancies ADD COLUMN first_seen_at timestamptz NOT NULL DEFAULT now();
+ALTER TABLE civil_service_vacancies ADD COLUMN updated_at    timestamptz NOT NULL DEFAULT now();
+`,
+  },
 ];

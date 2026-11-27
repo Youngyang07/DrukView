@@ -108,3 +108,32 @@ reference. If BLMIS fails, the snapshot charts come back.
 2. [ ] After the first production run: confirm both sources read `ok` on the Data sources page.
 3. [ ] Revisit BLMIS individual listings only if the Livewire request can be made reliably. Until then,
    counts only.
+
+## Addendum (2026-11-27): hourly, without duplicate updates
+
+**Hourly.** Vacancies change during the day, and a daily read can miss an announcement that closes within
+hours. Vercel's Hobby plan runs a cron at most once a day and refuses a deployment with a more frequent one,
+so the hourly trigger lives in GitHub Actions (`.github/workflows/refresh-vacancies.yml`, minute 17). It
+calls the public job routes, prints each response, and fails the run on any answer other than 200 (done) or
+429 (refreshed within the interval), so a broken collector is visible in the Actions tab rather than only
+on the Data sources page. The rate limit for both jobs is now 50 minutes. The daily Vercel crons remain as a
+fallback. GitHub runs scheduled workflows from the repository's default branch only, and pauses them in a
+repository with no activity for 60 days.
+
+**No duplicate updates.** A run used to delete and re-insert every row. Each run now compares the fresh read
+with what is stored:
+
+- Civil service, keyed by the Commission's own announcement id (agency + recruitment number): a vacancy is
+  added once, updated only when a fingerprint of what it says changes, and removed when Zhiyog no longer
+  lists it. The fingerprint leaves out the read time and the applicant count, which move every hour without
+  the vacancy changing. A re-announcement keeps its id, so it is an update with a new closing date, not a
+  second vacancy. The same id twice in one read is kept once.
+- Job portal: a set of counts identical to the stored one is not rewritten.
+
+Migration `0007_vacancy_changes.sql` adds `content_hash`, `first_seen_at` (kept across refreshes) and
+`updated_at`. The page dates each half by the source's last successful read and marks announcements first
+seen in the last 24 hours as **new**. The update log records each run as, for example,
+"16 open: 0 new, 0 changed, 0 removed, 16 unchanged".
+
+Verified against the live sites: a first run stored 16 new announcements, and an immediate second run
+reported 16 unchanged and wrote nothing, as did the job portal ("781 listings, unchanged since the last read").

@@ -151,11 +151,12 @@ export const getJobPortalCounts = () => query<PortalCount>(
 
 export type CivilVacancy = { id: string; title: string; announcement: string | null; position_level: string | null; agency: string; service: string | null;
   employment_type: string | null; category: string | null; qualification: string | null; slots: number; pay_min: number | null; pay_max: number | null;
-  pay_currency: string | null; published_on: string; closing_on: string; reannounced: boolean; places: string[]; where_names: string[]; url: string; fetched_at: string };
+  pay_currency: string | null; published_on: string; closing_on: string; reannounced: boolean; places: string[]; where_names: string[]; url: string; fetched_at: string; first_seen_at: string; new: boolean };
 /** Civil-service announcements, soonest to close first; scoped to those the Commission lists in a dzongkhag. */
 export const getCivilServiceVacancies = (scope: string | null) => query<CivilVacancy>(
   `select v.id, v.title, v.announcement, v.position_level, v.agency, v.service, v.employment_type, v.category, v.qualification, v.slots,
           v.pay_min, v.pay_max, v.pay_currency, v.published_on::text, v.closing_on::text, v.reannounced, v.places, v.url, v.fetched_at::text,
+          v.first_seen_at::text, (v.first_seen_at > now() - interval '24 hours') as new,
           coalesce((select array_agg(d.name order by d.name) from civil_service_vacancy_locations l join dzongkhags d on d.id = l.dzongkhag_id
                      where l.vacancy_id = v.id), '{}') as where_names
      from civil_service_vacancies v

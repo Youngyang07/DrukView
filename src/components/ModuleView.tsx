@@ -225,23 +225,23 @@ async function LiveVacancies({ scope, locale }: Props) {
   const of = (d: q.PortalCount['dimension']) => counts.filter(c => c.dimension === d);
   const dz = of('dzongkhag');
   const total = dz.reduce((s, c) => s + c.count, 0);
-  const countsOn = counts[0]?.fetched_at.slice(0, 10);
+  const countsOn = h(BLMIS.id)?.last_success?.slice(0, 10) ?? counts[0]?.fetched_at.slice(0, 10);
   const here = scope ? dz.find(c => c.dzongkhag_id === scope.id)?.count ?? 0 : total;
   const open = civil.filter(v => v.closing_on >= today);
   const closedSince = civil.length - open.length;
   const posts = open.reduce((s, v) => s + v.slots, 0);
-  const civilOn = civil[0]?.fetched_at.slice(0, 10) ?? h(RCSC.id)?.last_success?.slice(0, 10);
+  const civilOn = h(RCSC.id)?.last_success?.slice(0, 10) ?? civil[0]?.fetched_at.slice(0, 10);
 
   return (<div className="card"><div className="card-h"><h2>Vacancies now — {scopeName(scope)}</h2>
     <span><Fresh at={h(BLMIS.id)?.last_success} label="Job portal" /> <Fresh at={h(RCSC.id)?.last_success} label="Civil service" /></span></div>
-    <p className="note">Read daily from the two public vacancy systems: the national job portal (<Ext href={BLMIS.url}>BLMIS</Ext>, Ministry of Industry, Commerce and Employment) and the civil-service recruitment system (<Ext href={RCSC.url}>Zhiyog</Ext>, Royal Civil Service Commission). To apply, use those sites.</p>
+    <p className="note">Read every hour from the two public vacancy systems: the national job portal (<Ext href={BLMIS.url}>BLMIS</Ext>, Ministry of Industry, Commerce and Employment) and the civil-service recruitment system (<Ext href={RCSC.url}>Zhiyog</Ext>, Royal Civil Service Commission). To apply, use those sites.</p>
 
     <h3>Civil service{open.length ? ` — ${num(open.length)} announcement${open.length === 1 ? '' : 's'} open, ${num(posts)} post${posts === 1 ? '' : 's'}` : ''}</h3>
     {failedNote(RCSC.id, 'Zhiyog', civilOn)}
     {open.length ? <>
       <div className="scroll"><table><thead><tr><th>Position</th><th>Agency</th><th>Where</th><th>Posts</th><th>Pay scale</th><th>Closes</th></tr></thead><tbody>
         {open.map(v => <tr key={v.id}>
-          <td><Ext href={v.url}>{v.title}</Ext><br /><small>{[v.position_level, v.employment_type, v.category, v.reannounced ? 're-announced' : null].filter(Boolean).join(' · ')}</small>
+          <td><Ext href={v.url}>{v.title}</Ext>{v.new ? <> <span className="badge b-new" title={`First seen by DrukView ${v.first_seen_at.slice(0, 16)} UTC`}>new</span></> : null}<br /><small>{[v.position_level, v.employment_type, v.category, v.reannounced ? 're-announced' : null].filter(Boolean).join(' · ')}</small>
             {v.qualification ? <><br /><small>Needs: {v.qualification}</small></> : null}</td>
           <td>{v.agency}</td>
           <td>{v.where_names.length ? v.where_names.join(', ') : 'not stated'}</td>
@@ -249,7 +249,7 @@ async function LiveVacancies({ scope, locale }: Props) {
           <td className="nw">{payScale(v)}</td>
           <td className="nw">{v.closing_on}</td>
         </tr>)}</tbody></table></div>
-      <p className="note">Pay is the position&apos;s monthly pay scale in ngultrum as the Commission prints it. An announcement open in several dzongkhags is listed under each{scope ? '' : ', but counted once here'}.{closedSince ? ` ${num(closedSince)} announcement${closedSince === 1 ? ' has' : 's have'} closed since the last read and ${closedSince === 1 ? 'is' : 'are'} not shown.` : ''}</p>
+      <p className="note">Pay is the position&apos;s monthly pay scale in ngultrum as the Commission prints it. <b>New</b> marks an announcement DrukView first saw in the last 24 hours. An announcement open in several dzongkhags is listed under each{scope ? '' : ', but counted once here'}.{closedSince ? ` ${num(closedSince)} announcement${closedSince === 1 ? ' has' : 's have'} closed since the last read and ${closedSince === 1 ? 'is' : 'are'} not shown.` : ''}</p>
     </> : <EmptyOr health={health} ids={[RCSC.id]} what="the civil-service vacancy list">
         No civil-service vacancy{scope ? ` in ${scope.name}` : ''} was open on Zhiyog when it was last read{civilOn ? ` (${civilOn})` : ''}. The list was read successfully, so none was open — not that we failed to look.
       </EmptyOr>}
