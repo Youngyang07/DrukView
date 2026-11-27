@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { livewireData, parseBlmis, toCountRows, validateBlmis } from '../pipeline/blmis.mjs';
+import { livewireData, parseBlmis, sameCounts, toCountRows, validateBlmis } from '../pipeline/blmis.mjs';
 import { makeGeoMatcher } from '../pipeline/lib.mjs';
 
 const DZ = JSON.parse(readFileSync('shared/dzongkhags.json', 'utf8')).dzongkhags;
@@ -58,5 +58,12 @@ describe('BLMIS vacancy counts', () => {
     expect(validateBlmis(odd).join('\n')).toMatch(/"Haa" matches no dzongkhag/);
     const frac = r.map(x => (x.dimension === 'qualification' && x.label === 'NFE' ? { ...x, count: 1.5 } : x));
     expect(validateBlmis(frac).join('\n')).toMatch(/not a whole number/);
+  });
+
+  it('an identical read is recognised as unchanged, whatever its order or read time', () => {
+    const a = rows(), b = [...rows()].reverse().map(r => ({ ...r, fetched_at: '2026-11-27T10:00:00Z' }));
+    expect(sameCounts(a, b)).toBe(true);
+    expect(sameCounts(a, b.map(r => (r.dimension === 'dzongkhag' && r.label === 'Haa' ? { ...r, count: 8 } : r)))).toBe(false);
+    expect(sameCounts(a, b.slice(1))).toBe(false);
   });
 });

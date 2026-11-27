@@ -24,6 +24,7 @@
 //
 // The parser is pure and tested against a captured response (tests/rcsc.test.ts); the job is all-or-nothing,
 // so a response that does not look like the list fails the run and the previous vacancies stay published.
+import { createHash } from 'node:crypto';
 import { UA } from './lib.mjs';
 
 export const BASE = process.env.RCSC_BASE || 'https://jobs.rcsc.gov.bt';
@@ -209,4 +210,36 @@ export async function fetchRcscVacancies(matcher, { fetchedAt = new Date().toISO
     if (!rows.length || (total !== null && raw.length >= total)) break;
   }
   return { rows: toVacancies(raw, matcher, { fetchedAt }), total: total ?? 0, fetchedAt };
+}
+
+/**
+ * What a vacancy says, as a fingerprint. Applicant counts and the read time are left out: they move every
+ * hour without the vacancy itself changing, and would otherwise turn every refresh into an update.
+ * @param {any} v
+ */
+export function vacancyHash(v) {
+  const { fetched_at, applicants, ...content } = v; // eslint-disable-line no-unused-vars
+  return createHash('sha256').update(JSON.stringify(content, Object.keys(content).sort())).digest('hex');
+}
+
+/**
+ * Compare a fresh read with what is stored, by the Commission's own announcement id. A vacancy is added
+ * once, updated only when what it says has changed, and removed when Zhiyog no longer lists it; the rest
+ * are left untouched. Incoming duplicates of one id collapse to the first.
+ * @param {Map<string, string>} stored  id -> content hash
+ * @param {any[]} incoming
+ */
+export function diffVacancies(stored, incoming) {
+  const seen = new Set(), added = [], changed = [], unchanged = [];
+  for (const v of incoming) {
+    if (seen.has(v.id)) continue;
+    seen.add(v.id);
+    const hash = vacancyHash(v);
+    const before = stored.get(v.id);
+    if (before === undefined) added.push({ ...v, hash });
+    else if (before !== hash) changed.push({ ...v, hash });
+    else unchanged.push(v.id);
+  }
+  const removed = [...stored.keys()].filter(id => !seen.has(id));
+  return { added, changed, unchanged, removed };
 }

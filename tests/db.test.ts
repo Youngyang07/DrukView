@@ -182,14 +182,36 @@ d('database layer', () => {
     const blmis = await import('../pipeline/blmis.mjs'); const rcsc = await import('../pipeline/rcsc.mjs');
     const matcher = await ing.matcherOf();
     const counts = blmis.toCountRows(blmis.parseBlmis(readFileSync('tests/fixtures/blmis-jobseeker-real.html', 'utf8'))!, matcher, { fetchedAt: '2026-11-27T08:00:00Z' });
-    expect(await ing.saveJobPortalCounts(counts)).toBe(762); // the job records the listing total
+    expect(await ing.saveJobPortalCounts(counts)).toMatchObject({ records: 762, message: '762 listings, counts changed' });
+    const firstWrite = (await db.query<{ t: string }>('select min(fetched_at)::text t from job_portal_counts'))[0].t;
+    const again = counts.map(c => ({ ...c, fetched_at: '2026-11-27T09:00:00Z' }));
+    expect(await ing.saveJobPortalCounts(again)).toMatchObject({ message: '762 listings, unchanged since the last read' });
+    expect((await db.query<{ t: string }>('select min(fetched_at)::text t from job_portal_counts'))[0].t).toBe(firstWrite); // not rewritten
     const stored = await q.getJobPortalCounts();
     expect(stored.filter(c => c.dimension === 'dzongkhag').find(c => c.slug === 'thimphu')?.count).toBe(324);
     expect(stored.find(c => c.dimension === 'qualification' && c.label === null)?.count).toBe(1);
 
     const page = rcsc.parseRcscPage(JSON.parse(readFileSync('tests/fixtures/rcsc-vacancies-real.json', 'utf8')));
     const vac = rcsc.toVacancies(page.rows, matcher, { fetchedAt: '2026-11-27T08:00:00Z' });
-    expect(await ing.saveCivilServiceVacancies({ rows: vac, total: page.total! })).toBe(16);
+    expect(await ing.saveCivilServiceVacancies({ rows: vac, total: page.total! })).toMatchObject({ records: 16, message: '16 open: 16 new, 0 changed, 0 removed, 0 unchanged' });
+    await db.query(`update civil_service_vacancies set first_seen_at = now() - interval '3 days', updated_at = now() - interval '3 days'`);
+
+    // the next hourly read, identical apart from read time and applicant counts: nothing is written
+    const hourLater = vac.map((v: any) => ({ ...v, fetched_at: '2026-11-27T09:00:00Z', applicants: (v.applicants ?? 0) + 3 }));
+    expect(await ing.saveCivilServiceVacancies({ rows: hourLater, total: 16 })).toMatchObject({ message: '16 open: 0 new, 0 changed, 0 removed, 16 unchanged' });
+    expect((await db.query<{ n: number }>(`select count(*)::int n from civil_service_vacancies where updated_at > now() - interval '1 day'`))[0].n).toBe(0);
+
+    // one re-announced (same id, new closing date) and one withdrawn: one update, one removal, no duplicate
+    const next = hourLater.slice(0, 15).map((v: any, i: number) => (i === 0 ? { ...v, closing_on: '2026-12-20', reannounced: true } : v));
+    expect(await ing.saveCivilServiceVacancies({ rows: next, total: 15 })).toMatchObject({ records: 15, message: '15 open: 0 new, 1 changed, 1 removed, 14 unchanged' });
+    const rowsNow = await q.getCivilServiceVacancies(null);
+    expect(rowsNow).toHaveLength(15);
+    const re = rowsNow.find(v => v.id === next[0].id)!;
+    expect(re.closing_on).toBe('2026-12-20');
+    expect(re.new).toBe(false); // first seen three days ago, and still is
+    expect(rowsNow.every(v => !v.new)).toBe(true);
+    // put the full list back for the checks below
+    await ing.saveCivilServiceVacancies({ rows: vac, total: 16 });
     expect(await q.getCivilServiceVacancies(null)).toHaveLength(16);
     const gasa = await q.getCivilServiceVacancies('BT-GA'); // a nine-dzongkhag announcement, and Gasa's own driver post
     expect(gasa.map(v => v.title).sort()).toEqual(['Asst. Laboratory Technician I', 'Driver III']);
