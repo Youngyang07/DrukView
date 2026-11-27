@@ -9,6 +9,7 @@ import leadersJson from '../../data/reference/leaders.json';
 import budgetJson from '../../data/reference/budget-2026-27.json';
 import economyJson from '../../data/reference/economy.json';
 import dzongdagJson from '../../data/reference/dzongdags.json';
+import vacancyNoticesJson from '../../data/reference/vacancy-notices.json';
 
 export type RefSource = { publisher: string; title: string; table?: string; url: string; checked: string };
 
@@ -32,16 +33,43 @@ export type LeadersData = { sources: Record<'na' | 'nc', RefSource & { data: str
 export type BudgetSector = { name: string; current: number; capital: number; total: number; level: 'top' | 'parent' | 'child' };
 export type BudgetDz = { name: string; current: number; capitalBlock: number; capitalProjectExternal: number; capitalProjectRgob: number; capitalCentral: number; capital: number; total: number };
 export type BudgetGewog = { gewog: string; dz: string; current: number; capitalBlock: number; capitalProjectExternal: number; capitalCentral: number; capital: number; total: number; mapName?: string };
-export type BudgetData = { source: RefSource; fiscalYear: string; currency: string; notes: string[];
+export type BudgetSplit = { name: string; current: number; capital: number; total: number };
+export type ClimateAgency = { agency: string; name: string; recommended: number; mitigation: number; adaptation: number; enabling: number; noRelevance: number };
+/** Cross-cutting allocations the budget report tags across sectors (§5.4-5.8). They overlap the sector
+ *  table and each other, so nothing here may ever be summed with a sector or with another theme. */
+export type BudgetThemes = { source: RefSource; notes: string[];
+  climate: { section: string; table: string; page: number; taggedBudget: number; mitigation: number; adaptation: number; enabling: number; noRelevance: number; printedTotal: number; agencies: ClimateAgency[] };
+  gender: { section: string; page: number; total: number; description: string };
+  stimulus: { section: string; page: number; total: number; programmeOutlay: number; budgetedToDate: number; budgetedToDateAsOf: string; description: string };
+  reserve: { section: string; table: string; page: number; current: number; capital: number; total: number; lines: BudgetSplit[] };
+  transfers: { section: string; table: string; page: number; total: number; groups: { name: string; total: number; lines: BudgetSplit[] }[] } };
+export type BudgetData = { source: RefSource; fiscalYear: string; currency: string; notes: string[]; themes: BudgetThemes;
   national: { totalAppropriation: number; totalExpenditure: number; current: number; capital: number; totalResources: number; internalResources: number;
     domesticRevenue: number; tax: number; nonTax: number; externalResources: number; programGrants: number; projectTiedGrants: number; grantsGoI: number;
     fiscalDeficit: number; gdp: number; deficitPctGdp: number; debtService: number };
   sectors: BudgetSector[]; localGovernment: { total: number; dzongkhags: { current: number; capital: number; total: number }; thromdesTotal: number; gewogsTotal: number; previousYearTotal: number };
   dzongkhags: Record<string, BudgetDz>; thromdes: { name: string; dz: string; current: number; capital: number; total: number }[]; gewogs: BudgetGewog[] };
 
-export type EconMetric = { key: string; label: string; unit: string; asOf: string | null; fiscalYear: string; source: RefSource;
-  national: Record<string, number>; dzongkhags: Record<string, Record<string, number>>; notes: string[] };
+export type EconMetric = { key: string; label: string; unit: string; asOf: string | null; fiscalYear: string | null; source: RefSource;
+  national: Record<string, number>; dzongkhags: Record<string, Record<string, number>>; notes: string[];
+  breakdown?: { title: string; rows: { label: string; count: number }[] } };
 export type EconomyData = { metrics: EconMetric[] };
+
+export type VacancyGroup = 'listed' | 'un' | 'ngo' | 'foundation' | 'media';
+/** What a source showed when it was checked. "none" (nothing open) and "unreadable" (could not tell) are
+ *  different claims and are shown differently; see the empty-state rule in docs/adr/0002. */
+export type VacancySourceStatus = 'open' | 'none' | 'social' | 'not-found' | 'unreadable';
+export type VacancyNotice = { employer: string; group: VacancyGroup; title: string; posted: string | null; closes: string | null; url: string };
+export type VacancyNoticesData = { checked: string; notes: string[]; notices: VacancyNotice[];
+  sources: { employer: string; group: VacancyGroup; page: string | null; status: VacancySourceStatus; note: string }[];
+  /** The official lists the check claims to cover in full; tests hold every name to a row in `sources`. */
+  coverage: Record<'csoRegister' | 'rsebListed', { url: string; checked: string; names: string[] }> };
+export const VACANCY_GROUP: Record<VacancyGroup, string> = { listed: 'Listed company (RSEB)', un: 'UN agency', ngo: 'NGO / civil society', foundation: 'Foundation / trust', media: 'Newspaper' };
+export const VACANCY_STATUS: Record<VacancySourceStatus, string> = {
+  open: 'Vacancy open', none: 'Nothing open', social: 'Social media only', 'not-found': 'No current notice found', unreadable: 'Could not be read',
+};
+/** A notice is shown until the end of its closing day; one with no closing date stays until the next check. */
+export const isOpen = (n: VacancyNotice, today: string) => n.closes === null || n.closes >= today;
 
 export type Dzongdag = { name: string; confidence: 'confirmed' | 'website' | 'unconfirmed'; asOf: string | null; note: string | null; sourceTitle: string | null; sourceUrl: string | null };
 export type DzOffice = { name?: string; phone?: string; email?: string; address?: string; website?: string; sourceUrl?: string };
@@ -50,6 +78,7 @@ export type DzongdagData = { notes: string[]; checked: string; dzongkhags: Recor
 export const health = healthJson as unknown as HealthData;
 export const economy = economyJson as unknown as EconomyData;
 export const dzongdags = dzongdagJson as unknown as DzongdagData;
+export const vacancyNotices = vacancyNoticesJson as unknown as VacancyNoticesData;
 export const CONFIDENCE_LABEL: Record<Dzongdag['confidence'], string> = {
   confirmed: 'Confirmed by a dated appointment notice',
   website: 'From the dzongkhag website — the page carries no date',
@@ -80,7 +109,11 @@ export const pct = (a: number, b: number) => (b > 0 ? ((a - b) / b) * 100 : 0);
 
 export const REFERENCE_SOURCES: { what: string; source: RefSource; notes: string[] }[] = [
   { what: `National budget FY ${budget.fiscalYear}`, source: budget.source, notes: budget.notes },
+  { what: `Budget themes FY ${budget.fiscalYear} (climate, gender, stimulus, reserve, grants & subsidies)`, source: budget.themes.source, notes: budget.themes.notes },
   ...economy.metrics.map(m => ({ what: `${m.label} (MoICE)`, source: m.source, notes: m.notes })),
+  { what: 'Vacancy notices from listed companies, UN agencies, NGOs and foundations',
+    source: { publisher: 'Employers’ own websites', title: 'vacancy and career pages of the companies listed on the Royal Securities Exchange of Bhutan, the UN in Bhutan, NGOs and foundations', table: 'each notice links its own page', url: 'https://rsebl.org.bt/listedscripts', checked: vacancyNotices.checked },
+    notes: vacancyNotices.notes },
   { what: 'Population (census)', source: population.source, notes: population.notes },
   { what: 'Health facilities', source: health.source, notes: health.notes },
   { what: 'Schools', source: schools.source, notes: schools.notes },
