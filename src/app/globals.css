@@ -135,3 +135,4 @@ tr.tot td{font-weight:700;border-top:2px solid var(--line)}
 }
 @media(display-mode:standalone){.skip{display:none}}
 .b-new{background:var(--tint);color:var(--brand);border-color:transparent;font-weight:600;vertical-align:middle}
+.hero-links{margin:14px 0 0}.hero-links a{color:#fff;font-weight:600;text-decoration:none;display:inline-block;padding:8px 14px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.08)}.hero-links a:hover{background:rgba(255,255,255,.18)}

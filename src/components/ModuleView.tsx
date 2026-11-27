@@ -6,7 +6,7 @@ import * as q from '@/server/queries';
 import { SOURCE as EGP } from '../../pipeline/egp.mjs';
 import { SOURCE as BLMIS } from '../../pipeline/blmis.mjs';
 import { SOURCE as RCSC } from '../../pipeline/rcsc.mjs';
-import { Dzongdags, Economy, Health, Leaders, MofBudget, Population, Schools } from './RefViews';
+import { Dzongdags, Economy, Health, Leaders, MofBudget, Population, Schools, VacancyNotices } from './RefViews';
 import { budget, health, population, schools } from '@/lib/reference';
 
 type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: q.Filters };
@@ -232,7 +232,7 @@ async function LiveVacancies({ scope, locale }: Props) {
   const posts = open.reduce((s, v) => s + v.slots, 0);
   const civilOn = h(RCSC.id)?.last_success?.slice(0, 10) ?? civil[0]?.fetched_at.slice(0, 10);
 
-  return (<div className="card"><div className="card-h"><h2>Vacancies now — {scopeName(scope)}</h2>
+  return (<div className="card"><div className="card-h"><h2>Job vacancies — {scopeName(scope)}</h2>
     <span><Fresh at={h(BLMIS.id)?.last_success} label="Job portal" /> <Fresh at={h(RCSC.id)?.last_success} label="Civil service" /></span></div>
     <p className="note">Read every hour from the two public vacancy systems: the national job portal (<Ext href={BLMIS.url}>BLMIS</Ext>, Ministry of Industry, Commerce and Employment) and the civil-service recruitment system (<Ext href={RCSC.url}>Zhiyog</Ext>, Royal Civil Service Commission). To apply, use those sites.</p>
 
@@ -259,7 +259,7 @@ async function LiveVacancies({ scope, locale }: Props) {
     {counts.length ? (scope ? <>
       {here ? <p>{num(here)} of the {num(total)} vacancies listed on BLMIS that day were in {scope.name} ({((here / total) * 100).toFixed(1)}%).</p>
         : <p>None of the {num(total)} vacancies listed on BLMIS that day was in {scope.name}.</p>}
-      <p className="note">BLMIS publishes counts by dzongkhag, not the listings themselves, so the jobs cannot be listed here. <Link href={`/${locale}/bhutan/economy`}>See the national breakdown</Link>, or search <Ext href={BLMIS.url}>BLMIS</Ext> to apply.</p>
+      <p className="note">BLMIS publishes counts by dzongkhag, not the listings themselves, so the jobs cannot be listed here. <Link href={`/${locale}/bhutan/jobs`}>See the national breakdown</Link>, or search <Ext href={BLMIS.url}>BLMIS</Ext> to apply.</p>
     </> : <>
       <div className="kpis">
         <Stat label="Listed on BLMIS" value={num(total)} sub={`on ${countsOn}`} />
@@ -284,7 +284,13 @@ async function LiveVacancies({ scope, locale }: Props) {
 async function EconomyModule(p: Props) {
   const [hs] = await q.healthOf([BLMIS.id]).catch(() => [] as q.SourceHealth[]);
   const live = !!hs?.last_success && hs.status === 'ok';
-  return (<><Economy scope={p.scope} locale={p.locale} liveVacancies={live} /><LiveVacancies {...p} /></>);
+  return (<><Economy scope={p.scope} locale={p.locale} liveVacancies={live} />
+    <div className="card"><p style={{ margin: 0 }}>Looking for work? Open civil-service posts and the job portal&apos;s listings, refreshed every hour, are on the <Link href={`/${p.locale}/${p.scope ? p.scope.slug : 'bhutan'}/jobs`}><b>Job vacancies</b></Link> page.</p></div></>);
+}
+
+/** Job vacancies: the live sources first, then the notices read by hand on employers' own sites. */
+async function JobsModule(p: Props) {
+  return (<><LiveVacancies {...p} />{p.scope ? null : <div className="card"><VacancyNotices /></div>}</>);
 }
 
 export default async function ModuleView(p: Props) {
@@ -300,5 +306,6 @@ export default async function ModuleView(p: Props) {
     case 'health': return <Health scope={p.scope} locale={p.locale} />;
     case 'schools': return <Schools scope={p.scope} locale={p.locale} />;
     case 'economy': return <EconomyModule {...p} />;
+    case 'jobs': return <JobsModule {...p} />;
   }
 }
