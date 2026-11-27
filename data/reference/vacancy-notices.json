@@ -2,8 +2,8 @@
  "checked": "2026-11-27",
  "notes": [
   "Each notice in this section was read on the employer's own website on 27 November 2026 and links to it. Notices are hidden once their closing date has passed, so this list shrinks until it is checked again.",
-  "Social-media posts and paid aggregators are not used: a notice is listed only where the employer publishes it on its own site.",
-  "This is not a complete list of employers: Bhutan has many more NGOs and civil-society organisations registered with the Civil Society Organizations Authority (csoa.gov.bt). The table of sources says which employers were looked at and what was found, including where nothing could be read."
+  "Social-media posts, third-party job boards and paid aggregators are not used: a notice is listed only where the employer publishes it on its own site.",
+  "Coverage on 27 November 2026: all 17 companies listed on the Royal Securities Exchange of Bhutan, all 50 organisations on the Civil Society Organizations Authority register (csoa.gov.bt), the UN agencies with Bhutan postings, and both national newspapers. Where an organisation has no vacancy page, a web search for notices from the previous 30 days was used, and the table says so."
  ],
  "notices": [
   {
@@ -53,6 +53,30 @@
    "posted": "2026-11-26",
    "closes": "2026-12-02",
    "url": "https://rspnbhutan.org/re-announcement-2/"
+  },
+  {
+   "employer": "Bhutan Youth Development Fund",
+   "group": "foundation",
+   "title": "School Well-being Counsellor, Nazhoen Pelri School",
+   "posted": "2026-11-09",
+   "closes": "2026-11-27",
+   "url": "https://www.bhutanyouth.org/2026/11/09/we-are-hiring-school-well-being-counsellor/"
+  },
+  {
+   "employer": "Bhutan Youth Development Fund",
+   "group": "foundation",
+   "title": "Primary Facilitators, PP–6 (4 posts), Nazhoen Pelri School",
+   "posted": "2026-11-09",
+   "closes": "2026-11-27",
+   "url": "https://www.bhutanyouth.org/2026/11/09/we-are-hiring-primary-teachers-4-positions/"
+  },
+  {
+   "employer": "Bhutan Youth Development Fund",
+   "group": "foundation",
+   "title": "Early Learning Centre Facilitators (3 posts), Nazhoen Pelri School",
+   "posted": "2026-11-05",
+   "closes": "2026-11-27",
+   "url": "https://www.bhutanyouth.org/2026/11/05/2347/"
   }
  ],
  "sources": [
@@ -134,18 +158,74 @@
    "note": "Posts vacancies on Facebook; none found on a website."
   },
   {
-   "employer": "Bhutan Board Products, Bhutan Polymers, Bhutan Tourism Corporation, Druk Ferro Alloys, Druk Wang Alloys, GIC Bhutan Re",
+   "employer": "Bhutan Tourism Corporation Ltd",
+   "group": "listed",
+   "page": "https://bhutanhotels.com.bt/career/",
+   "status": "unreadable",
+   "note": "Its hotel unit, Bhutan Hotels & Restaurants, lists vacancy posts, but their details are in images, with no date or deadline that could be read."
+  },
+  {
+   "employer": "GIC Bhutan Reinsurance Co. Ltd",
+   "group": "listed",
+   "page": "https://www.gicbhutanre.com/vacancy-re-announcement-gic-bhutan-re-is-pleased-to-re-announce-the-vacancy-for-the-post-of-deputy-manager-it-and-assistant-manager-compliance-for-detail-please-click-on-the-post/",
+   "status": "none",
+   "note": "The latest vacancy notice found on its website is from December 2022."
+  },
+  {
+   "employer": "Druk Ferro Alloys Ltd",
+   "group": "listed",
+   "page": null,
+   "status": "social",
+   "note": "Posts on Facebook; its latest post there welcomes newly recruited staff. No vacancy page found on a website."
+  },
+  {
+   "employer": "Druk Wang Alloys Ltd",
    "group": "listed",
    "page": null,
    "status": "not-found",
-   "note": "No vacancy page was found for these listed companies."
+   "note": "No vacancy notice found on its website (drukwang.com); its recent notices were seen only on an aggregator."
   },
   {
-   "employer": "United Nations in Bhutan (all agencies, including UNDP, UNICEF and WHO)",
+   "employer": "Bhutan Board Products Ltd",
+   "group": "listed",
+   "page": null,
+   "status": "not-found",
+   "note": "No readable vacancy page on its website (bhutanboard.com)."
+  },
+  {
+   "employer": "Bhutan Polymers Company Ltd",
+   "group": "listed",
+   "page": null,
+   "status": "not-found",
+   "note": "No website or vacancy notice found."
+  },
+  {
+   "employer": "United Nations in Bhutan (joint jobs page)",
    "group": "un",
    "page": "https://bhutan.un.org/en/jobs",
    "status": "unreadable",
-   "note": "The job list is built in the browser and could not be read, so no UN vacancy is listed here. Check the page directly."
+   "note": "The job list is built in the browser and could not be read. Check the page directly."
+  },
+  {
+   "employer": "UNICEF",
+   "group": "un",
+   "page": "https://jobs.unicef.org/jobs/search",
+   "status": "none",
+   "note": "Its one Bhutan posting found, a Partnerships Lead Consultant in Thimphu, has been taken down (the page now returns “not found”). The site’s location filter did not narrow results to Bhutan."
+  },
+  {
+   "employer": "UNDP",
+   "group": "un",
+   "page": "https://jobs.undp.org/",
+   "status": "not-found",
+   "note": "No Bhutan posting found on UNDP’s own job site. One Thimphu post (an expert for a climate and environmental financing mechanism) appears only on third-party job boards, which are not used."
+  },
+  {
+   "employer": "WHO, UNFPA, WFP, FAO",
+   "group": "un",
+   "page": null,
+   "status": "not-found",
+   "note": "A search of each agency’s own careers site found no Bhutan posting from the last 30 days."
   },
   {
    "employer": "Royal Society for Protection of Nature (RSPN)",
@@ -162,18 +242,67 @@
    "note": "Its two most recent vacancy notices, from December 2025, are marked closed."
   },
   {
+   "employer": "Bhutan Cancer Society",
+   "group": "ngo",
+   "page": "https://www.bcs.org.bt/vacancy-for-data-assistant/",
+   "status": "none",
+   "note": "Its latest vacancy notice is from May 2025, followed by a selection result."
+  },
+  {
+   "employer": "Disabled People's Organization of Bhutan (DPOB)",
+   "group": "ngo",
+   "page": "https://dpobhutan.org/we-are-hiring/",
+   "status": "none",
+   "note": "Its latest vacancy notice (enumerators) was posted in May 2026."
+  },
+  {
+   "employer": "Journalists' Association of Bhutan",
+   "group": "ngo",
+   "page": "https://www.jab.bt/",
+   "status": "none",
+   "note": "Its latest vacancy notice found is from May 2024."
+  },
+  {
+   "employer": "Bhutan Animal Rescue and Care, Bhutan Kidney Foundation, Chithuen Phendhey Association, Nazhoen Lamtoen, RENEW",
+   "group": "ngo",
+   "page": null,
+   "status": "social",
+   "note": "Recent vacancy or internship posts found on Facebook only; none on their websites."
+  },
+  {
+   "employer": "Ability Bhutan Society, Draktsho Vocational Training Centre",
+   "group": "ngo",
+   "page": null,
+   "status": "not-found",
+   "note": "Recent notices were seen only on an aggregator, not on their own websites. Draktsho is listed as inactive on the CSO register."
+  },
+  {
+   "employer": "The other 35 registered CSOs",
+   "group": "ngo",
+   "page": "https://csoa.gov.bt/organizations",
+   "status": "not-found",
+   "note": "A web search found no vacancy notice from the last 30 days for: Association of Bhutanese Industries; Association of Bhutanese Tour Operators; Barnyard Bhutan Animal Rescue and Sanctuary; Bhutan Association of Women Entrepreneurs; Bhutan Ecological Society; Bhutan Film Institute; Bhutan Media Foundation; Bhutan Stroke Foundation; Bhutan Taxi Association; Bhutan Toilet Organization; Bhutan Transparency Initiative; Clean Bhutan; Construction Association of Bhutan; Evaluation Association of Bhutan; Financial Institutions Association of Bhutan; GNH Centre Bhutan; Guide Association of Bhutan; Gyalyum Charitable Trust; Handicrafts Association of Bhutan; Hotel and Restaurant Association of Bhutan; Jangsa Animal Saving Trust; Karzay Foundation; Lhak-Sam (inactive); Lhomon Society; Menjong Foundation; Ogyen Choling Foundation; Organization for Youth Empowerment; Phensem Parents Support Group; Phuentsholing Sports Association; Royal Society for Protection and Care of Animals; Royal Society for Senior Citizens; Royal Textile Academy of Bhutan; SAARC Business Association of Home Based Workers; VAST Bhutan; Yang ya Foundation (inactive)."
+  },
+  {
    "employer": "Save the Children (Bhutan)",
    "group": "ngo",
    "page": "https://www.savethechildren.net/bhutan/bhutan-jobs",
    "status": "none",
-   "note": "The page lists the organisation’s worldwide openings; none was based in Bhutan."
+   "note": "The page lists the organisation’s worldwide openings; none was based in Bhutan. (A foreign organisation, not on the CSO register.)"
   },
   {
    "employer": "WWF Bhutan",
    "group": "ngo",
    "page": null,
    "status": "social",
-   "note": "Posts vacancies on Facebook; none found on a website."
+   "note": "Posts vacancies on Facebook; none found on a website. (A foreign organisation, not on the CSO register.)"
+  },
+  {
+   "employer": "Bhutan Youth Development Fund",
+   "group": "foundation",
+   "page": "https://www.bhutanyouth.org/news-announcements/",
+   "status": "open",
+   "note": "3 notices for 8 posts at its Nazhoen Pelri School, Thimphu, all closing 27 November 2026."
   },
   {
    "employer": "Loden Foundation",
@@ -187,14 +316,14 @@
    "group": "foundation",
    "page": "https://bhutantrustfund.bt/vacancy-announcement-5/",
    "status": "open",
-   "note": "1 vacancy notice."
+   "note": "1 vacancy notice. (Set up by statute; not on the CSO register.)"
   },
   {
    "employer": "Tarayana Foundation",
    "group": "foundation",
    "page": "https://www.tarayanafoundation.org/tarayana-foundation-announces-shortlisted-candidates-for-assistant-events-and-partnership-officer-position/",
    "status": "none",
-   "note": "Latest notice is an interview call for 26 November 2026."
+   "note": "Latest notice is an interview call for 26 November 2026. Listed as inactive on the CSO register."
   },
   {
    "employer": "Kuensel (newspaper)",
@@ -210,5 +339,86 @@
    "status": "unreadable",
    "note": "Vacancy adverts are published as images in posts titled “Ads”, so their text cannot be read."
   }
- ]
+ ],
+ "coverage": {
+  "csoRegister": {
+   "url": "https://csoa.gov.bt/organizations",
+   "checked": "2026-11-27",
+   "names": [
+    "Ability Bhutan Society",
+    "Association of Bhutanese Industries",
+    "Association of Bhutanese Tour Operators",
+    "Barnyard Bhutan Animal Rescue and Sanctuary",
+    "Bhutan Animal Rescue and Care",
+    "Bhutan Association of Women Entrepreneurs",
+    "Bhutan Cancer Society",
+    "Bhutan Centre for Media and Democracy",
+    "Bhutan Ecological Society",
+    "Bhutan Film Institute",
+    "Bhutan Kidney Foundation",
+    "Bhutan Media Foundation",
+    "Bhutan Stroke Foundation",
+    "Bhutan Taxi Association",
+    "Bhutan Toilet Organization",
+    "Bhutan Transparency Initiative",
+    "Bhutan Youth Development Fund",
+    "Chithuen Phendhey Association",
+    "Clean Bhutan",
+    "Construction Association of Bhutan",
+    "Disabled People's Organization of Bhutan",
+    "Draktsho",
+    "Evaluation Association of Bhutan",
+    "Financial Institutions Association of Bhutan",
+    "GNH Centre Bhutan",
+    "Guide Association of Bhutan",
+    "Gyalyum Charitable Trust",
+    "Handicrafts Association of Bhutan",
+    "Hotel and Restaurant Association of Bhutan",
+    "Jangsa Animal Saving Trust",
+    "Journalists' Association of Bhutan",
+    "Karzay Foundation",
+    "Lhak-Sam",
+    "Lhomon Society",
+    "Loden Foundation",
+    "Menjong Foundation",
+    "Nazhoen Lamtoen",
+    "Ogyen Choling Foundation",
+    "Organization for Youth Empowerment",
+    "Phensem Parents Support Group",
+    "Phuentsholing Sports Association",
+    "RENEW",
+    "Royal Society for Protection and Care of Animals",
+    "Royal Society for Protection of Nature",
+    "Royal Society for Senior Citizens",
+    "Royal Textile Academy of Bhutan",
+    "SAARC Business Association of Home Based Workers",
+    "Tarayana Foundation",
+    "VAST Bhutan",
+    "Yang ya Foundation"
+   ]
+  },
+  "rsebListed": {
+   "url": "https://rsebl.org.bt/listedscripts",
+   "checked": "2026-11-27",
+   "names": [
+    "Bhutan Board Products",
+    "Bhutan Carbide",
+    "Bhutan Ferro Alloys",
+    "Bhutan Insurance",
+    "Bhutan National Bank",
+    "Bhutan Polymers",
+    "Bhutan Tourism Corporation",
+    "Druk Ferro Alloys",
+    "Dungsam Polymers",
+    "Druk PNB",
+    "Druk Wang Alloys",
+    "GIC Bhutan Re",
+    "Kuensel Corporation",
+    "Penden Cement",
+    "Royal Insurance Corporation",
+    "State Trading Corporation",
+    "T Bank"
+   ]
+  }
+ }
 }

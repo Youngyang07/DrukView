@@ -261,6 +261,11 @@ describe('vacancy notices (employers’ own sites)', () => {
       expect(s.note.length, s.employer).toBeGreaterThan(10);
       if (s.status === 'open' || s.status === 'none' || s.status === 'unreadable') expect(s.page, s.employer).toMatch(/^https:\/\//);
     }
+    // "all 50 CSOs" and "all 17 listed companies" are claims on the page: every name must have a row
+    const blob = V.sources.map(s => `${s.employer} ${s.note}`).join(' ').toLowerCase();
+    expect(V.coverage.csoRegister.names).toHaveLength(50);
+    expect(V.coverage.rsebListed.names).toHaveLength(17);
+    for (const n of [...V.coverage.csoRegister.names, ...V.coverage.rsebListed.names]) expect(blob.includes(n.toLowerCase()), n).toBe(true);
     // every group the user asked about is covered, even where the answer is "could not be read"
     expect(new Set(V.sources.map(s => s.group))).toEqual(new Set(['listed', 'un', 'ngo', 'foundation', 'media']));
   });

@@ -61,10 +61,12 @@ export type VacancyGroup = 'listed' | 'un' | 'ngo' | 'foundation' | 'media';
 export type VacancySourceStatus = 'open' | 'none' | 'social' | 'not-found' | 'unreadable';
 export type VacancyNotice = { employer: string; group: VacancyGroup; title: string; posted: string | null; closes: string | null; url: string };
 export type VacancyNoticesData = { checked: string; notes: string[]; notices: VacancyNotice[];
-  sources: { employer: string; group: VacancyGroup; page: string | null; status: VacancySourceStatus; note: string }[] };
+  sources: { employer: string; group: VacancyGroup; page: string | null; status: VacancySourceStatus; note: string }[];
+  /** The official lists the check claims to cover in full; tests hold every name to a row in `sources`. */
+  coverage: Record<'csoRegister' | 'rsebListed', { url: string; checked: string; names: string[] }> };
 export const VACANCY_GROUP: Record<VacancyGroup, string> = { listed: 'Listed company (RSEB)', un: 'UN agency', ngo: 'NGO / civil society', foundation: 'Foundation / trust', media: 'Newspaper' };
 export const VACANCY_STATUS: Record<VacancySourceStatus, string> = {
-  open: 'Vacancy open', none: 'Nothing open', social: 'Social media only', 'not-found': 'No vacancy page found', unreadable: 'Could not be read',
+  open: 'Vacancy open', none: 'Nothing open', social: 'Social media only', 'not-found': 'No current notice found', unreadable: 'Could not be read',
 };
 /** A notice is shown until the end of its closing day; one with no closing date stays until the next check. */
 export const isOpen = (n: VacancyNotice, today: string) => n.closes === null || n.closes >= today;
