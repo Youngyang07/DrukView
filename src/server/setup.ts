@@ -29,13 +29,25 @@ export async function migrate(): Promise<string[]> {
 
 type RefDz = { id: string; slug: string; name: string; aliases: string[]; lat: number; lon: number; grid_col: number; grid_row: number };
 
+/**
+ * Upsert the 20 dzongkhags, under the same advisory lock as `migrate`. Without the lock, two first visits
+ * arriving together insert the same row at once: `on conflict (id)` only absorbs a clash on `id`, so the
+ * clash on the other unique key, `slug`, surfaced as an error and failed setup for one of them.
+ */
 export async function seed(): Promise<number> {
   const list = (ref as { dzongkhags: RefDz[] }).dzongkhags;
-  for (const d of list) {
-    await pool().query(
-      `insert into dzongkhags(id,slug,name,aliases,lat,lon,grid_col,grid_row) values ($1,$2,$3,$4,$5,$6,$7,$8)
-       on conflict (id) do update set slug=$2,name=$3,aliases=$4,lat=$5,lon=$6,grid_col=$7,grid_row=$8`,
-      [d.id, d.slug, d.name, d.aliases, d.lat, d.lon, d.grid_col, d.grid_row]);
+  const c = await pool().connect();
+  try {
+    await c.query('select pg_advisory_lock($1)', [LOCK_ID]);
+    for (const d of list) {
+      await c.query(
+        `insert into dzongkhags(id,slug,name,aliases,lat,lon,grid_col,grid_row) values ($1,$2,$3,$4,$5,$6,$7,$8)
+         on conflict (id) do update set slug=$2,name=$3,aliases=$4,lat=$5,lon=$6,grid_col=$7,grid_row=$8`,
+        [d.id, d.slug, d.name, d.aliases, d.lat, d.lon, d.grid_col, d.grid_row]);
+    }
+  } finally {
+    await c.query('select pg_advisory_unlock($1)', [LOCK_ID]).catch(() => {});
+    c.release();
   }
   return list.length;
 }
