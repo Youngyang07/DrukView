@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { issueUrl } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { budget, CONFIDENCE_LABEL, dzongdags, DZONGKHAGS, economy, isOpen, VACANCY_GROUP, VACANCY_STATUS, vacancyNotices, FACILITY_LABEL, FACILITY_SHORT, health, leaders, pct, per10k, population, SCHOOL_LEVEL, schools, type DzRef, type FacilityType, type Member, type RefSource, type SchoolLevel } from '@/lib/reference';
 import FacilityList, { type FacilityRow } from './FacilityList';
@@ -14,7 +13,6 @@ export function SourceNote({ source, notes, what }: { source: RefSource; notes: 
   return (<div className="srcbox">
     <p><b>Source:</b> <Ext href={source.url}>{source.publisher} — {source.title}</Ext>{source.table ? `, ${source.table}` : ''}. Transcribed and checked against the publication’s own totals; link checked {source.checked}.</p>
     {notes.length ? <ul>{notes.map(n => <li key={n}>{n}</li>)}</ul> : null}
-    <p>Spotted a mistake? <a href={issueUrl(`Data issue: ${what}`, `What is wrong:\nCorrect source (link + page):`)} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p>
   </div>);
 }
 
@@ -182,8 +180,7 @@ export function Leaders({ scope, locale, live, flags = [] }: Props & { live?: Li
     ? <>Refreshed automatically from Parliament&rsquo;s member records <Fresh at={live!.fetchedAt} label="" /></>
     : <>Read from Parliament&rsquo;s member records on {base.sources.na.checked}; the automatic daily refresh has not run here yet</>; const dzName = (s: string) => DZONGKHAGS.find(d => d.slug === s)?.name ?? s;
   const src = <div className="srcbox"><p><b>Sources:</b> <Ext href={L.sources.na.url}>{L.sources.na.publisher} — {L.sources.na.title}</Ext>; <Ext href={L.sources.nc.url}>{L.sources.nc.publisher} — {L.sources.nc.title}</Ext>. {freshness}.</p>
-    <ul>{L.notes.map(n => <li key={n}>{n}</li>)}</ul>
-    <p>Out of date or wrong? <a href={issueUrl(`Leaders: correction${scope ? ' – ' + scope.name : ''}`, 'What changed:\nOfficial source (link):')} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p></div>;
+    <ul>{L.notes.map(n => <li key={n}>{n}</li>)}</ul></div>;
   const news = flags.length ? (<section><h3>Recent news that may affect these entries</h3>
     <p className="note">Headlines from Kuensel and The Bhutanese that look like a change of office-holder. They are prompts to re-check an entry against the official source — no name on DrukView is ever taken from a newspaper.</p>
     <ul className="plist">{flags.slice(0, 12).map((f, i) => <li key={i}><div className="t">{f.url ? <Ext href={f.url}>{f.title}</Ext> : f.title}</div>
@@ -350,8 +347,7 @@ export function VacancyNotices() {
     <div className="scroll"><table><thead><tr><th>Employer</th><th>Type</th><th>Result on {V.checked}</th><th>What we found</th></tr></thead><tbody>
       {V.sources.map(s => <tr key={s.employer}><td>{s.page ? <Ext href={s.page}>{s.employer}</Ext> : s.employer}</td><td>{VACANCY_GROUP[s.group]}</td>
         <td className="nw">{VACANCY_STATUS[s.status]}</td><td>{s.note}</td></tr>)}</tbody></table></div>
-    <div className="srcbox"><ul>{V.notes.map(n => <li key={n}>{n}</li>)}</ul>
-      <p>Spotted a mistake, or know an employer’s vacancy page? <a href={issueUrl('Vacancy source', 'Employer:\nLink to its own vacancy page:')} target="_blank" rel="noopener noreferrer">Tell us on GitHub</a>.</p></div>
+    <div className="srcbox"><ul>{V.notes.map(n => <li key={n}>{n}</li>)}</ul></div>
   </>);
 }
 
@@ -438,8 +434,7 @@ export function Dzongdags({ scope }: Props) {
   };
   if (scope) return (<div className="card"><div className="card-h"><h2>Dzongkhag administration — {scope.name}</h2><span className="fresh">Checked {D.checked}</span></div>
     {one(scope.slug)}
-    <div className="srcbox"><ul>{D.notes.map(n => <li key={n}>{n}</li>)}</ul>
-      <p>Wrong or out of date? <a href={issueUrl(`Dzongdag: correction – ${scope.name}`, 'Correct name:\nOfficial source (link):')} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p></div></div>);
+    <div className="srcbox"><ul>{D.notes.map(n => <li key={n}>{n}</li>)}</ul></div></div>);
   const rows = DZONGKHAGS.map(d => ({ d, e: D.dzongkhags[d.slug] }));
   const n = (c: string) => rows.filter(r => r.e?.dzongdag?.confidence === c).length;
   return (<div className="card"><div className="card-h"><h2>Dzongdags (district administrators)</h2><span className="fresh">Checked {D.checked}</span></div>
@@ -453,6 +448,5 @@ export function Dzongdags({ scope }: Props) {
       <h3>Entries to treat with care</h3>
       <ul className="plist">{rows.filter(r => r.e?.dzongdag?.note && r.e.dzongdag.confidence === 'unconfirmed').map(({ d, e }) =>
         <li key={d.slug}><div className="t">{d.name}: {e!.dzongdag!.name}</div><div className="m">{e!.dzongdag!.note}</div></li>)}</ul></> : null}
-    <div className="srcbox"><ul>{D.notes.map(nt => <li key={nt}>{nt}</li>)}</ul>
-      <p>Wrong or out of date? <a href={issueUrl('Dzongdag: correction', 'Dzongkhag:\nCorrect name:\nOfficial source (link):')} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p></div></div>);
+    <div className="srcbox"><ul>{D.notes.map(nt => <li key={nt}>{nt}</li>)}</ul></div></div>);
 }

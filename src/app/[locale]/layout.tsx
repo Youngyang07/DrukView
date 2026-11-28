@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { isLocale, issueUrl } from '@/lib/modules';
+import { isLocale } from '@/lib/modules';
 import BottomNav from '@/components/BottomNav';
 import { InstallApp } from '@/components/AppShell';
 
@@ -14,12 +14,12 @@ export default async function LocaleLayout({ children, params }: { children: Rea
         <div><b>DrukView</b><span>Every Ngultrum Accounted For</span></div></Link>
       <nav aria-label="Main" className="topnav">
         <Link href={`/${locale}/bhutan`}>Bhutan</Link><Link href={`/${locale}/bhutan/jobs`}>Job vacancies</Link><Link href={`/${locale}/compare`}>Compare</Link><Link href={`/${locale}/data-sources`}>Data sources</Link>
-        <Link href={`/${locale}/updates`}>Update log</Link><Link href={`/${locale}/contribute`}>Contribute</Link>
+        <Link href={`/${locale}/updates`}>Update log</Link>
       </nav></div></header>
     <main id="main" tabIndex={-1}>{children}</main>
     <footer className="foot"><div className="wrap">
       <p>DrukView is an independent transparency tool, not an official Royal Government of Bhutan publication. Figures come from the sources on the <Link href={`/${locale}/data-sources`}>Data sources</Link> page; always check the linked original before relying on a number.</p>
-      <p><Link href={`/${locale}/about`}>About</Link> · <Link href={`/${locale}/contribute`}>Contribute</Link> · <Link href={`/${locale}/updates`}>Update log</Link> · <Link href={`/${locale}/disclaimer`}>Disclaimer</Link> · <a href={issueUrl('Feedback')} target="_blank" rel="noopener noreferrer">Report a problem</a> · Open source (MIT)</p>
+      <p><Link href={`/${locale}/about`}>About</Link> · <Link href={`/${locale}/updates`}>Update log</Link> · <Link href={`/${locale}/disclaimer`}>Disclaimer</Link></p>
       <InstallApp />
     </div></footer>
     <BottomNav locale={locale} />

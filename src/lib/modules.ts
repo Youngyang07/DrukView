@@ -21,6 +21,3 @@ export const STATIC_MODULES: readonly string[] = ['population', 'health', 'schoo
 export type ModuleSlug = (typeof MODULES)[number]['slug'];
 
 export const RESERVED = new Set(['about', 'compare', 'contribute', 'data-sources', 'updates', 'disclaimer', 'bhutan']);
-export const REPO = process.env.NEXT_PUBLIC_GITHUB_REPO || 'Youngyang07/DrukView';
-export const issueUrl = (title: string, body = '') =>
-  `https://github.com/${REPO}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=data`;
