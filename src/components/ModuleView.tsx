@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { issueUrl, MODULES, type ModuleSlug } from '@/lib/modules';
+import { MODULES, type ModuleSlug } from '@/lib/modules';
 import { money, moneyFull, num } from '@/lib/format';
 import { Badge, Bars, Empty, EmptyOr, Ext, Fresh, Stacked, Stat } from './ui';
 import * as q from '@/server/queries';
@@ -13,10 +13,6 @@ type Props = { module: ModuleSlug; scope: q.Dz | null; locale: string; filters: 
 const scopeName = (s: q.Dz | null) => (s ? `${s.name} Dzongkhag` : 'Bhutan');
 /** Projects and funding figures come from these two collectors; an empty view means nothing until both have run. */
 const PARTNER_SOURCES = ['worldbank', 'adb'] as const;
-
-function Cite({ what }: { what: string }) {
-  return <p className="note">Something wrong or missing? <a href={issueUrl(`Data issue: ${what}`, `Module: ${what}\nWhat is wrong:\nCorrect source (link):`)} target="_blank" rel="noopener noreferrer">Report it on GitHub</a>.</p>;
-}
 
 async function Overview({ scope, locale }: Props) {
   // `health` is the bundled health-facility dataset here, so the source health gets its own name.
@@ -59,7 +55,7 @@ async function Budget({ scope, locale }: Props) {
   return (<><MofBudget scope={scope} locale={locale} /><div className="card">
     <div className="card-h"><h2>Other published budget documents — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
     <p className="note">Extra lines transcribed from other published documents (ministry reports, dzongkhag plans); every line links to its source. Nu. (government) and US$ (partners) are never added together.</p>
-    {!years.length ? <Empty>Nothing beyond the Ministry of Finance budget above has been added for {scopeName(scope)} yet. Extra rows enter through <code>data/manual/*.csv</code> with a mandatory citation each — see <Link href="/en/contribute">Contribute</Link>.</Empty> : years.map(y => {
+    {!years.length ? <Empty>Nothing beyond the Ministry of Finance budget above has been added for {scopeName(scope)} yet. Every extra row must cite a public document before it can be added.</Empty> : years.map(y => {
       const a = al.filter(x => x.fiscal_year === y), l = lines.filter(x => x.fiscal_year === y);
       return (<section key={y}><h3>Fiscal year {y}</h3>
         {l.length ? <><Bars rows={Object.entries(l.reduce<Record<string, number>>((m, x) => (x.currency === 'BTN' ? (m[x.agency] = (m[x.agency] ?? 0) + x.amount) : m, m), {})).map(([k, v]) => ({ k, v }))} fmt={v => money(v, 'BTN')} />
@@ -68,8 +64,7 @@ async function Budget({ scope, locale }: Props) {
         {a.length ? <div className="scroll"><table><thead><tr>{!scope ? <th>Dzongkhag</th> : null}<th>Gewog / village</th><th>Sector</th><th>Funding source</th><th>Amount</th><th>Source document</th></tr></thead><tbody>
           {a.map((x, i) => <tr key={i}>{!scope ? <td>{x.dzongkhag}</td> : null}<td>{[x.gewog, x.village].filter(Boolean).join(' / ') || '–'}</td><td>{x.sector ?? 'General'}</td><td>{x.funding_source}</td><td className="num">{moneyFull(x.amount, x.currency)}</td><td><Ext href={x.source_url}>{x.source_name}: {x.document}{x.page ? `, p.${x.page}` : ''}</Ext></td></tr>)}</tbody></table></div> : null}
       </section>);
-    })}
-    <Cite what={`Budget – ${scopeName(scope)}`} /></div></>);
+    })}</div></>);
 }
 
 async function Projects({ scope, filters, locale }: Props) {
@@ -96,8 +91,7 @@ async function Projects({ scope, filters, locale }: Props) {
         <td>{p.where.length ? p.where.join(', ') : 'National / unspecified'}{p.geo_confidence === 'text-match' ? <small> (inferred from text)</small> : null}</td>
         <td className="num">{p.amount_committed == null ? '–' : money(p.amount_committed, p.currency)}</td><td className="num">{p.amount_disbursed == null ? '–' : money(p.amount_disbursed, p.currency)}</td>
         <td className="nw">{p.start_date ?? '–'}</td><td className="nw">{p.end_date ?? '–'}</td><td>{p.url ? <Ext href={p.url}>View</Ext> : '–'}</td></tr>)}</tbody></table></div>}
-    {total > rows.length ? <p className="note">Showing the first {rows.length} of {num(total)}. Refine the filters or download the CSV.</p> : null}
-    <Cite what={`Projects – ${scopeName(scope)}`} /></div>);
+    {total > rows.length ? <p className="note">Showing the first {rows.length} of {num(total)}. Refine the filters or download the CSV.</p> : null}</div>);
 }
 
 async function Funders({ scope }: Props) {
@@ -112,8 +106,7 @@ async function Funders({ scope }: Props) {
       : <EmptyOr health={health} ids={PARTNER_SOURCES} what="World Bank and ADB project data">
           No development-partner commitment is recorded for {scopeName(scope)}. Both sources were read successfully; partner financing is often recorded nationally rather than against a dzongkhag.
         </EmptyOr>}
-    {btn.length ? <><h3>Curated allocations by funding source (Nu.)</h3><Bars rows={btn.map(([k, v]) => ({ k, v }))} fmt={v => money(v, 'BTN')} /></> : null}
-    <Cite what={`Funding sources – ${scopeName(scope)}`} /></div>);
+    {btn.length ? <><h3>Curated allocations by funding source (Nu.)</h3><Bars rows={btn.map(([k, v]) => ({ k, v }))} fmt={v => money(v, 'BTN')} /></> : null}</div>);
 }
 
 async function Weather({ scope, locale }: Props) {
@@ -126,7 +119,7 @@ async function Weather({ scope, locale }: Props) {
       {has ? <div className="scroll"><table><thead><tr><th>Dzongkhag</th><th>Rain, last 14 days</th><th>Latest max °C</th><th>Latest min °C</th></tr></thead><tbody>
         {rows.map(r => <tr key={r.id}><td><Link href={`/${locale}/${r.slug}/weather`}>{r.name}</Link></td><td className="num">{r.precip14 == null ? '–' : `${r.precip14.toFixed(1)} mm`}</td><td className="num">{r.tmax ?? '–'}</td><td className="num">{r.tmin ?? '–'}</td></tr>)}</tbody></table></div>
         : <EmptyOr health={health} ids={['weather']} what="Open-Meteo weather">
-            Open-Meteo returned no readings for any dzongkhag, which should not happen — please <Link href="/en/contribute">report it</Link>.
+            Open-Meteo returned no readings for any dzongkhag, which should not happen.
           </EmptyOr>}</div>);
   }
   const w = await q.getWeather(scope.id);
@@ -137,7 +130,7 @@ async function Weather({ scope, locale }: Props) {
       <div className="scroll"><table><thead><tr><th>Date</th><th>Max °C</th><th>Min °C</th><th>Rain (mm)</th><th></th></tr></thead><tbody>
         {[...w].reverse().map(x => <tr key={x.date}><td className="nw">{x.date}</td><td className="num">{x.tmax_c ?? '–'}</td><td className="num">{x.tmin_c ?? '–'}</td><td className="num">{x.precip_mm ?? '–'}</td><td>{x.is_forecast ? <small>forecast</small> : null}</td></tr>)}</tbody></table></div></>
       : <EmptyOr health={health} ids={['weather']} what="Open-Meteo weather">
-          Open-Meteo returned no readings for {scope.name}, which should not happen — please <Link href="/en/contribute">report it</Link>.
+          Open-Meteo returned no readings for {scope.name}, which should not happen.
         </EmptyOr>}</div>);
 }
 
@@ -174,8 +167,7 @@ async function Tenders({ scope, locale }: Props) {
     </> : <EmptyOr health={health} ids={[EGP.id]} what="the e-GP tender register">
         No tender from e-GP&apos;s live register is for {scopeName(scope)}. The register was read successfully, so nothing is out to bid here — not that we failed to look.
         A notice whose procuring agency is a ministry rather than a dzongkhag is listed under <Link href={`/${locale}/bhutan/tenders`}>Bhutan</Link>.
-      </EmptyOr>}
-    <Cite what={`Tenders – ${scopeName(scope)}`} /></div>);
+      </EmptyOr>}</div>);
 }
 
 async function Offices({ scope, locale }: Props) {
@@ -193,8 +185,7 @@ async function Offices({ scope, locale }: Props) {
   if (!o.length) return (<><Leaders scope={scope} locale={locale} live={liveLeaders} flags={flags} /><Dzongdags scope={scope} locale={locale} /></>);
   return (<><Leaders scope={scope} locale={locale} live={liveLeaders} flags={flags} /><Dzongdags scope={scope} locale={locale} /><div className="card"><div className="card-h"><h2>Other offices & contacts — {scopeName(scope)}</h2><Fresh at={fr.manual} label="Curated" /></div>
     <p className="note">Names and contacts come only from official publications; each entry cites its page and the date it was checked.</p>
-    {sec('leader', 'Officials')}{sec('office', 'Offices & contacts')}
-    <Cite what={`Offices – ${scopeName(scope)}`} /></div></>);
+    {sec('leader', 'Officials')}{sec('office', 'Offices & contacts')}</div></>);
 }
 
 /** "Nu.18,095–23,570 a month", or what the Commission did not print. Never converted, never summed. */
@@ -275,8 +266,7 @@ async function LiveVacancies({ scope, locale }: Props) {
       <p className="note">These are the counts BLMIS publishes on its job-seeker page, not a list of jobs. The portal does not say how long a listing stays up, and listings with old posting dates appear in it, so read this as &ldquo;listed on BLMIS that day&rdquo;, not &ldquo;open today&rdquo;. The four breakdowns are checked to add up to the same total before a refresh is accepted.</p>
     </>) : <EmptyOr health={health} ids={[BLMIS.id]} what="the national job portal's counts">
         BLMIS listed no vacancy when it was last read.
-      </EmptyOr>}
-    <Cite what={`Vacancies now – ${scopeName(scope)}`} /></div>);
+      </EmptyOr>}</div>);
 }
 
 /** The dated snapshot's charts give way to the live counts once those are being refreshed; while the live

@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   const out: MetadataRoute.Sitemap = [{ url: `${base}/`, lastModified, priority: 1 }];
   for (const locale of LOCALES) {
-    for (const page of ['', 'about', 'compare', 'contribute', 'data-sources', 'updates', 'disclaimer']) {
+    for (const page of ['', 'about', 'compare', 'data-sources', 'updates', 'disclaimer']) {
       out.push({ url: `${base}/${locale}${page ? `/${page}` : ''}`, lastModified, priority: page ? 0.5 : 0.9 });
     }
     for (const slug of ['bhutan', ...DZONGKHAGS.map(d => d.slug)]) {

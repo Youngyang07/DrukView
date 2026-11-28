@@ -78,10 +78,19 @@ DrukView is one site for desktop and mobile. On a phone it uses a compact header
 
 There is deliberately no offline copy of the data. Without a connection, the app shows an offline page rather than a saved page, because a figure whose date you cannot see could be weeks old. The service worker (`public/sw.js`) only caches the site's own build files, which never change, to make the app start faster. Icons are regenerated with `node scripts/make-icons.mjs`.
 
-## Contributing## Contributing
-DrukView is open source (MIT) and open to anyone. Start with **[CONTRIBUTING.md](CONTRIBUTING.md)** — it sets out the seven data rules (never invent a number; cite every row; never mix Nu. and US$; never guess an identity or a place; reject the batch, not the row; say what you do not know; keep the date), how to add cited CSV rows or a reference dataset, and how to write a collector.
+## Working on DrukView
+This repository is **private**. The source and the CI logs are not public, and the site takes no public
+corrections: it carries no links to this repository, and there is no public issue tracker. The published
+site stays public — only the code and its history are closed.
 
-The most valuable contribution needs no code: if a figure here is wrong, open a **Data correction** issue with a link to the public document that proves it. Also see the [Code of Conduct](CODE_OF_CONDUCT.md) and, for anything security-related, [SECURITY.md](SECURITY.md) — report privately, never in a public issue. CI runs typecheck, tests and a production build on Node 20 and 22 for every push, plus a check that every curated row cites an https document and that no secret is committed.
+The data rules still govern every change. **[CONTRIBUTING.md](CONTRIBUTING.md)** sets out the seven of them
+(never invent a number; cite every row; never mix Nu. and US$; never guess an identity or a place; reject the
+batch, not the row; say what you do not know; keep the date), how to add cited CSV rows or a reference
+dataset, and how to write a collector. CI runs typecheck, tests and a production build on Node 20 and 22 for
+every push, plus a check that every curated row cites an https document and that no secret is committed.
+
+`LICENSE` (MIT) is kept because it covers the versions already published while the repository was public;
+it is not an offer of the current code.
 
 ## Honesty rules (enforced in code and tests)
 - No sample/estimated data ships. With no data, the UI says so.
